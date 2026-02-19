@@ -22,7 +22,7 @@ export function Chat({
       id,
       body: { id },
       initialMessages,
-      maxSteps: 10,
+      maxSteps: 1,
       onFinish: () => {
         window.history.replaceState({}, "", `/chat/${id}`);
       },
@@ -50,6 +50,9 @@ export function Chat({
               content={message.content}
               attachments={message.experimental_attachments}
               toolInvocations={message.toolInvocations}
+              onFormSubmit={(content) =>
+                append({ role: "user", content })
+              }
             />
           ))}
 

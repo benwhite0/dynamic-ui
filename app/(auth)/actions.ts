@@ -1,5 +1,6 @@
 "use server";
 
+import { headers } from "next/headers";
 import { z } from "zod";
 
 import { createUser, getUser } from "@/db/queries";
@@ -19,6 +20,7 @@ export const login = async (
   _: LoginActionState,
   formData: FormData,
 ): Promise<LoginActionState> => {
+  await headers();
   try {
     const validatedData = authFormSchema.parse({
       email: formData.get("email"),
@@ -55,6 +57,7 @@ export const register = async (
   _: RegisterActionState,
   formData: FormData,
 ): Promise<RegisterActionState> => {
+  await headers();
   try {
     const validatedData = authFormSchema.parse({
       email: formData.get("email"),

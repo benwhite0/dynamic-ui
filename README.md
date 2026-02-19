@@ -32,6 +32,20 @@
   - [Vercel Blob](https://vercel.com/storage/blob) for efficient object storage
 - [NextAuth.js](https://github.com/nextauthjs/next-auth)
   - Simple and secure authentication
+- **Dynamic forms** – Ask the chatbot to generate a form (e.g. with specific fields); it will render a fillable form in the chat. Submitting sends the values back to the conversation.
+
+## Dynamic form example prompts
+
+Try these in the chat to see dynamically generated forms:
+
+- *"Give me a form with 4 inputs: name, email, age, and comments, with a submit button."*
+- *"Create a form with fields for first name, last name, and email. Use 'Send' as the button text."*
+- *"I need a simple contact form with name, email, and message."*
+- *"Make a form with 3 text boxes: title above each, and a submit button at the bottom."*
+- *"Generate a feedback form with rating (number), comment (text), and email."*
+- *"I want a form with an email input at the top, a larger content/message box below it, and a Send button."*
+
+Field type `textarea` renders a bigger, resizable box (e.g. for messages or comments). After you submit a form, the values are sent as a message so the assistant can respond.
 
 ## Model Providers
 
