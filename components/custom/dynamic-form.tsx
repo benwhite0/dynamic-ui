@@ -18,6 +18,7 @@ import {
   Heart,
   Bell,
   ChevronDown,
+  GripVertical,
   LucideIcon,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -64,6 +65,7 @@ export type FormField = {
     | "choice"
     | "select"
     | "rating"
+    | "rank"
     | "date"
     | "time"
     | "datetime"
@@ -473,6 +475,84 @@ function CheckboxGroupField({
   );
 }
 
+function RankField({
+  options,
+  value,
+  onChange,
+}: {
+  options: string[];
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  let order: string[] = [];
+  try {
+    const parsed = value ? JSON.parse(value) : [];
+    order = Array.isArray(parsed) ? parsed : options.slice();
+  } catch {
+    order = options.slice();
+  }
+  const validOrder = order.filter((x) => options.includes(x));
+  const missing = options.filter((x) => !validOrder.includes(x));
+  const items = [...validOrder, ...missing];
+
+  const [dragged, setDragged] = useState<string | null>(null);
+
+  const move = (fromIdx: number, toIdx: number) => {
+    const next = items.slice();
+    const [removed] = next.splice(fromIdx, 1);
+    next.splice(toIdx, 0, removed);
+    onChange(JSON.stringify(next));
+  };
+
+  const handleDragStart = (e: React.DragEvent, item: string) => {
+    setDragged(item);
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", item);
+  };
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+  };
+  const handleDrop = (e: React.DragEvent, toIdx: number) => {
+    e.preventDefault();
+    const item = e.dataTransfer.getData("text/plain");
+    if (!item) return;
+    const fromIdx = items.indexOf(item);
+    if (fromIdx !== -1 && fromIdx !== toIdx) move(fromIdx, toIdx);
+    setDragged(null);
+  };
+  const handleDragEnd = () => setDragged(null);
+
+  return (
+    <div className="rounded-lg border border-zinc-200 dark:border-zinc-700 overflow-hidden bg-zinc-50/50 dark:bg-zinc-800/30">
+      <p className="text-xs text-zinc-500 dark:text-zinc-400 px-3 pt-2 pb-1">
+        Drag to re-order your priorities
+      </p>
+      <ul className="divide-y divide-zinc-200 dark:divide-zinc-700">
+        {items.map((item, idx) => (
+          <li
+            key={item}
+            draggable
+            onDragStart={(e) => handleDragStart(e, item)}
+            onDragOver={handleDragOver}
+            onDrop={(e) => handleDrop(e, idx)}
+            onDragEnd={handleDragEnd}
+            className={`flex items-center gap-3 px-3 py-2.5 bg-white dark:bg-zinc-900 cursor-grab active:cursor-grabbing ${dragged === item ? "opacity-50" : ""}`}
+          >
+            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-xs font-medium flex items-center justify-center">
+              {idx + 1}
+            </span>
+            <span className="flex-1 text-sm text-zinc-800 dark:text-zinc-200">
+              {item}
+            </span>
+            <GripVertical className="size-4 text-zinc-400 flex-shrink-0" />
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 export function DynamicForm({
   fields,
   title,
@@ -488,8 +568,15 @@ export function DynamicForm({
   submitLabel?: string;
   onSubmit?: (values: Record<string, string>) => void;
 }) {
-  const [values, setValues] = useState<Record<string, string>>(
-    Object.fromEntries(fields.map((f) => [f.id, ""]))
+  const [values, setValues] = useState<Record<string, string>>(() =>
+    Object.fromEntries(
+      fields.map((f) => [
+        f.id,
+        f.type === "rank"
+          ? JSON.stringify(f.options ?? [])
+          : "",
+      ])
+    )
   );
   const [submitted, setSubmitted] = useState(false);
 
@@ -575,6 +662,14 @@ export function DynamicForm({
       case "checkboxGroup":
         return (
           <CheckboxGroupField
+            options={field.options ?? []}
+            value={values[field.id] ?? ""}
+            onChange={(v) => update(field.id, v)}
+          />
+        );
+      case "rank":
+        return (
+          <RankField
             options={field.options ?? []}
             value={values[field.id] ?? ""}
             onChange={(v) => update(field.id, v)}

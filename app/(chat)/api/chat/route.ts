@@ -75,8 +75,9 @@ FIELD TYPES:
   toggle        — on/off switch
   slider        — numeric range (use min, max, step)
   rating        — 1–5 star rating
+  rank          — reorderable list: user drags to rank options (MUST include options)
 
-Use id (short key), label (display text), type, options (required for choice/select/checkboxGroup),
+Use id (short key), label (display text), type, options (required for choice/select/checkboxGroup/rank),
 placeholder (optional hint), min/max/step (for number/slider).
 Set submitLabel to match the action (Send, Submit, Book, Apply, etc.).
 Call renderForm AT MOST ONCE per request.
@@ -113,6 +114,8 @@ EXAMPLES:
                             fields: mood (choice ["😄","🙂","😐","😔","😢"]),
                             energy (slider, min 1, max 10), sleep (number, min 0, max 24, step 0.5),
                             notes (textarea), submitLabel "Log Check-In"
+  "rank project priorities" → title "Project Priorities", icon "clipboard", accentColor "amber",
+                            fields: priorities (rank, options ["Ship new features","Fix bugs","Improve performance","Write documentation"]), submitLabel "Submit"
 
 CRITICAL: When the latest user message starts with "Form submitted:" do NOT call renderForm or any tool.
 Reply with ONLY a short confirmation (e.g. "Email sent.", "Payment processed.", "Feedback received.").`,
@@ -138,7 +141,7 @@ Reply with ONLY a short confirmation (e.g. "Email sent.", "Payment processed.", 
               type: z
                 .enum([
                   "text", "email", "number", "textarea", "password",
-                  "choice", "select", "rating",
+                  "choice", "select", "rating", "rank",
                   "date", "time", "datetime", "tel", "url",
                   "toggle", "slider", "checkbox", "checkboxGroup",
                 ])
