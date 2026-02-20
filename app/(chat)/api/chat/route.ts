@@ -39,67 +39,134 @@ export async function POST(request: Request) {
     system: `You help users by creating dynamic, beautifully styled forms for structured input.
 Keep responses to one sentence. DO NOT output lists. After a tool call, reply with a short phrase and wait.
 
-VARIANT SELECTION — pick the best match for user intent:
-  "email"    → composing / sending emails or messages (Gmail-like compose UI)
-  "feedback" → reviews, ratings, satisfaction (warm card with emoji & star support)
-  "payment"  → payments, checkout, billing (secure card-style)
-  "support"  → help requests, bug reports, tickets (ticket-style with priority)
-  "survey"   → polls, questionnaires, quizzes (clean survey layout)
-  "rsvp"     → event attendance, invitations (elegant event card)
-  "default"  → anything that doesn't fit above
+FORM DESIGN:
+You are NOT limited to specific form types. Reason from the user's request and compose whatever fields make sense.
+Set title, icon, and accentColor to match the form's purpose.
+
+ACCENT COLORS:
+  blue    → communication, professional, general
+  amber   → feedback, reviews, warmth
+  emerald → payments, success, finance
+  red     → support, urgent, medical
+  indigo  → surveys, analytics, productivity
+  purple  → events, creative, entertainment
+  pink    → personal, social, health
+  zinc    → minimal, technical, settings
+
+ICONS:
+  send, message, card, headphones, clipboard, party, star, lock,
+  calendar, user, settings, search, heart, bell, none
 
 FIELD TYPES:
-  text, email, number, password — standard inputs
-  textarea — multi-line text
-  choice   — selectable button group; MUST include options (e.g. ["😍","😊","😐","😕","😢"] or ["Low","Medium","High","Urgent"])
-  select   — dropdown; MUST include options
-  rating   — 1–5 star rating (great for satisfaction / quality scores)
+  text          — single-line text
+  email         — email address
+  tel           — phone number
+  url           — web URL
+  number        — numeric input (use min/max/step as needed)
+  password      — masked text
+  textarea      — multi-line text
+  date          — date picker
+  time          — time picker
+  datetime      — date and time picker
+  choice        — selectable button group (MUST include options)
+  select        — dropdown menu (MUST include options)
+  checkboxGroup — multi-select checkboxes (MUST include options)
+  checkbox      — single yes/no (renders label inline, no separate label shown)
+  toggle        — on/off switch
+  slider        — numeric range (use min, max, step)
+  rating        — 1–5 star rating
 
-Use id (short key), label (display text), type, options (required for choice/select), placeholder (optional hint).
-Set submitLabel to match the action (Send, Pay, Submit Feedback, Confirm RSVP, etc.).
+Use id (short key), label (display text), type, options (required for choice/select/checkboxGroup),
+placeholder (optional hint), min/max/step (for number/slider).
+Set submitLabel to match the action (Send, Submit, Book, Apply, etc.).
 Call renderForm AT MOST ONCE per request.
 
 EXAMPLES:
-  "send an email" → variant "email", fields: to (email), subject (text, placeholder "Subject"), body (textarea), submitLabel "Send"
-  "leave feedback" → variant "feedback", fields: satisfaction (choice, options ["😍","😊","😐","😕","😢"]), rating (rating), comments (textarea, placeholder "Tell us more…"), submitLabel "Submit Feedback"
-  "make a payment" → variant "payment", fields: cardholder (text), cardNumber (text, placeholder "1234 5678 9012 3456"), expiry (text, placeholder "MM/YY"), cvv (password), submitLabel "Pay Securely"
-  "submit a support ticket" → variant "support", fields: priority (choice, options ["Low","Medium","High","Urgent"]), category (select, options ["Technical","Billing","Account","Other"]), subject (text), description (textarea), submitLabel "Submit Ticket"
-  "take a survey" → variant "survey", fields: one or more questions as choice fields with answer options, optional textarea for comments, submitLabel "Submit"
-  "rsvp to party" → variant "rsvp", fields: attendance (choice, options ["🎉 Going","🤔 Maybe","😔 Can't make it"]), name (text), email (email), dietary (select, options ["No restrictions","Vegetarian","Vegan","Gluten-free","Other"]), submitLabel "Confirm RSVP"
+  "send an email"         → title "New Message", icon "send", accentColor "blue",
+                            fields: to (email), subject (text), body (textarea), submitLabel "Send"
+  "leave feedback"        → title "Share Your Feedback", icon "message", accentColor "amber",
+                            fields: satisfaction (choice ["😍","😊","😐","😕","😢"]), rating (rating),
+                            comments (textarea, placeholder "Tell us more…"), submitLabel "Submit Feedback"
+  "make a payment"        → title "Payment Details", icon "card", accentColor "emerald",
+                            fields: cardholder (text), cardNumber (text, placeholder "1234 5678 9012 3456"),
+                            expiry (text, placeholder "MM/YY"), cvv (password), submitLabel "Pay Securely"
+  "submit support ticket" → title "Support Ticket", icon "headphones", accentColor "red",
+                            fields: priority (choice ["Low","Medium","High","Urgent"]),
+                            category (select ["Technical","Billing","Account","Other"]),
+                            subject (text), description (textarea), submitLabel "Submit Ticket"
+  "rsvp to an event"      → title "You're Invited", icon "party", accentColor "purple",
+                            fields: attendance (choice ["🎉 Going","🤔 Maybe","😔 Can't make it"]),
+                            name (text), email (email),
+                            dietary (select ["No restrictions","Vegetarian","Vegan","Gluten-free","Other"]),
+                            submitLabel "Confirm RSVP"
+  "book a restaurant"     → title "Reserve a Table", icon "calendar", accentColor "purple",
+                            fields: name (text), email (email), date (date), time (time),
+                            guests (number, min 1, max 20), requests (textarea), submitLabel "Book Table"
+  "job application"       → title "Job Application", icon "user", accentColor "indigo",
+                            fields: name (text), email (email), phone (tel),
+                            position (select [...relevant roles...]), startDate (date),
+                            coverLetter (textarea), submitLabel "Apply Now"
+  "set a reminder"        → title "New Reminder", icon "bell", accentColor "amber",
+                            fields: title (text), date (date), time (time),
+                            priority (choice ["Low","Normal","High"]), submitLabel "Set Reminder"
+  "health check-in"       → title "Daily Check-In", icon "heart", accentColor "pink",
+                            fields: mood (choice ["😄","🙂","😐","😔","😢"]),
+                            energy (slider, min 1, max 10), sleep (number, min 0, max 24, step 0.5),
+                            notes (textarea), submitLabel "Log Check-In"
 
-CRITICAL: When the latest user message starts with "Form submitted:" do NOT call renderForm or any tool. Reply with ONLY a short confirmation (e.g. "Email sent.", "Payment processed.", "Feedback received.", "Ticket created.", "RSVP confirmed.").`,
+CRITICAL: When the latest user message starts with "Form submitted:" do NOT call renderForm or any tool.
+Reply with ONLY a short confirmation (e.g. "Email sent.", "Payment processed.", "Feedback received.").`,
     messages: coreMessages,
     tools: {
       renderForm: {
         description:
-          "Render a styled dynamic form in the chat. Choose the best variant and infer fields from the user's goal. Do not wait for the user to specify fields—reason from context.",
+          "Render a dynamic form in the chat. Reason about what the user needs and compose the right fields—do not wait for the user to specify them.",
         parameters: z.object({
-          variant: z
-            .enum(["default", "email", "feedback", "payment", "support", "survey", "rsvp"])
+          title: z.string().optional().describe("Form header title, e.g. 'New Message', 'Job Application'"),
+          icon: z
+            .enum(["send", "message", "card", "headphones", "clipboard", "party", "star", "lock", "calendar", "user", "settings", "search", "heart", "bell", "none"])
             .optional()
-            .describe("Visual style variant matching the form's purpose"),
+            .describe("Icon shown in the header"),
+          accentColor: z
+            .enum(["blue", "amber", "emerald", "red", "indigo", "purple", "pink", "zinc"])
+            .optional()
+            .describe("Accent color for the form theme"),
           fields: z.array(
             z.object({
               id: z.string().describe("Short field key"),
               label: z.string().describe("Label shown above the input"),
               type: z
-                .enum(["text", "email", "number", "textarea", "password", "choice", "select", "rating"])
+                .enum([
+                  "text", "email", "number", "textarea", "password",
+                  "choice", "select", "rating",
+                  "date", "time", "datetime", "tel", "url",
+                  "toggle", "slider", "checkbox", "checkboxGroup",
+                ])
                 .describe("Input type"),
               options: z
                 .array(z.string())
                 .optional()
-                .describe("Options for choice or select fields"),
+                .describe("Options for choice, select, or checkboxGroup fields"),
               placeholder: z.string().optional().describe("Placeholder hint text"),
+              min: z.number().optional().describe("Minimum value for number or slider fields"),
+              max: z.number().optional().describe("Maximum value for number or slider fields"),
+              step: z.number().optional().describe("Step size for number or slider fields"),
             })
           ),
           submitLabel: z.string().optional().describe("Button text, e.g. Send, Pay, Submit"),
         }),
-        execute: async ({ variant, fields, submitLabel }) => {
+        execute: async ({ title, icon, accentColor, fields, submitLabel }) => {
           renderFormCallCount += 1;
           if (renderFormCallCount > 1 || isFormSubmission) {
-            return { __skipRender: true, variant: "default", fields: [], submitLabel: "Submit" };
+            return { __skipRender: true };
           }
-          return { variant: variant ?? "default", fields, submitLabel: submitLabel ?? "Submit" };
+          return {
+            title: title ?? "",
+            icon: icon ?? "none",
+            accentColor: accentColor ?? "blue",
+            fields,
+            submitLabel: submitLabel ?? "Submit",
+          };
         },
       },
     },

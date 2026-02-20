@@ -32,20 +32,35 @@
   - [Vercel Blob](https://vercel.com/storage/blob) for efficient object storage
 - [NextAuth.js](https://github.com/nextauthjs/next-auth)
   - Simple and secure authentication
-- **Dynamic forms** – Ask the chatbot to generate a form (e.g. with specific fields); it will render a fillable form in the chat. Submitting sends the values back to the conversation.
+- **Dynamic forms** – Describe what you need (email, feedback, booking, job application, etc.) and the chatbot composes a form from primitives—text, email, date, time, rating, slider, toggle, checkboxes, dropdowns, and more. It picks the right fields, title, and styling from your intent. Submitting sends the values back to the conversation.
 
 ## Dynamic form example prompts
 
-Try these in the chat to see dynamically generated forms:
+The chatbot reasons from your request and is not limited to preset form types. Try prompts like:
 
-- *"Give me a form with 4 inputs: name, email, age, and comments, with a submit button."*
-- *"Create a form with fields for first name, last name, and email. Use 'Send' as the button text."*
-- *"I need a simple contact form with name, email, and message."*
-- *"Make a form with 3 text boxes: title above each, and a submit button at the bottom."*
-- *"Generate a feedback form with rating (number), comment (text), and email."*
-- *"I want a form with an email input at the top, a larger content/message box below it, and a Send button."*
+**Core flows**
+- *"Send an email to my team"*
+- *"I want to leave feedback"*
+- *"Submit a support ticket"*
+- *"RSVP to the wedding"*
 
-Field type `textarea` renders a bigger, resizable box (e.g. for messages or comments). After you submit a form, the values are sent as a message so the assistant can respond.
+**Date, time & booking**
+- *"Book a table for next Friday"*
+- *"Set a reminder for tomorrow at 9am"*
+- *"I need to schedule a call"*
+
+**Sliders, toggles & checkboxes**
+- *"Log my mood and energy level"*
+- *"Which topics are you interested in?"* (multi-select)
+- *"Opt in to the newsletter"* (toggle/checkbox)
+
+**Open-ended**
+- *"I want to apply for a job"*
+- *"Report a bug"*
+- *"Submit a recipe"*
+- *"Create a quick poll: what should we order for lunch?"*
+
+After you submit a form, the values are sent as a message so the assistant can respond.
 
 ## Model Providers
 

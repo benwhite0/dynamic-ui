@@ -60,7 +60,9 @@ export const Message = ({
                       result.__skipRender ? null : (
                         <DynamicForm
                           fields={result.fields}
-                          variant={result.variant}
+                          title={result.title}
+                          icon={result.icon}
+                          accentColor={result.accentColor}
                           submitLabel={result.submitLabel}
                           onSubmit={(values) => {
                             const text = Object.entries(values)
