@@ -5,6 +5,8 @@ import { geminiProModel } from "@/ai";
 import { auth } from "@/app/(auth)/auth";
 import { deleteChatById, getChatById, saveChat } from "@/db/queries";
 
+import { searchWeb } from "@/lib/tools/search";
+
 export async function POST(request: Request) {
   const { id, messages }: { id: string; messages: Array<Message> } =
     await request.json();
@@ -37,7 +39,8 @@ export async function POST(request: Request) {
     model: geminiProModel,
     maxSteps: 1,
     system: `You help users by creating dynamic, beautifully styled forms for structured input.
-Keep responses to one sentence. DO NOT output lists. After a tool call, reply with a short phrase and wait.
+Keep responses to one sentence. DO NOT output lists. After calling renderForm, reply with a short phrase and wait. 
+After calling searchWeb, always summarise the results conversationally — never output raw JSON or arrays.
 
 VARIANT SELECTION — pick the best match for user intent:
   "email"    → composing / sending emails or messages (Gmail-like compose UI)
@@ -102,6 +105,7 @@ CRITICAL: When the latest user message starts with "Form submitted:" do NOT call
           return { variant: variant ?? "default", fields, submitLabel: submitLabel ?? "Submit" };
         },
       },
+      searchWeb,
     },
     onFinish: async ({ responseMessages }) => {
       if (session.user && session.user.id) {
@@ -155,3 +159,5 @@ export async function DELETE(request: Request) {
     });
   }
 }
+
+
