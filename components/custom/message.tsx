@@ -72,11 +72,16 @@ export const Message = ({
                         />
                       )
                     ) : toolName === "searchWeb" ? (
-                      <SearchWidget
-                        query={args?.query ?? ""}
-                        summary={result.summary ?? ""}
-                        results={result.results ?? []}
-                      />
+                      <div className="flex flex-col gap-1">
+                        <div className="text-xs text-muted-foreground italic">
+                          Searched the web:
+                        </div>
+                        <SearchWidget
+                          query={args?.query ?? ""}
+                          summary={result.summary ?? ""}
+                          results={result.results ?? []}
+                        />
+                      </div>
                     ) : (
                       <div>{JSON.stringify(result, null, 2)}</div>
                     )}
@@ -87,6 +92,11 @@ export const Message = ({
                   <div key={toolCallId} className="skeleton">
                     {toolName === "renderForm" ? (
                       <div className="h-24 w-full max-w-md rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800/50 animate-pulse" />
+                    ) : null}
+                    {toolName === "searchWeb" ? (
+                      <div className="text-xs text-muted-foreground italic">
+                        Searching the web...
+                      </div>
                     ) : null}
                   </div>
                 );

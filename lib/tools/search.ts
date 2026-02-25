@@ -13,7 +13,8 @@ export const searchWeb = tool({
     try {
       const response = await client.search(query, {
         maxResults: 5,
-        searchDepth: 'basic', // use 'advanced' for better results (costs 2 credits vs 1)
+        searchDepth: 'advanced', // better reasoning over sources
+        includeAnswer: true, // let Tavily synthesize an answer
       });
 
       if (!response.results || response.results.length === 0) {
@@ -23,55 +24,40 @@ export const searchWeb = tool({
         };
       }
 
-      // Return a conversational, non-JSON summary so the model
-      // doesn’t surface raw arrays/objects to the user.
-      const topResults = response.results.slice(0, 3);
+      // Only use the top (best) result for user-facing output.
+      const [best] = response.results;
 
-      const summary = topResults
-        .map((r, index) => {
-          const title = r.title?.trim();
-          let content = r.content?.trim();
-          const url = r.url?.trim();
+      const title = best.title?.trim();
+      const url = best.url?.trim();
 
-          let sentence = '';
+      // Prefer Tavily's synthesized answer when available.
+      const tavilyAnswer = typeof (response as any).answer === 'string'
+        ? (response as any).answer.trim()
+        : '';
 
-          if (title) {
-            sentence += `Result ${index + 1} is "${title}". `;
-          }
+      const fallbackSummaryParts: string[] = [];
 
-          if (content) {
-            // If the snippet looks like raw JSON or a big object dump,
-            // skip it to avoid ugly structured output.
-            const looksLikeJson =
-              content.startsWith('{') ||
-              content.startsWith('[') ||
-              content.includes("': {") ||
-              content.includes('": {');
+      if (title) {
+        fallbackSummaryParts.push(`"${title}".`);
+      }
 
-            if (!looksLikeJson) {
-              // Keep things short to avoid overwhelming the user.
-              const shortContent =
-                content.length > 240 ? content.slice(0, 237).trimEnd() + '…' : content;
-              sentence += shortContent + ' ';
-            }
-          }
+      if (url) {
+        fallbackSummaryParts.push(`You can read more at ${url}.`);
+      }
 
-          if (url) {
-            sentence += `You can read more at ${url}.`;
-          }
-
-          return sentence.trim();
-        })
-        .join(' ');
+      const summary =
+        tavilyAnswer.length > 0 ? tavilyAnswer : fallbackSummaryParts.join(' ');
 
       // Gemini tools expect a JSON object (Struct) as the
       // function_response.response value, not a bare string.
       return {
         summary,
-        results: topResults.map((r) => ({
-          title: r.title,
-          url: r.url,
-        })),
+        results: [
+          {
+            title: best.title,
+            url: best.url,
+          },
+        ],
       };
     } catch (error) {
       console.error('searchWeb tool failed', error);
