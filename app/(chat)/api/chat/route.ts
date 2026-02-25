@@ -34,43 +34,74 @@ export async function POST(request: Request) {
     typeof lastContent === "string" && lastContent.startsWith("Form submitted:");
 
   let renderFormCallCount = 0;
+  let renderCardCallCount = 0;
 
   const result = await streamText({
     model: geminiProModel,
-    maxSteps: 1,
-    system: `You help users by creating dynamic, beautifully styled forms for structured input.
-Keep responses to one sentence. DO NOT output lists. After calling renderForm, reply with a short phrase and wait. 
-After calling searchWeb, always summarise the results conversationally — never output raw JSON or arrays.
+    maxSteps: 5,
+    system: `You help users by creating dynamic, beautifully styled forms AND rich info cards.
+Keep text responses to one sentence. DO NOT output lists. After calling renderForm, reply with a short phrase and wait.
 
-VARIANT SELECTION — pick the best match for user intent:
-  "email"    → composing / sending emails or messages (Gmail-like compose UI)
-  "feedback" → reviews, ratings, satisfaction (warm card with emoji & star support)
-  "payment"  → payments, checkout, billing (secure card-style)
-  "support"  → help requests, bug reports, tickets (ticket-style with priority)
-  "survey"   → polls, questionnaires, quizzes (clean survey layout)
-  "rsvp"     → event attendance, invitations (elegant event card)
-  "default"  → anything that doesn't fit above
+CRITICAL: When the latest user message starts with "Form submitted:" do NOT call renderForm or any tool. Reply with ONLY a short confirmation (e.g. "Email sent.", "Payment processed.", "Feedback received.", "Ticket created.", "RSVP confirmed.").
+
+═══════════════════════════════════════
+FORMS — renderForm (for structured user input)
+═══════════════════════════════════════
+
+VARIANT SELECTION:
+  "email"    → composing / sending emails or messages
+  "feedback" → reviews, ratings, satisfaction
+  "payment"  → payments, checkout, billing
+  "support"  → help requests, bug reports, tickets
+  "survey"   → polls, questionnaires, quizzes
+  "rsvp"     → event attendance, invitations
+  "default"  → anything else
 
 FIELD TYPES:
   text, email, number, password — standard inputs
   textarea — multi-line text
-  choice   — selectable button group; MUST include options (e.g. ["😍","😊","😐","😕","😢"] or ["Low","Medium","High","Urgent"])
+  choice   — selectable button group; MUST include options
   select   — dropdown; MUST include options
-  rating   — 1–5 star rating (great for satisfaction / quality scores)
+  rating   — 1–5 star rating
 
 Use id (short key), label (display text), type, options (required for choice/select), placeholder (optional hint).
-Set submitLabel to match the action (Send, Pay, Submit Feedback, Confirm RSVP, etc.).
-Call renderForm AT MOST ONCE per request.
+Set submitLabel to match the action. Call renderForm AT MOST ONCE per request.
 
-EXAMPLES:
-  "send an email" → variant "email", fields: to (email), subject (text, placeholder "Subject"), body (textarea), submitLabel "Send"
-  "leave feedback" → variant "feedback", fields: satisfaction (choice, options ["😍","😊","😐","😕","😢"]), rating (rating), comments (textarea, placeholder "Tell us more…"), submitLabel "Submit Feedback"
-  "make a payment" → variant "payment", fields: cardholder (text), cardNumber (text, placeholder "1234 5678 9012 3456"), expiry (text, placeholder "MM/YY"), cvv (password), submitLabel "Pay Securely"
-  "submit a support ticket" → variant "support", fields: priority (choice, options ["Low","Medium","High","Urgent"]), category (select, options ["Technical","Billing","Account","Other"]), subject (text), description (textarea), submitLabel "Submit Ticket"
-  "take a survey" → variant "survey", fields: one or more questions as choice fields with answer options, optional textarea for comments, submitLabel "Submit"
-  "rsvp to party" → variant "rsvp", fields: attendance (choice, options ["🎉 Going","🤔 Maybe","😔 Can't make it"]), name (text), email (email), dietary (select, options ["No restrictions","Vegetarian","Vegan","Gluten-free","Other"]), submitLabel "Confirm RSVP"
+═══════════════════════════════════════
+INFO CARDS — renderCard (for displaying search results visually)
+═══════════════════════════════════════
 
-CRITICAL: When the latest user message starts with "Form submitted:" do NOT call renderForm or any tool. Reply with ONLY a short confirmation (e.g. "Email sent.", "Payment processed.", "Feedback received.", "Ticket created.", "RSVP confirmed.").`,
+After searchWeb returns results, ALWAYS call renderCard to display the key information as a beautiful card.
+Extract structured data from the search answer and compose 2–6 blocks.
+
+CARD VARIANT SELECTION — pick the best match:
+  "finance"  → prices, stocks, crypto, market data, currencies (dark card with trend indicators)
+  "weather"  → weather conditions, temperature, forecasts (blue gradient)
+  "stat"     → single key statistic, population, distance, quantity (big-number card)
+  "profile"  → person, company, city, country info (gradient header)
+  "info"     → definitions, explanations, how-to, general knowledge (neutral blue tint)
+  "warning"  → alerts, advisories, risks, outages (amber tint)
+  "success"  → positive news, achievements, records (green tint)
+  "default"  → anything else
+
+BLOCK TYPES (compose freely):
+  metric   → big prominent number. Fields: label, value, unit (optional), trend "up"/"down"/"neutral" (optional)
+  pair     → key-value row. Fields: label, value
+  text     → paragraph. Fields: content
+  badges   → tag row. Fields: labels (array of strings)
+  progress → bar 0–100. Fields: label, numericValue, max (optional, default 100)
+  list     → bullet or numbered. Fields: items (array), ordered (optional boolean)
+  divider  → horizontal separator (no additional fields)
+
+Set icon to a relevant emoji. Include sourceTitle and sourceUrl from the search result.
+Call renderCard AT MOST ONCE per search.
+
+CARD EXAMPLES:
+  BTC price → variant "finance", title "Bitcoin", icon "₿", blocks: [metric{label:"Price",value:"$66,100",trend:"up"}, pair{label:"24h Change",value:"+5.2%"}, pair{label:"Market Cap",value:"$1.3T"}], footer "Live data"
+  Weather → variant "weather", title "Sheffield, UK", icon "🌤️", blocks: [metric{label:"Temperature",value:"15",unit:"°C"}, pair{label:"Conditions",value:"Partly Cloudy"}, pair{label:"Humidity",value:"72%"}, pair{label:"Wind",value:"12 mph NW"}]
+  Person → variant "profile", title "Albert Einstein", subtitle "Physicist", icon "👤", blocks: [text{content:"German-born theoretical physicist..."}, pair{label:"Born",value:"March 14, 1879"}, badges{labels:["Physics","Nobel Prize","Relativity"]}]
+  Definition → variant "info", title "Quantum Computing", icon "💡", blocks: [text{content:"..."}, list{items:["Superposition","Entanglement","Qubits"],ordered:false}, badges{labels:["Computer Science","Physics"]}]
+  Sports score → variant "success", title "Match Result", icon "⚽", blocks: [metric{label:"Final Score",value:"3 – 1"}, pair{label:"Man City vs Arsenal",value:"Full Time"}, badges{labels:["Premier League","Matchday 12"]}]`,
     messages: coreMessages,
     tools: {
       renderForm: {
@@ -103,6 +134,64 @@ CRITICAL: When the latest user message starts with "Form submitted:" do NOT call
             return { __skipRender: true, variant: "default", fields: [], submitLabel: "Submit" };
           }
           return { variant: variant ?? "default", fields, submitLabel: submitLabel ?? "Submit" };
+        },
+      },
+      renderCard: {
+        description:
+          "Render a beautiful dynamic info card in the chat. Call this AFTER searchWeb to visually display the key information from search results. Choose the best variant and compose blocks.",
+        parameters: z.object({
+          variant: z
+            .enum(["default", "finance", "weather", "stat", "profile", "info", "warning", "success"])
+            .optional()
+            .describe("Visual style variant matching the content type"),
+          title: z.string().describe("Card title"),
+          subtitle: z.string().optional().describe("Short subtitle under the title"),
+          icon: z.string().optional().describe("Emoji icon for the card header"),
+          blocks: z.array(
+            z.object({
+              type: z
+                .enum(["metric", "pair", "text", "badges", "progress", "list", "divider"])
+                .describe("Block type"),
+              label: z.string().optional().describe("Label for metric/pair/progress"),
+              value: z.string().optional().describe("Display value for metric/pair"),
+              unit: z.string().optional().describe("Unit suffix for metric (e.g. °C, %)"),
+              trend: z
+                .enum(["up", "down", "neutral"])
+                .optional()
+                .describe("Trend direction for metric"),
+              content: z.string().optional().describe("Paragraph text for text blocks"),
+              labels: z
+                .array(z.string())
+                .optional()
+                .describe("Tag strings for badges"),
+              items: z
+                .array(z.string())
+                .optional()
+                .describe("List items for list blocks"),
+              ordered: z.boolean().optional().describe("Numbered list if true"),
+              numericValue: z.number().optional().describe("Numeric value for progress bar"),
+              max: z.number().optional().describe("Max value for progress bar (default 100)"),
+            })
+          ),
+          footer: z.string().optional().describe("Small footer text"),
+          sourceTitle: z.string().optional().describe("Source link text"),
+          sourceUrl: z.string().optional().describe("Source URL"),
+        }),
+        execute: async ({ variant, title, subtitle, icon, blocks, footer, sourceTitle, sourceUrl }) => {
+          renderCardCallCount += 1;
+          if (renderCardCallCount > 1) {
+            return { __skipRender: true };
+          }
+          return {
+            variant: variant ?? "default",
+            title,
+            subtitle,
+            icon,
+            blocks,
+            footer,
+            sourceTitle,
+            sourceUrl,
+          };
         },
       },
       searchWeb,

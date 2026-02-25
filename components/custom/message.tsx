@@ -8,6 +8,7 @@ import { Streamdown } from "streamdown";
 import { BotIcon, UserIcon } from "./icons";
 import { PreviewAttachment } from "./preview-attachment";
 import { DynamicForm } from "./dynamic-form";
+import { DynamicCard } from "./dynamic-card";
 import { SearchWidget } from "./search-widget";
 
 const isFormSubmissionMessage = (role: string, content: string | ReactNode) =>
@@ -71,6 +72,19 @@ export const Message = ({
                           }}
                         />
                       )
+                    ) : toolName === "renderCard" ? (
+                      result.__skipRender ? null : (
+                        <DynamicCard
+                          variant={result.variant}
+                          title={result.title}
+                          subtitle={result.subtitle}
+                          icon={result.icon}
+                          blocks={result.blocks}
+                          footer={result.footer}
+                          sourceTitle={result.sourceTitle}
+                          sourceUrl={result.sourceUrl}
+                        />
+                      )
                     ) : toolName === "searchWeb" ? (
                       <div className="flex flex-col gap-1">
                         <div className="text-xs text-muted-foreground italic">
@@ -92,8 +106,9 @@ export const Message = ({
                   <div key={toolCallId} className="skeleton">
                     {toolName === "renderForm" ? (
                       <div className="h-24 w-full max-w-md rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800/50 animate-pulse" />
-                    ) : null}
-                    {toolName === "searchWeb" ? (
+                    ) : toolName === "renderCard" ? (
+                      <div className="h-32 w-full max-w-md rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800/50 animate-pulse" />
+                    ) : toolName === "searchWeb" ? (
                       <div className="text-xs text-muted-foreground italic">
                         Searching the web...
                       </div>
