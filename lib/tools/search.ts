@@ -14,7 +14,7 @@ export const searchWeb = tool({
       const response = await client.search(query, {
         maxResults: 5,
         searchDepth: 'advanced', // better reasoning over sources
-        includeAnswer: true, // let Tavily synthesize an answer
+        includeAnswer: 'advanced', // let Tavily synthesize an answer
       });
 
       if (!response.results || response.results.length === 0) {
