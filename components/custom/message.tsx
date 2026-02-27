@@ -10,6 +10,7 @@ import { PreviewAttachment } from "./preview-attachment";
 import { DynamicForm } from "./dynamic-form";
 import { DynamicCard } from "./dynamic-card";
 import { SearchWidget } from "./search-widget";
+import { WebsiteSuggestionsWidget } from "./website-suggestions-widget";
 
 const isFormSubmissionMessage = (role: string, content: string | ReactNode) =>
   role === "user" && typeof content === "string" && content.startsWith("Form submitted: ");
@@ -96,6 +97,12 @@ export const Message = ({
                           results={result.results ?? []}
                         />
                       </div>
+                    ) : toolName === "suggestWebsites" ? (
+                      <WebsiteSuggestionsWidget
+                        task={result.task ?? args?.task ?? ""}
+                        websites={result.websites ?? []}
+                        message={result.message}
+                      />
                     ) : (
                       <div>{JSON.stringify(result, null, 2)}</div>
                     )}
@@ -111,6 +118,10 @@ export const Message = ({
                     ) : toolName === "searchWeb" ? (
                       <div className="text-xs text-muted-foreground italic">
                         Searching the web...
+                      </div>
+                    ) : toolName === "suggestWebsites" ? (
+                      <div className="text-xs text-muted-foreground italic">
+                        Finding top websites...
                       </div>
                     ) : null}
                   </div>

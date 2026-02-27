@@ -33,6 +33,8 @@
 - [NextAuth.js](https://github.com/nextauthjs/next-auth)
   - Simple and secure authentication
 - **Dynamic forms** – Ask the chatbot to generate a form (e.g. with specific fields); it will render a fillable form in the chat. Submitting sends the values back to the conversation.
+- **Real-Time Web Search**
+  - Integrated with [Tavily API](https://tavily.com/) to grant the chatbot internet access for up-to-date answers and research.
 
 ## Dynamic form example prompts
 
