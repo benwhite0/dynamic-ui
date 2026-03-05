@@ -13,12 +13,14 @@ type WebsiteSuggestionsWidgetProps = {
   task: string;
   websites: WebsiteResult[];
   message?: string;
+  onWebsiteOpen?: (url: string) => void;
 };
 
 export function WebsiteSuggestionsWidget({
   task,
   websites,
   message,
+  onWebsiteOpen,
 }: WebsiteSuggestionsWidgetProps) {
   const truncatedTask =
     task.length > 80 ? `${task.slice(0, 77).trimEnd()}…` : task;
@@ -61,13 +63,37 @@ export function WebsiteSuggestionsWidget({
                   }
                 })();
 
-              return (
+              const linkClass =
+                "flex items-center justify-between gap-3 rounded-lg border border-border bg-background px-3 py-2.5 text-left transition-colors hover:bg-muted/50";
+
+              return onWebsiteOpen && site.url ? (
+                <button
+                  key={idx}
+                  type="button"
+                  onClick={() => onWebsiteOpen(site.url!)}
+                  className={`w-full ${linkClass}`}
+                >
+                  <div className="min-w-0 flex-1">
+                    {site.title && (
+                      <div className="truncate text-sm font-medium text-foreground">
+                        {site.title}
+                      </div>
+                    )}
+                    {domain && (
+                      <div className="text-[11px] text-muted-foreground">
+                        {domain}
+                      </div>
+                    )}
+                  </div>
+                  <ExternalLink className="size-4 shrink-0 text-muted-foreground" />
+                </button>
+              ) : (
                 <a
                   key={idx}
                   href={site.url}
                   target="_blank"
                   rel="noreferrer"
-                  className="flex items-center justify-between gap-3 rounded-lg border border-border bg-background px-3 py-2.5 text-left transition-colors hover:bg-muted/50"
+                  className={linkClass}
                 >
                   <div className="min-w-0 flex-1">
                     {site.title && (

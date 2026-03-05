@@ -22,6 +22,7 @@ export const Message = ({
   toolInvocations,
   attachments,
   onFormSubmit,
+  onWebsiteOpen,
 }: {
   chatId: string;
   role: string;
@@ -29,6 +30,7 @@ export const Message = ({
   toolInvocations: Array<ToolInvocation> | undefined;
   attachments?: Array<Attachment>;
   onFormSubmit?: (content: string) => void;
+  onWebsiteOpen?: (url: string) => void;
 }) => {
   if (isFormSubmissionMessage(role, content)) return null;
 
@@ -102,6 +104,7 @@ export const Message = ({
                         task={result.task ?? args?.task ?? ""}
                         websites={result.websites ?? []}
                         message={result.message}
+                        onWebsiteOpen={onWebsiteOpen}
                       />
                     ) : (
                       <div>{JSON.stringify(result, null, 2)}</div>
