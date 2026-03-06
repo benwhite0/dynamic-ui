@@ -1,6 +1,6 @@
 "use client";
 
-import { Attachment, Message } from "ai";
+import { Attachment, ChatRequestOptions, Message } from "ai";
 import { useChat } from "ai/react";
 import { useState } from "react";
 import { X, ExternalLink } from "lucide-react";
@@ -35,6 +35,83 @@ export function Chat({
   const [attachments, setAttachments] = useState<Array<Attachment>>([]);
   const [openWebsiteUrl, setOpenWebsiteUrl] = useState<string | null>(null);
 
+  const getHostname = (url?: string | null) => {
+    if (!url) return null;
+    try {
+      return new URL(url).hostname.replace(/^www\./, "").toLowerCase();
+    } catch {
+      return null;
+    }
+  };
+
+  const looksLikePreviewFollowUp = (text: string, url: string) => {
+    const t = (text ?? "").trim().toLowerCase();
+    if (t.length === 0) return false;
+
+    const hostname = getHostname(url);
+    const baseDomain = hostname ? hostname.split(".").slice(-2).join(".") : null;
+
+    if (hostname && (t.includes(hostname) || (baseDomain && t.includes(baseDomain)))) {
+      return true;
+    }
+
+    // Heuristic cues that the user is referring to the open website/preview.
+    const cues = [
+      "this site",
+      "this website",
+      "that site",
+      "that website",
+      "the site",
+      "the website",
+      "this page",
+      "that page",
+      "the page",
+      "preview",
+      "iframe",
+      "left panel",
+      "open preview",
+      "in the preview",
+      "on the website",
+      "on the page",
+      "use the website",
+      "use that site",
+      "use this site",
+      "continue",
+      "next",
+      "scroll",
+      "click",
+      "tap",
+      "select",
+      "choose",
+      "fill",
+      "enter",
+      "type",
+      "search on",
+      "filter",
+      "sort",
+      "checkout",
+      "reserve",
+      "book now",
+      "book it",
+    ];
+
+    return cues.some((c) => t.includes(c));
+  };
+
+  const handleSubmitAutoClosePreview = (
+    event?: { preventDefault?: () => void },
+    chatRequestOptions?: ChatRequestOptions,
+  ) => {
+    if (
+      openWebsiteUrl &&
+      !looksLikePreviewFollowUp(input, openWebsiteUrl)
+    ) {
+      setOpenWebsiteUrl(null);
+    }
+
+    handleSubmit(event, chatRequestOptions);
+  };
+
   const chatPanel = (
     <div className="flex flex-col justify-between items-center gap-4 h-full w-full min-w-0">
       <div
@@ -62,11 +139,21 @@ export function Chat({
         />
       </div>
 
+      {openWebsiteUrl && (
+        <button
+          type="button"
+          onClick={() => setOpenWebsiteUrl(null)}
+          className="text-xs px-2 py-1 rounded-md border border-border text-muted-foreground hover:bg-muted self-end mr-4 md:mr-0"
+        >
+          Exit preview and return to full chat
+        </button>
+      )}
+
       <form className="flex flex-row gap-2 relative items-end w-full md:max-w-[500px] max-w-[calc(100dvw-32px) px-4 md:px-0 shrink-0">
         <MultimodalInput
           input={input}
           setInput={setInput}
-          handleSubmit={handleSubmit}
+          handleSubmit={handleSubmitAutoClosePreview}
           isLoading={isLoading}
           stop={stop}
           attachments={attachments}
