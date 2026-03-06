@@ -5,7 +5,7 @@ import { geminiProModel } from "@/ai";
 import { auth } from "@/app/(auth)/auth";
 import { deleteChatById, getChatById, saveChat } from "@/db/queries";
 
-import { searchWeb } from "@/lib/tools/search";
+import { searchWeb, suggestWebsites } from "@/lib/tools/search";
 
 export async function POST(request: Request) {
   const { id, messages }: { id: string; messages: Array<Message> } =
@@ -45,12 +45,24 @@ Keep text responses to one sentence. DO NOT output lists. After calling renderFo
 CRITICAL: When the latest user message starts with "Form submitted:" do NOT call renderForm or any tool. Reply with ONLY a short confirmation (e.g. "Email sent.", "Payment processed.", "Feedback received.", "Ticket created.", "RSVP confirmed.").
 
 ═══════════════════════════════════════
-SEARCH — searchWeb (use only when needed)
+SEARCH — searchWeb (informational questions only)
 ═══════════════════════════════════════
 
-Reason before calling searchWeb:
-  USE searchWeb when the user needs up-to-date or external information: current prices (crypto, stocks, forex), live weather, today's news, recent sports results, breaking events, or anything that changes frequently. When in doubt whether data is current, prefer searching.
-  DO NOT use searchWeb when: the user wants a form (e.g. "send an email", "leave feedback") — just call renderForm; the question is simple math or common knowledge (e.g. "what is 2+2?", "capital of France"); or the user is asking for help with the app itself. Answer directly from your knowledge in those cases.
+USE searchWeb when the user asks a simple INFORMATIONAL question needing up-to-date data:
+  Examples: "What is the weather in Manchester today?", "Bitcoin price?", "Latest news on X", "Sports score", "Population of France"
+  Result: Returns a synthesized answer → then call renderCard to display it.
+
+DO NOT use searchWeb when: the user wants to DO something on a website (see suggestWebsites); wants a form; or it's common knowledge. Answer directly in those cases.
+
+═══════════════════════════════════════
+WEBSITE SUGGESTIONS — suggestWebsites (when user wants to DO something online)
+═══════════════════════════════════════
+
+USE suggestWebsites ONLY when the user wants to PERFORM A TASK on a website:
+  Examples: "I want to book a flight to Paris", "Where can I compare hotel prices?", "Best sites to buy a used car", "Find me a plumber in London"
+  Result: Returns top website links for the task. Do NOT call renderCard. Do NOT call searchWeb.
+
+DO NOT use suggestWebsites for informational questions (weather, prices, news, facts) — use searchWeb + renderCard instead.
 
 ═══════════════════════════════════════
 FORMS — renderForm (for structured user input)
@@ -81,7 +93,7 @@ Set submitLabel to match the action. Call renderForm AT MOST ONCE per request.
 INFO CARDS — renderCard (only when you used searchWeb)
 ═══════════════════════════════════════
 
-When you have just called searchWeb and received results, call renderCard to display the key information as a beautiful card. Do not call renderCard if you did not call searchWeb.
+When you have just called searchWeb (informational question) and received results, call renderCard to display the key information. Do NOT call renderCard if you used suggestWebsites. Do NOT call renderCard if you did not call searchWeb.
 Extract structured data from the search answer and compose 2–6 blocks.
 
 CARD VARIANT SELECTION — pick the best match:
@@ -205,6 +217,7 @@ CARD EXAMPLES:
         },
       },
       searchWeb,
+      suggestWebsites,
     },
     onFinish: async ({ responseMessages }) => {
       if (session.user && session.user.id) {
