@@ -54,7 +54,7 @@ CRITICAL: When the latest user message starts with "Form submitted:" do NOT call
 HOLIDAYS — getHolidays (who is on annual leave)
 ═══════════════════════════════════════
 
-USE getHolidays when the user asks who is on holiday / off / away / on annual leave, optionally for a time range (e.g. "who's on holiday next month?", "who's off in the next 2 weeks?"). Pass daysAhead when the user implies a window (2 weeks → 14). It reads the company database and returns a finished card. Do NOT call renderCard or searchWeb for this; just reply with one short sentence.
+USE getHolidays when the user asks who is on holiday / off / away / on annual leave, optionally for a time range (e.g. "who's on holiday next month?", "who's off in the next 2 weeks?"). Pass daysAhead when the user implies a window (2 weeks → 14). When the user asks about ONE person (e.g. "when is Leo next on holiday?", "is Charlotte off soon?") pass that person's name so only they are shown. It reads the company database and returns a finished card. Do NOT call renderCard or searchWeb for this; just reply with one short sentence.
 
 ═══════════════════════════════════════
 SEARCH — searchWeb (informational questions only)
@@ -230,24 +230,38 @@ CARD EXAMPLES:
       },
       getHolidays: {
         description:
-          "Look up who is on annual leave / holiday from the company database. Use whenever the user asks who is on holiday, who's off, who's away, time off, or annual leave. Returns a finished card to display—do NOT also call renderCard.",
+          "Look up who is on annual leave / holiday from the company database. Use whenever the user asks who is on holiday, who's off, who's away, time off, or annual leave. Pass `name` to look up one specific person. Returns a finished card to display—do NOT also call renderCard.",
         parameters: z.object({
+          name: z
+            .string()
+            .optional()
+            .describe(
+              "A person's name (or part of it) to filter by, e.g. 'Leo'. Omit to list everyone."
+            ),
           daysAhead: z
             .number()
             .optional()
             .describe("How many days ahead to check. Default 30 (next month)."),
         }),
-        execute: async ({ daysAhead }) => {
+        execute: async ({ name, daysAhead }) => {
           const days = daysAhead ?? 30;
           const start = new Date();
           const end = new Date();
-          end.setDate(end.getDate() + days);
+          // For a named person, look a year ahead to find their NEXT holiday.
+          end.setDate(end.getDate() + (name ? 365 : days));
 
-          const rows = await getHolidaysBetween({ start, end });
+          const rows = await getHolidaysBetween({ start, end, name });
 
           const blocks =
             rows.length === 0
-              ? [{ type: "text", content: "No one is on holiday in this period." }]
+              ? [
+                  {
+                    type: "text",
+                    content: name
+                      ? `${name} has no upcoming holidays booked.`
+                      : "No one is on holiday in this period.",
+                  },
+                ]
               : rows.map((r) => ({
                   type: "pair",
                   label: r.name,
@@ -256,11 +270,13 @@ CARD EXAMPLES:
 
           return {
             variant: "info",
-            title: "Upcoming Holidays",
-            subtitle: `Next ${days} days`,
+            title: name && rows.length ? rows[0].name : "Upcoming Holidays",
+            subtitle: name ? "Annual leave" : `Next ${days} days`,
             icon: "🌴",
             blocks,
-            footer: `${rows.length} ${rows.length === 1 ? "person" : "people"} on leave`,
+            footer: name
+              ? undefined
+              : `${rows.length} ${rows.length === 1 ? "person" : "people"} on leave`,
           };
         },
       },

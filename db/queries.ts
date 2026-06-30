@@ -1,7 +1,7 @@
 import "server-only";
 
 import { genSaltSync, hashSync } from "bcrypt-ts";
-import { and, asc, desc, eq, gte, lte } from "drizzle-orm";
+import { and, asc, desc, eq, gte, ilike, lte } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
@@ -152,17 +152,23 @@ export async function updateReservation({
     .where(eq(reservation.id, id));
 }
 
-// Returns everyone whose holiday overlaps the [start, end] window, soonest first.
+// Returns holidays overlapping the [start, end] window, soonest first.
+// Pass `name` to match a single person (case-insensitive, partial).
 export async function getHolidaysBetween({
   start,
   end,
+  name,
 }: {
   start: Date;
   end: Date;
+  name?: string;
 }) {
+  const conditions = [lte(holiday.startDate, end), gte(holiday.endDate, start)];
+  if (name) conditions.push(ilike(holiday.name, `%${name}%`));
+
   return await db()
     .select()
     .from(holiday)
-    .where(and(lte(holiday.startDate, end), gte(holiday.endDate, start)))
+    .where(and(...conditions))
     .orderBy(asc(holiday.startDate));
 }
