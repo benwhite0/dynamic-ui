@@ -5,13 +5,26 @@ import { z } from "zod";
 import { geminiProModel } from "@/ai";
 import { auth } from "@/app/(auth)/auth";
 import {
+  createTicket,
   deleteChatById,
   getChatById,
   getHolidaysBetween,
+  getTickets,
   saveChat,
 } from "@/db/queries";
 
 import { searchWeb, suggestWebsites } from "@/lib/tools/search";
+
+const STATUS_LABEL: Record<string, string> = {
+  todo: "To Do",
+  in_progress: "In Progress",
+  done: "Done",
+};
+const PRIORITY_LABEL: Record<string, string> = {
+  low: "Low",
+  medium: "Medium",
+  high: "High",
+};
 
 export async function POST(request: Request) {
   const { id, messages }: { id: string; messages: Array<Message> } =
@@ -55,6 +68,14 @@ HOLIDAYS — getHolidays (who is on annual leave)
 ═══════════════════════════════════════
 
 USE getHolidays when the user asks who is on holiday / off / away / on annual leave, optionally for a time range (e.g. "who's on holiday next month?", "who's off in the next 2 weeks?"). Pass daysAhead when the user implies a window (2 weeks → 14). When the user asks about ONE person (e.g. "when is Leo next on holiday?", "is Charlotte off soon?") pass that person's name so only they are shown. It reads the company database and returns a finished card. Do NOT call renderCard or searchWeb for this; just reply with one short sentence.
+
+═══════════════════════════════════════
+KANBAN TICKETS — createTicket / getTickets
+═══════════════════════════════════════
+
+USE createTicket when the user wants to create/add/open/raise a ticket, task, bug, or issue (e.g. "create a ticket to fix the login bug, high priority"). Infer a concise title plus any description/priority/status the user implies.
+USE getTickets when the user asks to see tickets/tasks/issues (e.g. "show my tickets", "what's in progress?", "any high-priority bugs?"). Pass status to filter a column or search to match title text.
+Both read/write the company database and return a finished card. Do NOT call renderCard for these; just reply with one short sentence.
 
 ═══════════════════════════════════════
 SEARCH — searchWeb (informational questions only)
@@ -277,6 +298,67 @@ CARD EXAMPLES:
             footer: name
               ? undefined
               : `${rows.length} ${rows.length === 1 ? "person" : "people"} on leave`,
+          };
+        },
+      },
+      createTicket: {
+        description:
+          "Create a new kanban ticket in the company database. Use when the user wants to create/add/open/raise a ticket, task, bug, or issue. Infer a concise title and (if implied) description, priority and status from the request. Returns a finished card—do NOT also call renderCard.",
+        parameters: z.object({
+          title: z.string().describe("Short ticket title"),
+          description: z.string().optional().describe("Longer details, if given"),
+          priority: z
+            .enum(["low", "medium", "high"])
+            .optional()
+            .describe("Defaults to medium"),
+          status: z
+            .enum(["todo", "in_progress", "done"])
+            .optional()
+            .describe("Defaults to todo"),
+        }),
+        execute: async ({ title, description, priority, status }) => {
+          const row = await createTicket({ title, description, priority, status });
+          return {
+            variant: "success",
+            title: row.title,
+            subtitle: "Ticket created",
+            icon: "🎫",
+            blocks: [
+              { type: "pair", label: "Status", value: STATUS_LABEL[row.status] ?? row.status },
+              { type: "pair", label: "Priority", value: PRIORITY_LABEL[row.priority] ?? row.priority },
+              ...(row.description ? [{ type: "text", content: row.description }] : []),
+            ],
+            footer: `#${row.id.slice(0, 8)}`,
+          };
+        },
+      },
+      getTickets: {
+        description:
+          "List kanban tickets from the company database. Use when the user asks about tickets/tasks/issues, e.g. 'show my tickets', 'what's in progress', 'any high priority bugs'. Pass status to filter a column, or search to match title text. Returns a finished card—do NOT also call renderCard.",
+        parameters: z.object({
+          status: z
+            .enum(["todo", "in_progress", "done"])
+            .optional()
+            .describe("Filter to one kanban column"),
+          search: z.string().optional().describe("Match against ticket titles"),
+        }),
+        execute: async ({ status, search }) => {
+          const rows = await getTickets({ status, search });
+          const blocks =
+            rows.length === 0
+              ? [{ type: "text", content: "No matching tickets." }]
+              : rows.map((t) => ({
+                  type: "pair",
+                  label: t.title,
+                  value: `${STATUS_LABEL[t.status] ?? t.status} · ${PRIORITY_LABEL[t.priority] ?? t.priority}`,
+                }));
+          return {
+            variant: "info",
+            title: "Tickets",
+            subtitle: status ? STATUS_LABEL[status] : search ? `Matching “${search}”` : "All tickets",
+            icon: "🎫",
+            blocks,
+            footer: `${rows.length} ${rows.length === 1 ? "ticket" : "tickets"}`,
           };
         },
       },

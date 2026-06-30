@@ -5,7 +5,7 @@ import { and, asc, desc, eq, gte, ilike, lte } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
-import { user, chat, User, reservation, holiday } from "./schema";
+import { user, chat, User, reservation, holiday, ticket } from "./schema";
 
 function getDb() {
   const url = process.env.POSTGRES_URL;
@@ -171,4 +171,41 @@ export async function getHolidaysBetween({
     .from(holiday)
     .where(and(...conditions))
     .orderBy(asc(holiday.startDate));
+}
+
+export async function createTicket({
+  title,
+  description,
+  status,
+  priority,
+}: {
+  title: string;
+  description?: string;
+  status?: string;
+  priority?: string;
+}) {
+  const [row] = await db()
+    .insert(ticket)
+    .values({ title, description, status, priority, createdAt: new Date() })
+    .returning();
+  return row;
+}
+
+// Lists tickets, newest first. Optionally filter by status and/or title text.
+export async function getTickets({
+  status,
+  search,
+}: {
+  status?: string;
+  search?: string;
+}) {
+  const conditions = [];
+  if (status) conditions.push(eq(ticket.status, status));
+  if (search) conditions.push(ilike(ticket.title, `%${search}%`));
+
+  return await db()
+    .select()
+    .from(ticket)
+    .where(conditions.length ? and(...conditions) : undefined)
+    .orderBy(desc(ticket.createdAt));
 }
