@@ -90,7 +90,9 @@ export const Message = ({
                       )
                     ) : toolName === "getHolidays" ||
                       toolName === "createTicket" ||
-                      toolName === "getTickets" ? (
+                      toolName === "getTickets" ||
+                      toolName === "updateTicket" ||
+                      toolName === "deleteTicket" ? (
                       <DynamicCard
                         variant={result.variant}
                         title={result.title}
@@ -130,7 +132,9 @@ export const Message = ({
                     ) : toolName === "renderCard" ||
                       toolName === "getHolidays" ||
                       toolName === "createTicket" ||
-                      toolName === "getTickets" ? (
+                      toolName === "getTickets" ||
+                      toolName === "updateTicket" ||
+                      toolName === "deleteTicket" ? (
                       <div className="h-32 w-full max-w-md rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800/50 animate-pulse" />
                     ) : toolName === "searchWeb" ? (
                       <div className="text-xs text-muted-foreground italic">

@@ -209,3 +209,38 @@ export async function getTickets({
     .where(conditions.length ? and(...conditions) : undefined)
     .orderBy(desc(ticket.createdAt));
 }
+
+export async function updateTicketById({
+  id,
+  title,
+  description,
+  status,
+  priority,
+}: {
+  id: string;
+  title?: string;
+  description?: string;
+  status?: string;
+  priority?: string;
+}) {
+  const fields: Record<string, unknown> = {};
+  if (title !== undefined) fields.title = title;
+  if (description !== undefined) fields.description = description;
+  if (status !== undefined) fields.status = status;
+  if (priority !== undefined) fields.priority = priority;
+
+  const [row] = await db()
+    .update(ticket)
+    .set(fields)
+    .where(eq(ticket.id, id))
+    .returning();
+  return row;
+}
+
+export async function deleteTicketById({ id }: { id: string }) {
+  const [row] = await db()
+    .delete(ticket)
+    .where(eq(ticket.id, id))
+    .returning();
+  return row;
+}

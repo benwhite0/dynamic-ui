@@ -7,10 +7,12 @@ import { auth } from "@/app/(auth)/auth";
 import {
   createTicket,
   deleteChatById,
+  deleteTicketById,
   getChatById,
   getHolidaysBetween,
   getTickets,
   saveChat,
+  updateTicketById,
 } from "@/db/queries";
 
 import { searchWeb, suggestWebsites } from "@/lib/tools/search";
@@ -25,6 +27,55 @@ const PRIORITY_LABEL: Record<string, string> = {
   medium: "Medium",
   high: "High",
 };
+
+// Builds a single-ticket card (reused by create and update).
+function ticketCard(row: any, subtitle: string) {
+  return {
+    variant: "success",
+    title: row.title,
+    subtitle,
+    icon: "🎫",
+    blocks: [
+      { type: "pair", label: "Status", value: STATUS_LABEL[row.status] ?? row.status },
+      { type: "pair", label: "Priority", value: PRIORITY_LABEL[row.priority] ?? row.priority },
+      ...(row.description ? [{ type: "text", content: row.description }] : []),
+    ],
+    footer: `#${row.id.slice(0, 8)}`,
+  };
+}
+
+// Finds the single ticket matching a title search. Returns the row, or a card
+// to show instead when there is no match / more than one match.
+async function resolveTicket(search: string) {
+  const matches = await getTickets({ search });
+  if (matches.length === 0) {
+    return {
+      card: {
+        variant: "warning",
+        title: "No matching ticket",
+        icon: "🎫",
+        blocks: [{ type: "text", content: `No ticket matches “${search}”.` }],
+      },
+    };
+  }
+  if (matches.length > 1) {
+    return {
+      card: {
+        variant: "info",
+        title: "Multiple tickets match",
+        subtitle: `“${search}”`,
+        icon: "🎫",
+        blocks: matches.map((t) => ({
+          type: "pair",
+          label: t.title,
+          value: STATUS_LABEL[t.status] ?? t.status,
+        })),
+        footer: "Please be more specific.",
+      },
+    };
+  }
+  return { row: matches[0] };
+}
 
 export async function POST(request: Request) {
   const { id, messages }: { id: string; messages: Array<Message> } =
@@ -75,7 +126,9 @@ KANBAN TICKETS — createTicket / getTickets
 
 USE createTicket when the user wants to create/add/open/raise a ticket, task, bug, or issue (e.g. "create a ticket to fix the login bug, high priority"). Infer a concise title plus any description/priority/status the user implies.
 USE getTickets when the user asks to see tickets/tasks/issues (e.g. "show my tickets", "what's in progress?", "any high-priority bugs?"). Pass status to filter a column or search to match title text.
-Both read/write the company database and return a finished card. Do NOT call renderCard for these; just reply with one short sentence.
+USE updateTicket when the user wants to change/move/edit/reprioritise a ticket (e.g. "move the login ticket to done", "make the login bug low priority"). Identify it with search (its title text) and pass only the fields that change.
+USE deleteTicket when the user wants to delete/remove a ticket. Identify it with search (its title text).
+All of these read/write the company database and return a finished card. Do NOT call renderCard for these; just reply with one short sentence.
 
 ═══════════════════════════════════════
 SEARCH — searchWeb (informational questions only)
@@ -318,18 +371,7 @@ CARD EXAMPLES:
         }),
         execute: async ({ title, description, priority, status }) => {
           const row = await createTicket({ title, description, priority, status });
-          return {
-            variant: "success",
-            title: row.title,
-            subtitle: "Ticket created",
-            icon: "🎫",
-            blocks: [
-              { type: "pair", label: "Status", value: STATUS_LABEL[row.status] ?? row.status },
-              { type: "pair", label: "Priority", value: PRIORITY_LABEL[row.priority] ?? row.priority },
-              ...(row.description ? [{ type: "text", content: row.description }] : []),
-            ],
-            footer: `#${row.id.slice(0, 8)}`,
-          };
+          return ticketCard(row, "Ticket created");
         },
       },
       getTickets: {
@@ -359,6 +401,51 @@ CARD EXAMPLES:
             icon: "🎫",
             blocks,
             footer: `${rows.length} ${rows.length === 1 ? "ticket" : "tickets"}`,
+          };
+        },
+      },
+      updateTicket: {
+        description:
+          "Update an existing kanban ticket (e.g. move it to a new column, change priority, edit title/description). Use when the user wants to change/move/edit/reprioritise a ticket. Identify the ticket via `search` (its title text) and pass only the fields to change. Returns a finished card—do NOT also call renderCard.",
+        parameters: z.object({
+          search: z.string().describe("Title text identifying the ticket to update"),
+          title: z.string().optional().describe("New title"),
+          description: z.string().optional().describe("New description"),
+          status: z
+            .enum(["todo", "in_progress", "done"])
+            .optional()
+            .describe("Move to this column"),
+          priority: z.enum(["low", "medium", "high"]).optional(),
+        }),
+        execute: async ({ search, title, description, status, priority }) => {
+          const found = await resolveTicket(search);
+          if (found.card) return found.card;
+          const row = await updateTicketById({
+            id: found.row!.id,
+            title,
+            description,
+            status,
+            priority,
+          });
+          return ticketCard(row, "Ticket updated");
+        },
+      },
+      deleteTicket: {
+        description:
+          "Delete a kanban ticket. Use when the user wants to delete/remove/close out a ticket. Identify it via `search` (its title text). Returns a finished card—do NOT also call renderCard.",
+        parameters: z.object({
+          search: z.string().describe("Title text identifying the ticket to delete"),
+        }),
+        execute: async ({ search }) => {
+          const found = await resolveTicket(search);
+          if (found.card) return found.card;
+          const row = await deleteTicketById({ id: found.row!.id });
+          return {
+            variant: "default",
+            title: row.title,
+            subtitle: "Ticket deleted",
+            icon: "🗑️",
+            blocks: [{ type: "text", content: "This ticket has been removed." }],
           };
         },
       },
