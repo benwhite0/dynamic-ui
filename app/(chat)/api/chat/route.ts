@@ -1,9 +1,15 @@
 import { convertToCoreMessages, Message, streamText } from "ai";
+import { format } from "date-fns";
 import { z } from "zod";
 
 import { geminiProModel } from "@/ai";
 import { auth } from "@/app/(auth)/auth";
-import { deleteChatById, getChatById, saveChat } from "@/db/queries";
+import {
+  deleteChatById,
+  getChatById,
+  getHolidaysBetween,
+  saveChat,
+} from "@/db/queries";
 
 import { searchWeb, suggestWebsites } from "@/lib/tools/search";
 
@@ -43,6 +49,12 @@ export async function POST(request: Request) {
 Keep text responses to one sentence. DO NOT output lists. After calling renderForm, reply with a short phrase and wait.
 
 CRITICAL: When the latest user message starts with "Form submitted:" do NOT call renderForm or any tool. Reply with ONLY a short confirmation (e.g. "Email sent.", "Payment processed.", "Feedback received.", "Ticket created.", "RSVP confirmed.").
+
+═══════════════════════════════════════
+HOLIDAYS — getHolidays (who is on annual leave)
+═══════════════════════════════════════
+
+USE getHolidays when the user asks who is on holiday / off / away / on annual leave, optionally for a time range (e.g. "who's on holiday next month?", "who's off in the next 2 weeks?"). Pass daysAhead when the user implies a window (2 weeks → 14). It reads the company database and returns a finished card. Do NOT call renderCard or searchWeb for this; just reply with one short sentence.
 
 ═══════════════════════════════════════
 SEARCH — searchWeb (informational questions only)
@@ -213,6 +225,42 @@ CARD EXAMPLES:
             footer,
             sourceTitle,
             sourceUrl,
+          };
+        },
+      },
+      getHolidays: {
+        description:
+          "Look up who is on annual leave / holiday from the company database. Use whenever the user asks who is on holiday, who's off, who's away, time off, or annual leave. Returns a finished card to display—do NOT also call renderCard.",
+        parameters: z.object({
+          daysAhead: z
+            .number()
+            .optional()
+            .describe("How many days ahead to check. Default 30 (next month)."),
+        }),
+        execute: async ({ daysAhead }) => {
+          const days = daysAhead ?? 30;
+          const start = new Date();
+          const end = new Date();
+          end.setDate(end.getDate() + days);
+
+          const rows = await getHolidaysBetween({ start, end });
+
+          const blocks =
+            rows.length === 0
+              ? [{ type: "text", content: "No one is on holiday in this period." }]
+              : rows.map((r) => ({
+                  type: "pair",
+                  label: r.name,
+                  value: `${format(r.startDate, "d MMM")} – ${format(r.endDate, "d MMM")}`,
+                }));
+
+          return {
+            variant: "info",
+            title: "Upcoming Holidays",
+            subtitle: `Next ${days} days`,
+            icon: "🌴",
+            blocks,
+            footer: `${rows.length} ${rows.length === 1 ? "person" : "people"} on leave`,
           };
         },
       },

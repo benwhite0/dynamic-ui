@@ -1,11 +1,11 @@
 import "server-only";
 
 import { genSaltSync, hashSync } from "bcrypt-ts";
-import { desc, eq } from "drizzle-orm";
+import { and, asc, desc, eq, gte, lte } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
-import { user, chat, User, reservation } from "./schema";
+import { user, chat, User, reservation, holiday } from "./schema";
 
 function getDb() {
   const url = process.env.POSTGRES_URL;
@@ -150,4 +150,19 @@ export async function updateReservation({
       hasCompletedPayment,
     })
     .where(eq(reservation.id, id));
+}
+
+// Returns everyone whose holiday overlaps the [start, end] window, soonest first.
+export async function getHolidaysBetween({
+  start,
+  end,
+}: {
+  start: Date;
+  end: Date;
+}) {
+  return await db()
+    .select()
+    .from(holiday)
+    .where(and(lte(holiday.startDate, end), gte(holiday.endDate, start)))
+    .orderBy(asc(holiday.startDate));
 }
