@@ -7,6 +7,7 @@ import {
   json,
   uuid,
   boolean,
+  text,
 } from "drizzle-orm/pg-core";
 
 export const user = pgTable("User", {
@@ -41,3 +42,23 @@ export const reservation = pgTable("Reservation", {
 });
 
 export type Reservation = InferSelectModel<typeof reservation>;
+
+export const holiday = pgTable("Holiday", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  name: varchar("name", { length: 64 }).notNull(),
+  startDate: timestamp("startDate").notNull(),
+  endDate: timestamp("endDate").notNull(),
+});
+
+export type Holiday = InferSelectModel<typeof holiday>;
+
+export const ticket = pgTable("Ticket", {
+  id: uuid("id").primaryKey().notNull().defaultRandom(),
+  title: varchar("title", { length: 128 }).notNull(),
+  description: text("description"),
+  status: varchar("status", { length: 16 }).notNull().default("todo"),
+  priority: varchar("priority", { length: 16 }).notNull().default("medium"),
+  createdAt: timestamp("createdAt").notNull().defaultNow(),
+});
+
+export type Ticket = InferSelectModel<typeof ticket>;

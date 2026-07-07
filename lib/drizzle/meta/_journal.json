@@ -8,6 +8,20 @@
       "when": 1728635586378,
       "tag": "0000_absurd_joshua_kane",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1782814610840,
+      "tag": "0001_cute_nick_fury",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1782821540371,
+      "tag": "0002_simple_boomerang",
+      "breakpoints": true
     }
   ]
 }

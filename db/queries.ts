@@ -1,11 +1,11 @@
 import "server-only";
 
 import { genSaltSync, hashSync } from "bcrypt-ts";
-import { desc, eq } from "drizzle-orm";
+import { and, asc, desc, eq, gte, ilike, lte } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
 
-import { user, chat, User, reservation } from "./schema";
+import { user, chat, User, reservation, holiday, ticket } from "./schema";
 
 function getDb() {
   const url = process.env.POSTGRES_URL;
@@ -150,4 +150,97 @@ export async function updateReservation({
       hasCompletedPayment,
     })
     .where(eq(reservation.id, id));
+}
+
+// Returns holidays overlapping the [start, end] window, soonest first.
+// Pass `name` to match a single person (case-insensitive, partial).
+export async function getHolidaysBetween({
+  start,
+  end,
+  name,
+}: {
+  start: Date;
+  end: Date;
+  name?: string;
+}) {
+  const conditions = [lte(holiday.startDate, end), gte(holiday.endDate, start)];
+  if (name) conditions.push(ilike(holiday.name, `%${name}%`));
+
+  return await db()
+    .select()
+    .from(holiday)
+    .where(and(...conditions))
+    .orderBy(asc(holiday.startDate));
+}
+
+export async function createTicket({
+  title,
+  description,
+  status,
+  priority,
+}: {
+  title: string;
+  description?: string;
+  status?: string;
+  priority?: string;
+}) {
+  const [row] = await db()
+    .insert(ticket)
+    .values({ title, description, status, priority, createdAt: new Date() })
+    .returning();
+  return row;
+}
+
+// Lists tickets, newest first. Optionally filter by status and/or title text.
+export async function getTickets({
+  status,
+  search,
+}: {
+  status?: string;
+  search?: string;
+}) {
+  const conditions = [];
+  if (status) conditions.push(eq(ticket.status, status));
+  if (search) conditions.push(ilike(ticket.title, `%${search}%`));
+
+  return await db()
+    .select()
+    .from(ticket)
+    .where(conditions.length ? and(...conditions) : undefined)
+    .orderBy(desc(ticket.createdAt));
+}
+
+export async function updateTicketById({
+  id,
+  title,
+  description,
+  status,
+  priority,
+}: {
+  id: string;
+  title?: string;
+  description?: string;
+  status?: string;
+  priority?: string;
+}) {
+  const fields: Record<string, unknown> = {};
+  if (title !== undefined) fields.title = title;
+  if (description !== undefined) fields.description = description;
+  if (status !== undefined) fields.status = status;
+  if (priority !== undefined) fields.priority = priority;
+
+  const [row] = await db()
+    .update(ticket)
+    .set(fields)
+    .where(eq(ticket.id, id))
+    .returning();
+  return row;
+}
+
+export async function deleteTicketById({ id }: { id: string }) {
+  const [row] = await db()
+    .delete(ticket)
+    .where(eq(ticket.id, id))
+    .returning();
+  return row;
 }

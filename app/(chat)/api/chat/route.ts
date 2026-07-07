@@ -1,11 +1,81 @@
 import { convertToCoreMessages, Message, streamText } from "ai";
+import { format } from "date-fns";
 import { z } from "zod";
 
 import { geminiProModel } from "@/ai";
 import { auth } from "@/app/(auth)/auth";
-import { deleteChatById, getChatById, saveChat } from "@/db/queries";
+import {
+  createTicket,
+  deleteChatById,
+  deleteTicketById,
+  getChatById,
+  getHolidaysBetween,
+  getTickets,
+  saveChat,
+  updateTicketById,
+} from "@/db/queries";
 
 import { searchWeb, suggestWebsites } from "@/lib/tools/search";
+
+const STATUS_LABEL: Record<string, string> = {
+  todo: "To Do",
+  in_progress: "In Progress",
+  done: "Done",
+};
+const PRIORITY_LABEL: Record<string, string> = {
+  low: "Low",
+  medium: "Medium",
+  high: "High",
+};
+
+// Builds a single-ticket card (reused by create and update).
+function ticketCard(row: any, subtitle: string) {
+  return {
+    variant: "success",
+    title: row.title,
+    subtitle,
+    icon: "🎫",
+    blocks: [
+      { type: "pair", label: "Status", value: STATUS_LABEL[row.status] ?? row.status },
+      { type: "pair", label: "Priority", value: PRIORITY_LABEL[row.priority] ?? row.priority },
+      ...(row.description ? [{ type: "text", content: row.description }] : []),
+    ],
+    footer: `#${row.id.slice(0, 8)}`,
+  };
+}
+
+// Finds the single ticket matching a title search. Returns the row, or a card
+// to show instead when there is no match / more than one match.
+async function resolveTicket(search: string) {
+  const matches = await getTickets({ search });
+  if (matches.length === 0) {
+    return {
+      card: {
+        variant: "warning",
+        title: "No matching ticket",
+        icon: "🎫",
+        blocks: [{ type: "text", content: `No ticket matches “${search}”.` }],
+      },
+    };
+  }
+  if (matches.length > 1) {
+    return {
+      card: {
+        variant: "info",
+        title: "Multiple tickets match",
+        subtitle: `“${search}”`,
+        icon: "🎫",
+        blocks: matches.map((t) => ({
+          type: "pair",
+          label: t.title,
+          value: STATUS_LABEL[t.status] ?? t.status,
+        })),
+        footer: "Please be more specific.",
+      },
+    };
+  }
+  return { row: matches[0] };
+}
 
 export async function POST(request: Request) {
   const { id, messages }: { id: string; messages: Array<Message> } =
@@ -43,6 +113,22 @@ export async function POST(request: Request) {
 Keep text responses to one sentence. DO NOT output lists. After calling renderForm, reply with a short phrase and wait.
 
 CRITICAL: When the latest user message starts with "Form submitted:" do NOT call renderForm or any tool. Reply with ONLY a short confirmation (e.g. "Email sent.", "Payment processed.", "Feedback received.", "Ticket created.", "RSVP confirmed.").
+
+═══════════════════════════════════════
+HOLIDAYS — getHolidays (who is on annual leave)
+═══════════════════════════════════════
+
+USE getHolidays when the user asks who is on holiday / off / away / on annual leave, optionally for a time range (e.g. "who's on holiday next month?", "who's off in the next 2 weeks?"). Pass daysAhead when the user implies a window (2 weeks → 14). When the user asks about ONE person (e.g. "when is Leo next on holiday?", "is Charlotte off soon?") pass that person's name so only they are shown. It reads the company database and returns a finished card. Do NOT call renderCard or searchWeb for this; just reply with one short sentence.
+
+═══════════════════════════════════════
+KANBAN TICKETS — createTicket / getTickets
+═══════════════════════════════════════
+
+USE createTicket when the user wants to create/add/open/raise a ticket, task, bug, or issue (e.g. "create a ticket to fix the login bug, high priority"). Infer a concise title plus any description/priority/status the user implies.
+USE getTickets when the user asks to see tickets/tasks/issues (e.g. "show my tickets", "what's in progress?", "any high-priority bugs?"). Pass status to filter a column or search to match title text.
+USE updateTicket when the user wants to change/move/edit/reprioritise a ticket (e.g. "move the login ticket to done", "make the login bug low priority"). Identify it with search (its title text) and pass only the fields that change.
+USE deleteTicket when the user wants to delete/remove a ticket. Identify it with search (its title text).
+All of these read/write the company database and return a finished card. Do NOT call renderCard for these; just reply with one short sentence.
 
 ═══════════════════════════════════════
 SEARCH — searchWeb (informational questions only)
@@ -213,6 +299,153 @@ CARD EXAMPLES:
             footer,
             sourceTitle,
             sourceUrl,
+          };
+        },
+      },
+      getHolidays: {
+        description:
+          "Look up who is on annual leave / holiday from the company database. Use whenever the user asks who is on holiday, who's off, who's away, time off, or annual leave. Pass `name` to look up one specific person. Returns a finished card to display—do NOT also call renderCard.",
+        parameters: z.object({
+          name: z
+            .string()
+            .optional()
+            .describe(
+              "A person's name (or part of it) to filter by, e.g. 'Leo'. Omit to list everyone."
+            ),
+          daysAhead: z
+            .number()
+            .optional()
+            .describe("How many days ahead to check. Default 30 (next month)."),
+        }),
+        execute: async ({ name, daysAhead }) => {
+          const days = daysAhead ?? 30;
+          const start = new Date();
+          const end = new Date();
+          // For a named person, look a year ahead to find their NEXT holiday.
+          end.setDate(end.getDate() + (name ? 365 : days));
+
+          const rows = await getHolidaysBetween({ start, end, name });
+
+          const blocks =
+            rows.length === 0
+              ? [
+                  {
+                    type: "text",
+                    content: name
+                      ? `${name} has no upcoming holidays booked.`
+                      : "No one is on holiday in this period.",
+                  },
+                ]
+              : rows.map((r) => ({
+                  type: "pair",
+                  label: r.name,
+                  value: `${format(r.startDate, "d MMM")} – ${format(r.endDate, "d MMM")}`,
+                }));
+
+          return {
+            variant: "info",
+            title: name && rows.length ? rows[0].name : "Upcoming Holidays",
+            subtitle: name ? "Annual leave" : `Next ${days} days`,
+            icon: "🌴",
+            blocks,
+            footer: name
+              ? undefined
+              : `${rows.length} ${rows.length === 1 ? "person" : "people"} on leave`,
+          };
+        },
+      },
+      createTicket: {
+        description:
+          "Create a new kanban ticket in the company database. Use when the user wants to create/add/open/raise a ticket, task, bug, or issue. Infer a concise title and (if implied) description, priority and status from the request. Returns a finished card—do NOT also call renderCard.",
+        parameters: z.object({
+          title: z.string().describe("Short ticket title"),
+          description: z.string().optional().describe("Longer details, if given"),
+          priority: z
+            .enum(["low", "medium", "high"])
+            .optional()
+            .describe("Defaults to medium"),
+          status: z
+            .enum(["todo", "in_progress", "done"])
+            .optional()
+            .describe("Defaults to todo"),
+        }),
+        execute: async ({ title, description, priority, status }) => {
+          const row = await createTicket({ title, description, priority, status });
+          return ticketCard(row, "Ticket created");
+        },
+      },
+      getTickets: {
+        description:
+          "List kanban tickets from the company database. Use when the user asks about tickets/tasks/issues, e.g. 'show my tickets', 'what's in progress', 'any high priority bugs'. Pass status to filter a column, or search to match title text. Returns a finished card—do NOT also call renderCard.",
+        parameters: z.object({
+          status: z
+            .enum(["todo", "in_progress", "done"])
+            .optional()
+            .describe("Filter to one kanban column"),
+          search: z.string().optional().describe("Match against ticket titles"),
+        }),
+        execute: async ({ status, search }) => {
+          const rows = await getTickets({ status, search });
+          const blocks =
+            rows.length === 0
+              ? [{ type: "text", content: "No matching tickets." }]
+              : rows.map((t) => ({
+                  type: "pair",
+                  label: t.title,
+                  value: `${STATUS_LABEL[t.status] ?? t.status} · ${PRIORITY_LABEL[t.priority] ?? t.priority}`,
+                }));
+          return {
+            variant: "info",
+            title: "Tickets",
+            subtitle: status ? STATUS_LABEL[status] : search ? `Matching “${search}”` : "All tickets",
+            icon: "🎫",
+            blocks,
+            footer: `${rows.length} ${rows.length === 1 ? "ticket" : "tickets"}`,
+          };
+        },
+      },
+      updateTicket: {
+        description:
+          "Update an existing kanban ticket (e.g. move it to a new column, change priority, edit title/description). Use when the user wants to change/move/edit/reprioritise a ticket. Identify the ticket via `search` (its title text) and pass only the fields to change. Returns a finished card—do NOT also call renderCard.",
+        parameters: z.object({
+          search: z.string().describe("Title text identifying the ticket to update"),
+          title: z.string().optional().describe("New title"),
+          description: z.string().optional().describe("New description"),
+          status: z
+            .enum(["todo", "in_progress", "done"])
+            .optional()
+            .describe("Move to this column"),
+          priority: z.enum(["low", "medium", "high"]).optional(),
+        }),
+        execute: async ({ search, title, description, status, priority }) => {
+          const found = await resolveTicket(search);
+          if (found.card) return found.card;
+          const row = await updateTicketById({
+            id: found.row!.id,
+            title,
+            description,
+            status,
+            priority,
+          });
+          return ticketCard(row, "Ticket updated");
+        },
+      },
+      deleteTicket: {
+        description:
+          "Delete a kanban ticket. Use when the user wants to delete/remove/close out a ticket. Identify it via `search` (its title text). Returns a finished card—do NOT also call renderCard.",
+        parameters: z.object({
+          search: z.string().describe("Title text identifying the ticket to delete"),
+        }),
+        execute: async ({ search }) => {
+          const found = await resolveTicket(search);
+          if (found.card) return found.card;
+          const row = await deleteTicketById({ id: found.row!.id });
+          return {
+            variant: "default",
+            title: row.title,
+            subtitle: "Ticket deleted",
+            icon: "🗑️",
+            blocks: [{ type: "text", content: "This ticket has been removed." }],
           };
         },
       },
