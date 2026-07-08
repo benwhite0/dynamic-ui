@@ -1,6 +1,6 @@
 "use client";
 
-import { useChat } from "ai/react";
+import { useChat } from "@ai-sdk/react";
 import cx from "classnames";
 
 interface Seat {
@@ -61,10 +61,8 @@ export function SelectSeats({
   chatId: string;
   availability?: typeof SAMPLE;
 }) {
-  const { append } = useChat({
+  const { sendMessage } = useChat({
     id: chatId,
-    body: { id: chatId },
-    maxSteps: 5,
   });
 
   return (
@@ -95,10 +93,7 @@ export function SelectSeats({
                 <div
                   key={seat.seatNumber}
                   onClick={() => {
-                    append({
-                      role: "user",
-                      content: `I'd like to go with seat ${seat.seatNumber}`,
-                    });
+                    sendMessage({ text: `I'd like to go with seat ${seat.seatNumber}` });
                   }}
                   className={cx(
                     "cursor-pointer group relative size-8 sm:size-10 flex-shrink-0 flex rounded-sm flex-row items-center justify-center",

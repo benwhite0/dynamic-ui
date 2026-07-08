@@ -1,4 +1,9 @@
-import { convertToCoreMessages, Message, streamText } from "ai";
+import {
+  convertToModelMessages,
+  stepCountIs,
+  streamText,
+  UIMessage,
+} from "ai";
 import { format } from "date-fns";
 import { z } from "zod";
 
@@ -14,7 +19,6 @@ import {
   saveChat,
   updateTicketById,
 } from "@/db/queries";
-
 import { searchWeb, suggestWebsites } from "@/lib/tools/search";
 
 const STATUS_LABEL: Record<string, string> = {
@@ -78,7 +82,7 @@ async function resolveTicket(search: string) {
 }
 
 export async function POST(request: Request) {
-  const { id, messages }: { id: string; messages: Array<Message> } =
+  const { id, messages }: { id: string; messages: Array<UIMessage> } =
     await request.json();
 
   const session = await auth();
@@ -87,28 +91,20 @@ export async function POST(request: Request) {
     return new Response("Unauthorized", { status: 401 });
   }
 
-  const coreMessages = convertToCoreMessages(messages).filter(
-    (message) => message.content.length > 0,
-  );
-
   const lastUserMsg = messages.filter((m) => m.role === "user").pop();
   const lastContent =
-    typeof lastUserMsg?.content === "string"
-      ? lastUserMsg.content
-      : Array.isArray(lastUserMsg?.content)
-        ? (lastUserMsg?.content as Array<{ type: string; text?: string }>)
-            ?.find((p) => p.type === "text")
-            ?.text ?? ""
-        : "";
-  const isFormSubmission =
-    typeof lastContent === "string" && lastContent.startsWith("Form submitted:");
+    lastUserMsg?.parts
+      .filter((p): p is { type: "text"; text: string } => p.type === "text")
+      .map((p) => p.text)
+      .join("") ?? "";
+  const isFormSubmission = lastContent.startsWith("Form submitted:");
 
   let renderFormCallCount = 0;
   let renderCardCallCount = 0;
 
-  const result = await streamText({
+  const result = streamText({
     model: geminiProModel,
-    maxSteps: 5,
+    stopWhen: stepCountIs(5),
     system: `You help users by creating dynamic, beautifully styled forms AND rich info cards.
 Keep text responses to one sentence. DO NOT output lists. After calling renderForm, reply with a short phrase and wait.
 
@@ -210,12 +206,12 @@ CARD EXAMPLES:
   Person → variant "profile", title "Albert Einstein", subtitle "Physicist", icon "👤", blocks: [text{content:"German-born theoretical physicist..."}, pair{label:"Born",value:"March 14, 1879"}, badges{labels:["Physics","Nobel Prize","Relativity"]}]
   Definition → variant "info", title "Quantum Computing", icon "💡", blocks: [text{content:"..."}, list{items:["Superposition","Entanglement","Qubits"],ordered:false}, badges{labels:["Computer Science","Physics"]}]
   Sports score → variant "success", title "Match Result", icon "⚽", blocks: [metric{label:"Final Score",value:"3 – 1"}, pair{label:"Man City vs Arsenal",value:"Full Time"}, badges{labels:["Premier League","Matchday 12"]}]`,
-    messages: coreMessages,
+    messages: convertToModelMessages(messages),
     tools: {
       renderForm: {
         description:
           "Render a styled dynamic form in the chat. Choose the best variant and infer fields from the user's goal. Do not wait for the user to specify fields—reason from context.",
-        parameters: z.object({
+        inputSchema: z.object({
           variant: z
             .enum(["default", "email", "feedback", "payment", "support", "survey", "rsvp"])
             .optional()
@@ -247,7 +243,7 @@ CARD EXAMPLES:
       renderCard: {
         description:
           "Render a beautiful dynamic info card in the chat. Call this AFTER searchWeb to visually display the key information from search results. Choose the best variant and compose blocks.",
-        parameters: z.object({
+        inputSchema: z.object({
           variant: z
             .enum(["default", "finance", "weather", "stat", "profile", "info", "warning", "success"])
             .optional()
@@ -305,7 +301,7 @@ CARD EXAMPLES:
       getHolidays: {
         description:
           "Look up who is on annual leave / holiday from the company database. Use whenever the user asks who is on holiday, who's off, who's away, time off, or annual leave. Pass `name` to look up one specific person. Returns a finished card to display—do NOT also call renderCard.",
-        parameters: z.object({
+        inputSchema: z.object({
           name: z
             .string()
             .optional()
@@ -357,7 +353,7 @@ CARD EXAMPLES:
       createTicket: {
         description:
           "Create a new kanban ticket in the company database. Use when the user wants to create/add/open/raise a ticket, task, bug, or issue. Infer a concise title and (if implied) description, priority and status from the request. Returns a finished card—do NOT also call renderCard.",
-        parameters: z.object({
+        inputSchema: z.object({
           title: z.string().describe("Short ticket title"),
           description: z.string().optional().describe("Longer details, if given"),
           priority: z
@@ -377,7 +373,7 @@ CARD EXAMPLES:
       getTickets: {
         description:
           "List kanban tickets from the company database. Use when the user asks about tickets/tasks/issues, e.g. 'show my tickets', 'what's in progress', 'any high priority bugs'. Pass status to filter a column, or search to match title text. Returns a finished card—do NOT also call renderCard.",
-        parameters: z.object({
+        inputSchema: z.object({
           status: z
             .enum(["todo", "in_progress", "done"])
             .optional()
@@ -407,7 +403,7 @@ CARD EXAMPLES:
       updateTicket: {
         description:
           "Update an existing kanban ticket (e.g. move it to a new column, change priority, edit title/description). Use when the user wants to change/move/edit/reprioritise a ticket. Identify the ticket via `search` (its title text) and pass only the fields to change. Returns a finished card—do NOT also call renderCard.",
-        parameters: z.object({
+        inputSchema: z.object({
           search: z.string().describe("Title text identifying the ticket to update"),
           title: z.string().optional().describe("New title"),
           description: z.string().optional().describe("New description"),
@@ -433,7 +429,7 @@ CARD EXAMPLES:
       deleteTicket: {
         description:
           "Delete a kanban ticket. Use when the user wants to delete/remove/close out a ticket. Identify it via `search` (its title text). Returns a finished card—do NOT also call renderCard.",
-        parameters: z.object({
+        inputSchema: z.object({
           search: z.string().describe("Title text identifying the ticket to delete"),
         }),
         execute: async ({ search }) => {
@@ -452,12 +448,20 @@ CARD EXAMPLES:
       searchWeb,
       suggestWebsites,
     },
-    onFinish: async ({ responseMessages }) => {
+    experimental_telemetry: {
+      isEnabled: true,
+      functionId: "stream-text",
+    },
+  });
+
+  return result.toUIMessageStreamResponse({
+    originalMessages: messages,
+    onFinish: async ({ messages: finalMessages }) => {
       if (session.user && session.user.id) {
         try {
           await saveChat({
             id,
-            messages: [...coreMessages, ...responseMessages],
+            messages: finalMessages,
             userId: session.user.id,
           });
         } catch (error) {
@@ -465,13 +469,7 @@ CARD EXAMPLES:
         }
       }
     },
-    experimental_telemetry: {
-      isEnabled: true,
-      functionId: "stream-text",
-    },
   });
-
-  return result.toDataStreamResponse({});
 }
 
 export async function DELETE(request: Request) {

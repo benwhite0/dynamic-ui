@@ -1,38 +1,149 @@
 "use client";
 
-import { Attachment, ToolInvocation } from "ai";
+import { UIMessage } from "ai";
 import { motion } from "framer-motion";
-import { ReactNode } from "react";
 import { Streamdown } from "streamdown";
 
+import { DynamicCard } from "./dynamic-card";
+import { DynamicForm } from "./dynamic-form";
 import { BotIcon, UserIcon } from "./icons";
 import { PreviewAttachment } from "./preview-attachment";
-import { DynamicForm } from "./dynamic-form";
-import { DynamicCard } from "./dynamic-card";
 import { SearchWidget } from "./search-widget";
 import { WebsiteSuggestionsWidget } from "./website-suggestions-widget";
 
-const isFormSubmissionMessage = (role: string, content: string | ReactNode) =>
-  role === "user" && typeof content === "string" && content.startsWith("Form submitted: ");
+const CARD_TOOLS = [
+  "getHolidays",
+  "createTicket",
+  "getTickets",
+  "updateTicket",
+  "deleteTicket",
+];
+
+function messageText(message: UIMessage) {
+  return message.parts
+    .filter((p): p is { type: "text"; text: string } => p.type === "text")
+    .map((p) => p.text)
+    .join("");
+}
+
+function ToolResult({
+  toolName,
+  input,
+  output,
+  onFormSubmit,
+  onWebsiteOpen,
+}: {
+  toolName: string;
+  input: any;
+  output: any;
+  onFormSubmit?: (content: string) => void;
+  onWebsiteOpen?: (url: string) => void;
+}) {
+  if (output?.__skipRender) return null;
+
+  if (toolName === "renderForm") {
+    return (
+      <DynamicForm
+        fields={output.fields}
+        variant={output.variant}
+        submitLabel={output.submitLabel}
+        onSubmit={(values) => {
+          const text = Object.entries(values)
+            .map(([k, v]) => `${k}: ${v}`)
+            .join(", ");
+          onFormSubmit?.(`Form submitted: ${text}`);
+        }}
+      />
+    );
+  }
+
+  if (toolName === "renderCard" || CARD_TOOLS.includes(toolName)) {
+    return (
+      <DynamicCard
+        variant={output.variant}
+        title={output.title}
+        subtitle={output.subtitle}
+        icon={output.icon}
+        blocks={output.blocks}
+        footer={output.footer}
+        sourceTitle={output.sourceTitle}
+        sourceUrl={output.sourceUrl}
+      />
+    );
+  }
+
+  if (toolName === "searchWeb") {
+    return (
+      <div className="flex flex-col gap-1">
+        <div className="text-xs text-muted-foreground italic">
+          Searched the web:
+        </div>
+        <SearchWidget
+          query={input?.query ?? ""}
+          summary={output.summary ?? ""}
+          results={output.results ?? []}
+        />
+      </div>
+    );
+  }
+
+  if (toolName === "suggestWebsites") {
+    return (
+      <WebsiteSuggestionsWidget
+        task={output.task ?? input?.task ?? ""}
+        websites={output.websites ?? []}
+        message={output.message}
+        onWebsiteOpen={onWebsiteOpen}
+      />
+    );
+  }
+
+  return <div>{JSON.stringify(output, null, 2)}</div>;
+}
+
+function ToolSkeleton({ toolName }: { toolName: string }) {
+  if (toolName === "renderForm") {
+    return (
+      <div className="h-24 w-full max-w-md rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800/50 animate-pulse" />
+    );
+  }
+  if (toolName === "renderCard" || CARD_TOOLS.includes(toolName)) {
+    return (
+      <div className="h-32 w-full max-w-md rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800/50 animate-pulse" />
+    );
+  }
+  if (toolName === "searchWeb") {
+    return (
+      <div className="text-xs text-muted-foreground italic">
+        Searching the web...
+      </div>
+    );
+  }
+  if (toolName === "suggestWebsites") {
+    return (
+      <div className="text-xs text-muted-foreground italic">
+        Finding top websites...
+      </div>
+    );
+  }
+  return null;
+}
 
 export const Message = ({
   chatId,
-  role,
-  content,
-  toolInvocations,
-  attachments,
+  message,
   onFormSubmit,
   onWebsiteOpen,
 }: {
   chatId: string;
-  role: string;
-  content: string | ReactNode;
-  toolInvocations: Array<ToolInvocation> | undefined;
-  attachments?: Array<Attachment>;
+  message: UIMessage;
   onFormSubmit?: (content: string) => void;
   onWebsiteOpen?: (url: string) => void;
 }) => {
-  if (isFormSubmissionMessage(role, content)) return null;
+  const { role, parts } = message;
+
+  if (role === "user" && messageText(message).startsWith("Form submitted: "))
+    return null;
 
   return (
     <motion.div
@@ -45,120 +156,70 @@ export const Message = ({
       </div>
 
       <div className="flex flex-col gap-2 w-full">
-        {content && typeof content === "string" && (
-          <div className="text-zinc-800 dark:text-zinc-300 flex flex-col gap-4">
-            <Streamdown>{content}</Streamdown>
-          </div>
-        )}
+        {parts.map((part, index) => {
+          if (part.type === "text" && part.text) {
+            return (
+              <div
+                key={index}
+                className="text-zinc-800 dark:text-zinc-300 flex flex-col gap-4"
+              >
+                <Streamdown>{part.text}</Streamdown>
+              </div>
+            );
+          }
 
-        {toolInvocations && (
-          <div className="flex flex-col gap-4">
-            {toolInvocations.map((toolInvocation) => {
-              const { toolName, toolCallId, state } = toolInvocation;
+          if (part.type === "file") {
+            return (
+              <div key={index} className="flex flex-row gap-2">
+                <PreviewAttachment
+                  attachment={{
+                    url: part.url,
+                    name: part.filename,
+                    contentType: part.mediaType,
+                  }}
+                />
+              </div>
+            );
+          }
 
-              if (state === "result") {
-                const { result, args } = toolInvocation as any;
+          if (part.type.startsWith("tool-")) {
+            const toolName = part.type.slice("tool-".length);
+            const toolPart = part as any;
 
-                return (
-                  <div key={toolCallId}>
-                    {toolName === "renderForm" ? (
-                      result.__skipRender ? null : (
-                        <DynamicForm
-                          fields={result.fields}
-                          variant={result.variant}
-                          submitLabel={result.submitLabel}
-                          onSubmit={(values) => {
-                            const text = Object.entries(values)
-                              .map(([k, v]) => `${k}: ${v}`)
-                              .join(", ");
-                            onFormSubmit?.(`Form submitted: ${text}`);
-                          }}
-                        />
-                      )
-                    ) : toolName === "renderCard" ? (
-                      result.__skipRender ? null : (
-                        <DynamicCard
-                          variant={result.variant}
-                          title={result.title}
-                          subtitle={result.subtitle}
-                          icon={result.icon}
-                          blocks={result.blocks}
-                          footer={result.footer}
-                          sourceTitle={result.sourceTitle}
-                          sourceUrl={result.sourceUrl}
-                        />
-                      )
-                    ) : toolName === "getHolidays" ||
-                      toolName === "createTicket" ||
-                      toolName === "getTickets" ||
-                      toolName === "updateTicket" ||
-                      toolName === "deleteTicket" ? (
-                      <DynamicCard
-                        variant={result.variant}
-                        title={result.title}
-                        subtitle={result.subtitle}
-                        icon={result.icon}
-                        blocks={result.blocks}
-                        footer={result.footer}
-                      />
-                    ) : toolName === "searchWeb" ? (
-                      <div className="flex flex-col gap-1">
-                        <div className="text-xs text-muted-foreground italic">
-                          Searched the web:
-                        </div>
-                        <SearchWidget
-                          query={args?.query ?? ""}
-                          summary={result.summary ?? ""}
-                          results={result.results ?? []}
-                        />
-                      </div>
-                    ) : toolName === "suggestWebsites" ? (
-                      <WebsiteSuggestionsWidget
-                        task={result.task ?? args?.task ?? ""}
-                        websites={result.websites ?? []}
-                        message={result.message}
-                        onWebsiteOpen={onWebsiteOpen}
-                      />
-                    ) : (
-                      <div>{JSON.stringify(result, null, 2)}</div>
-                    )}
-                  </div>
-                );
-              } else {
-                return (
-                  <div key={toolCallId} className="skeleton">
-                    {toolName === "renderForm" ? (
-                      <div className="h-24 w-full max-w-md rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800/50 animate-pulse" />
-                    ) : toolName === "renderCard" ||
-                      toolName === "getHolidays" ||
-                      toolName === "createTicket" ||
-                      toolName === "getTickets" ||
-                      toolName === "updateTicket" ||
-                      toolName === "deleteTicket" ? (
-                      <div className="h-32 w-full max-w-md rounded-xl border border-zinc-200 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800/50 animate-pulse" />
-                    ) : toolName === "searchWeb" ? (
-                      <div className="text-xs text-muted-foreground italic">
-                        Searching the web...
-                      </div>
-                    ) : toolName === "suggestWebsites" ? (
-                      <div className="text-xs text-muted-foreground italic">
-                        Finding top websites...
-                      </div>
-                    ) : null}
-                  </div>
-                );
-              }
-            })}
-          </div>
-        )}
+            if (toolPart.state === "output-available") {
+              return (
+                <div key={toolPart.toolCallId ?? index}>
+                  <ToolResult
+                    toolName={toolName}
+                    input={toolPart.input}
+                    output={toolPart.output}
+                    onFormSubmit={onFormSubmit}
+                    onWebsiteOpen={onWebsiteOpen}
+                  />
+                </div>
+              );
+            }
 
-        {attachments && (
-          <div className="flex flex-row gap-2">
-            {attachments.map((attachment) => (
-              <PreviewAttachment key={attachment.url} attachment={attachment} />
-            ))}
-          </div>
-        )}
+            if (toolPart.state === "output-error") {
+              return (
+                <div
+                  key={toolPart.toolCallId ?? index}
+                  className="text-xs text-red-500"
+                >
+                  Something went wrong running {toolName}.
+                </div>
+              );
+            }
+
+            return (
+              <div key={toolPart.toolCallId ?? index} className="skeleton">
+                <ToolSkeleton toolName={toolName} />
+              </div>
+            );
+          }
+
+          return null;
+        })}
       </div>
     </motion.div>
   );

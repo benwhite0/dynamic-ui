@@ -1,10 +1,4 @@
-import {
-  CoreMessage,
-  CoreToolMessage,
-  generateId,
-  Message,
-  ToolInvocation,
-} from "ai";
+import { generateId, UIMessage } from "ai";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -51,88 +45,88 @@ export function generateUUID(): string {
   });
 }
 
-function addToolMessageToChat({
-  toolMessage,
-  messages,
-}: {
-  toolMessage: CoreToolMessage;
-  messages: Array<Message>;
-}): Array<Message> {
-  return messages.map((message) => {
-    if (message.toolInvocations) {
-      return {
-        ...message,
-        toolInvocations: message.toolInvocations.map((toolInvocation) => {
-          const toolResult = toolMessage.content.find(
-            (tool) => tool.toolCallId === toolInvocation.toolCallId,
-          );
+// Legacy CoreMessage shape stored by the pre-v5 app.
+type LegacyContentPart = {
+  type: string;
+  text?: string;
+  toolCallId?: string;
+  toolName?: string;
+  args?: unknown;
+  result?: unknown;
+};
+type LegacyMessage = {
+  role: string;
+  content: string | Array<LegacyContentPart>;
+  parts?: unknown;
+};
 
-          if (toolResult) {
-            return {
-              ...toolInvocation,
-              state: "result",
-              result: toolResult.result,
-            };
+// Converts stored chat messages to v5 UIMessages. Chats saved by the v5 app
+// are already UIMessages (they have `parts`) and pass through untouched;
+// pre-v5 chats stored CoreMessages and are converted, including tool results.
+export function convertToUIMessages(messages: Array<unknown>): Array<UIMessage> {
+  if (messages.length === 0) return [];
+  if ((messages[0] as LegacyMessage).parts) return messages as Array<UIMessage>;
+
+  const uiMessages: Array<UIMessage> = [];
+
+  for (const raw of messages as Array<LegacyMessage>) {
+    if (raw.role === "tool") {
+      // Attach each tool result to its matching tool part on a prior message.
+      for (const part of Array.isArray(raw.content) ? raw.content : []) {
+        if (part.type !== "tool-result") continue;
+        for (const m of uiMessages) {
+          for (const p of m.parts as Array<any>) {
+            if (p.toolCallId === part.toolCallId) {
+              p.state = "output-available";
+              p.output = part.result;
+            }
           }
-
-          return toolInvocation;
-        }),
-      };
+        }
+      }
+      continue;
     }
 
-    return message;
-  });
-}
+    const parts: Array<any> = [];
 
-export function convertToUIMessages(
-  messages: Array<CoreMessage>,
-): Array<Message> {
-  return messages.reduce((chatMessages: Array<Message>, message) => {
-    if (message.role === "tool") {
-      return addToolMessageToChat({
-        toolMessage: message as CoreToolMessage,
-        messages: chatMessages,
-      });
-    }
-
-    let textContent = "";
-    let toolInvocations: Array<ToolInvocation> = [];
-
-    if (typeof message.content === "string") {
-      textContent = message.content;
-    } else if (Array.isArray(message.content)) {
-      for (const content of message.content) {
-        if (content.type === "text") {
-          textContent += content.text;
-        } else if (content.type === "tool-call") {
-          toolInvocations.push({
-            state: "call",
-            toolCallId: content.toolCallId,
-            toolName: content.toolName,
-            args: content.args,
+    if (typeof raw.content === "string") {
+      if (raw.content) parts.push({ type: "text", text: raw.content });
+    } else if (Array.isArray(raw.content)) {
+      for (const part of raw.content) {
+        if (part.type === "text" && part.text) {
+          parts.push({ type: "text", text: part.text });
+        } else if (part.type === "tool-call") {
+          parts.push({
+            type: `tool-${part.toolName}`,
+            toolCallId: part.toolCallId,
+            state: "input-available",
+            input: part.args,
           });
         }
       }
     }
 
-    chatMessages.push({
+    uiMessages.push({
       id: generateId(),
-      role: message.role,
-      content: textContent,
-      toolInvocations,
+      role: raw.role as UIMessage["role"],
+      parts,
     });
+  }
 
-    return chatMessages;
-  }, []);
+  return uiMessages;
 }
 
 export function getTitleFromChat(chat: Chat) {
-  const messages = convertToUIMessages(chat.messages as Array<CoreMessage>);
+  const messages = convertToUIMessages(chat.messages as Array<unknown>);
   const firstMessage = messages[0];
 
   if (!firstMessage) {
     return "Untitled";
   }
 
-  return firstMessage.content;
+  const text = firstMessage.parts
+    .filter((p): p is { type: "text"; text: string } => p.type === "text")
+    .map((p) => p.text)
+    .join(" ");
+
+  return text || "Untitled";
 }
