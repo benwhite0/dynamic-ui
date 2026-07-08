@@ -98,7 +98,15 @@ function ToolResult({
     );
   }
 
-  return <div>{JSON.stringify(output, null, 2)}</div>;
+  // Generic fallback (e.g. MCP tools): collapsed raw result, model narrates it.
+  return (
+    <details className="text-xs text-muted-foreground max-w-md">
+      <summary className="cursor-pointer italic">Used {toolName}</summary>
+      <pre className="mt-1 p-2 rounded-md bg-muted overflow-x-auto whitespace-pre-wrap break-all">
+        {JSON.stringify(output, null, 2)}
+      </pre>
+    </details>
+  );
 }
 
 function ToolSkeleton({ toolName }: { toolName: string }) {
@@ -126,7 +134,11 @@ function ToolSkeleton({ toolName }: { toolName: string }) {
       </div>
     );
   }
-  return null;
+  return (
+    <div className="text-xs text-muted-foreground italic">
+      Running {toolName}...
+    </div>
+  );
 }
 
 export const Message = ({
@@ -182,9 +194,13 @@ export const Message = ({
             );
           }
 
-          if (part.type.startsWith("tool-")) {
-            const toolName = part.type.slice("tool-".length);
+          // MCP tools stream as "dynamic-tool" parts (name known only at runtime).
+          if (part.type.startsWith("tool-") || part.type === "dynamic-tool") {
             const toolPart = part as any;
+            const toolName =
+              part.type === "dynamic-tool"
+                ? toolPart.toolName
+                : part.type.slice("tool-".length);
 
             if (toolPart.state === "output-available") {
               return (

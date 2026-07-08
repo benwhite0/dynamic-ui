@@ -19,6 +19,7 @@ import {
   saveChat,
   updateTicketById,
 } from "@/db/queries";
+import { getMcpTools } from "@/lib/tools/mcp";
 import { searchWeb, suggestWebsites } from "@/lib/tools/search";
 
 const STATUS_LABEL: Record<string, string> = {
@@ -102,6 +103,26 @@ export async function POST(request: Request) {
   let renderFormCallCount = 0;
   let renderCardCallCount = 0;
 
+  const mcp = await getMcpTools();
+  const mcpPrompt =
+    Object.keys(mcp.tools).length > 0
+      ? `
+
+═══════════════════════════════════════
+COMPANY MCP TOOLS (live company data)
+═══════════════════════════════════════
+
+Extra tools from the company MCP server are also available. PREFER them over local tools when they can answer with real company data. After an MCP tool returns data, call renderCard to present the key information (this is an exception to the "only after searchWeb" rule), then reply with one short sentence.`
+      : "";
+
+  // When the MCP server provides holiday data, the local mock steps aside.
+  const mcpHasHolidays = Object.keys(mcp.tools).some((name) =>
+    name.toLowerCase().includes("holiday"),
+  );
+  const holidaysPrompt = mcpHasHolidays
+    ? `USE the company MCP holiday tool (e.g. find_holidays) when the user asks who is on holiday / off / away / on annual leave. When the data returns, call renderCard to display it: variant "info", icon "🌴", one pair block per person (label: name, value: date range). Then reply with one short sentence.`
+    : `USE getHolidays when the user asks who is on holiday / off / away / on annual leave, optionally for a time range (e.g. "who's on holiday next month?", "who's off in the next 2 weeks?"). Pass daysAhead when the user implies a window (2 weeks → 14). When the user asks about ONE person (e.g. "when is Leo next on holiday?", "is Charlotte off soon?") pass that person's name so only they are shown. It reads the company database and returns a finished card. Do NOT call renderCard or searchWeb for this; just reply with one short sentence.`;
+
   const result = streamText({
     model: geminiProModel,
     stopWhen: stepCountIs(5),
@@ -111,10 +132,10 @@ Keep text responses to one sentence. DO NOT output lists. After calling renderFo
 CRITICAL: When the latest user message starts with "Form submitted:" do NOT call renderForm or any tool. Reply with ONLY a short confirmation (e.g. "Email sent.", "Payment processed.", "Feedback received.", "Ticket created.", "RSVP confirmed.").
 
 ═══════════════════════════════════════
-HOLIDAYS — getHolidays (who is on annual leave)
+HOLIDAYS (who is on annual leave)
 ═══════════════════════════════════════
 
-USE getHolidays when the user asks who is on holiday / off / away / on annual leave, optionally for a time range (e.g. "who's on holiday next month?", "who's off in the next 2 weeks?"). Pass daysAhead when the user implies a window (2 weeks → 14). When the user asks about ONE person (e.g. "when is Leo next on holiday?", "is Charlotte off soon?") pass that person's name so only they are shown. It reads the company database and returns a finished card. Do NOT call renderCard or searchWeb for this; just reply with one short sentence.
+${holidaysPrompt}
 
 ═══════════════════════════════════════
 KANBAN TICKETS — createTicket / getTickets
@@ -205,7 +226,7 @@ CARD EXAMPLES:
   Weather → variant "weather", title "Sheffield, UK", icon "🌤️", blocks: [metric{label:"Temperature",value:"15",unit:"°C"}, pair{label:"Conditions",value:"Partly Cloudy"}, pair{label:"Humidity",value:"72%"}, pair{label:"Wind",value:"12 mph NW"}]
   Person → variant "profile", title "Albert Einstein", subtitle "Physicist", icon "👤", blocks: [text{content:"German-born theoretical physicist..."}, pair{label:"Born",value:"March 14, 1879"}, badges{labels:["Physics","Nobel Prize","Relativity"]}]
   Definition → variant "info", title "Quantum Computing", icon "💡", blocks: [text{content:"..."}, list{items:["Superposition","Entanglement","Qubits"],ordered:false}, badges{labels:["Computer Science","Physics"]}]
-  Sports score → variant "success", title "Match Result", icon "⚽", blocks: [metric{label:"Final Score",value:"3 – 1"}, pair{label:"Man City vs Arsenal",value:"Full Time"}, badges{labels:["Premier League","Matchday 12"]}]`,
+  Sports score → variant "success", title "Match Result", icon "⚽", blocks: [metric{label:"Final Score",value:"3 – 1"}, pair{label:"Man City vs Arsenal",value:"Full Time"}, badges{labels:["Premier League","Matchday 12"]}]${mcpPrompt}`,
     messages: convertToModelMessages(messages),
     tools: {
       renderForm: {
@@ -298,6 +319,10 @@ CARD EXAMPLES:
           };
         },
       },
+      // Local mock; hidden when the MCP server provides real holiday data.
+      ...(mcpHasHolidays
+        ? {}
+        : {
       getHolidays: {
         description:
           "Look up who is on annual leave / holiday from the company database. Use whenever the user asks who is on holiday, who's off, who's away, time off, or annual leave. Pass `name` to look up one specific person. Returns a finished card to display—do NOT also call renderCard.",
@@ -350,6 +375,7 @@ CARD EXAMPLES:
           };
         },
       },
+        }),
       createTicket: {
         description:
           "Create a new kanban ticket in the company database. Use when the user wants to create/add/open/raise a ticket, task, bug, or issue. Infer a concise title and (if implied) description, priority and status from the request. Returns a finished card—do NOT also call renderCard.",
@@ -447,6 +473,11 @@ CARD EXAMPLES:
       },
       searchWeb,
       suggestWebsites,
+      ...mcp.tools,
+    },
+    onError: async ({ error }) => {
+      console.error("streamText error", error);
+      await mcp.close();
     },
     experimental_telemetry: {
       isEnabled: true,
@@ -456,7 +487,13 @@ CARD EXAMPLES:
 
   return result.toUIMessageStreamResponse({
     originalMessages: messages,
+    onError: (error) => {
+      console.error("chat stream error", error);
+      return error instanceof Error ? error.message : String(error);
+    },
     onFinish: async ({ messages: finalMessages }) => {
+      await mcp.close();
+
       if (session.user && session.user.id) {
         try {
           await saveChat({
