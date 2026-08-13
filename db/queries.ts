@@ -45,6 +45,31 @@ export async function createUser(email: string, password: string) {
   }
 }
 
+// Login is bypassed for now, so every visitor runs as one shared guest user.
+// Chat and Reservation both hold a foreign key to User, so that row has to
+// exist before anything can be persisted. See app/(auth)/auth.ts.
+export const GUEST_USER_ID = "00000000-0000-0000-0000-000000000001";
+export const GUEST_USER_EMAIL = "guest@local";
+
+let guestUser: Promise<void> | null = null;
+
+export async function ensureGuestUser() {
+  if (!guestUser) {
+    guestUser = db()
+      .insert(user)
+      .values({ id: GUEST_USER_ID, email: GUEST_USER_EMAIL })
+      .onConflictDoNothing()
+      .then(() => undefined)
+      .catch((error) => {
+        // Don't cache a failure — the next request should get another go.
+        guestUser = null;
+        throw error;
+      });
+  }
+
+  return guestUser;
+}
+
 export async function saveChat({
   id,
   messages,

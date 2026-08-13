@@ -10,29 +10,10 @@ export const authConfig = {
     // while this file is also used in non-Node.js environments
   ],
   callbacks: {
-    authorized({ auth, request: { nextUrl } }) {
-      let isLoggedIn = !!auth?.user;
-      let isOnChat = nextUrl.pathname.startsWith("/");
-      let isOnRegister = nextUrl.pathname.startsWith("/register");
-      let isOnLogin = nextUrl.pathname.startsWith("/login");
-
-      if (isLoggedIn && (isOnLogin || isOnRegister)) {
-        return Response.redirect(new URL("/", nextUrl));
-      }
-
-      if (isOnRegister || isOnLogin) {
-        return true; // Always allow access to register and login pages
-      }
-
-      if (isOnChat) {
-        if (isLoggedIn) return true;
-        return false; // Redirect unauthenticated users to login page
-      }
-
-      if (isLoggedIn) {
-        return Response.redirect(new URL("/", nextUrl));
-      }
-
+    // Login is bypassed for now: every route is public, and `auth()` falls back
+    // to a shared guest session so the pages behind it still get a user id.
+    // Restore the real gate here to turn login back on — see app/(auth)/auth.ts.
+    authorized() {
       return true;
     },
   },

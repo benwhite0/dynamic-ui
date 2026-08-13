@@ -1,7 +1,8 @@
+import { BarChart3 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-import { auth, signOut } from "@/app/(auth)/auth";
+import { auth, isGuest, signOut } from "@/app/(auth)/auth";
 
 import { History } from "./history";
 import { SlashIcon } from "./icons";
@@ -16,6 +17,9 @@ import {
 
 export const Navbar = async () => {
   let session = await auth();
+  // Login is bypassed, so a session is always present — but a guest has nothing
+  // to sign out of.
+  let guest = isGuest(session);
 
   return (
     <>
@@ -38,46 +42,56 @@ export const Navbar = async () => {
           </div>
         </div>
 
-        {session ? (
+        <div className="flex flex-row gap-2 items-center">
+          <Button
+            className="py-1.5 px-2 h-fit font-normal gap-1.5"
+            variant="outline"
+            asChild
+          >
+            <Link href="/reports">
+              <BarChart3 className="size-3.5" />
+              <span className="hidden sm:inline">Spend reports</span>
+              <span className="sr-only sm:hidden">Spend reports</span>
+            </Link>
+          </Button>
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 className="py-1.5 px-2 h-fit font-normal"
                 variant="secondary"
               >
-                {session.user?.email}
+                {guest ? "Guest" : session?.user?.email}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem>
                 <ThemeToggle />
               </DropdownMenuItem>
-              <DropdownMenuItem className="p-1 z-50">
-                <form
-                  className="w-full"
-                  action={async () => {
-                    "use server";
+              {!guest && (
+                <DropdownMenuItem className="p-1 z-50">
+                  <form
+                    className="w-full"
+                    action={async () => {
+                      "use server";
 
-                    await signOut({
-                      redirectTo: "/",
-                    });
-                  }}
-                >
-                  <button
-                    type="submit"
-                    className="w-full text-left px-1 py-0.5 text-red-500"
+                      await signOut({
+                        redirectTo: "/",
+                      });
+                    }}
                   >
-                    Sign out
-                  </button>
-                </form>
-              </DropdownMenuItem>
+                    <button
+                      type="submit"
+                      className="w-full text-left px-1 py-0.5 text-red-500"
+                    >
+                      Sign out
+                    </button>
+                  </form>
+                </DropdownMenuItem>
+              )}
             </DropdownMenuContent>
           </DropdownMenu>
-        ) : (
-          <Button className="py-1.5 px-2 h-fit font-normal text-white" asChild>
-            <Link href="/login">Login</Link>
-          </Button>
-        )}
+        </div>
       </div>
     </>
   );
