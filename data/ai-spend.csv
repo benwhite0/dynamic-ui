@@ -1,0 +1,967 @@
+date,provider,model,team,project,requests,input_tokens,output_tokens,cache_read_tokens,cost_usd
+2026-05-15,bedrock,claude-opus-5,Delivery,Client Portal,81,170355,70722,31291,2.64
+2026-05-15,bedrock,claude-opus-4-8,Delivery,Cortex CMS,396,830511,341037,154119,12.76
+2026-05-15,bedrock,claude-sonnet-5,Delivery,Cortex CMS,3002,4995569,1915062,867336,43.97
+2026-05-15,bedrock,claude-haiku-4-5,Platform,Agent Runtime,21265,25400253,2089879,4800140,36.33
+2026-05-15,bedrock,claude-sonnet-5,Platform,Agent Runtime,1339,2159735,456941,339387,13.44
+2026-05-15,anthropic-api,claude-fable-5,Data Science,Churn Model,49,157851,109386,25718,7.07
+2026-05-15,anthropic-api,claude-opus-5,Data Science,Churn Model,40,80154,41545,15020,1.45
+2026-05-15,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,713,1245682,633738,215933,13.31
+2026-05-15,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,1741,1954528,262898,342335,3.30
+2026-05-15,bedrock,claude-haiku-4-5,Support,Ticket Triage,8363,9485476,928278,1957930,14.32
+2026-05-15,bedrock,claude-sonnet-5,Support,Ticket Triage,393,720096,231274,119819,5.67
+2026-05-16,bedrock,claude-opus-5,Delivery,Cortex CMS,21,49229,22523,9926,0.81
+2026-05-16,bedrock,claude-opus-4-8,Delivery,Cortex CMS,92,188115,111103,37910,3.74
+2026-05-16,bedrock,claude-sonnet-5,Delivery,Client Portal,560,1049121,502565,199906,10.75
+2026-05-16,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,4673,5556482,454047,932304,7.92
+2026-05-16,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,271,491255,85435,88421,2.78
+2026-05-16,anthropic-api,claude-fable-5,Data Science,Forecasting,12,43093,29422,8150,1.91
+2026-05-16,anthropic-api,claude-opus-5,Data Science,Churn Model,9,20291,14575,3846,0.47
+2026-05-16,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,143,222368,96105,44512,2.12
+2026-05-16,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,337,387962,41086,64604,0.60
+2026-05-16,bedrock,claude-haiku-4-5,Support,Ticket Triage,1863,2172608,176419,362513,3.09
+2026-05-16,bedrock,claude-sonnet-5,Support,Ticket Triage,117,213870,56388,43980,1.50
+2026-05-17,bedrock,claude-opus-5,Delivery,Client Portal,23,57156,27544,11181,0.98
+2026-05-17,bedrock,claude-opus-4-8,Delivery,Cortex CMS,106,201535,87151,39289,3.21
+2026-05-17,bedrock,claude-sonnet-5,Delivery,Client Portal,673,1184073,548194,251704,11.85
+2026-05-17,bedrock,claude-haiku-4-5,Platform,Agent Runtime,6235,7142862,524881,1225781,9.89
+2026-05-17,bedrock,claude-sonnet-5,Platform,Agent Runtime,263,479770,80044,78018,2.66
+2026-05-17,anthropic-api,claude-fable-5,Data Science,Forecasting,15,51729,40216,8976,2.54
+2026-05-17,anthropic-api,claude-opus-5,Data Science,Forecasting,12,24443,16172,4955,0.53
+2026-05-17,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,185,277726,100346,49887,2.35
+2026-05-17,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,365,407642,40981,80191,0.62
+2026-05-17,bedrock,claude-haiku-4-5,Support,Ticket Triage,2023,2270174,245695,393036,3.54
+2026-05-17,bedrock,claude-sonnet-5,Support,Ticket Triage,96,146540,45912,24378,1.14
+2026-05-18,bedrock,claude-opus-5,Delivery,Client Portal,113,265410,119309,57627,4.34
+2026-05-18,bedrock,claude-opus-4-8,Delivery,Cortex CMS,506,1137798,456545,240117,17.22
+2026-05-18,bedrock,claude-sonnet-5,Delivery,Cortex CMS,2563,4794102,2168565,792335,47.15
+2026-05-18,bedrock,claude-haiku-4-5,Platform,Agent Runtime,25631,30140740,2144261,5988086,41.46
+2026-05-18,bedrock,claude-sonnet-5,Platform,Agent Runtime,1210,2164245,382110,455003,12.36
+2026-05-18,anthropic-api,claude-fable-5,Data Science,Churn Model,61,220153,161770,44521,10.33
+2026-05-18,anthropic-api,claude-opus-5,Data Science,Churn Model,55,120681,61302,25110,2.15
+2026-05-18,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,753,1286903,463994,279564,10.90
+2026-05-18,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,1814,2155918,255153,447910,3.48
+2026-05-18,bedrock,claude-haiku-4-5,Support,Ticket Triage,10107,12105916,1053283,2447915,17.62
+2026-05-18,bedrock,claude-sonnet-5,Support,Ticket Triage,495,911305,298297,158010,7.26
+2026-05-19,bedrock,claude-opus-5,Delivery,Cortex CMS,144,299779,167102,53293,5.70
+2026-05-19,bedrock,claude-opus-4-8,Delivery,Client Portal,502,1111940,476326,223300,17.58
+2026-05-19,bedrock,claude-sonnet-5,Delivery,Client Portal,2458,4551534,1598204,1020696,37.93
+2026-05-19,bedrock,claude-haiku-4-5,Platform,Agent Runtime,21864,26691292,2327009,4961161,38.82
+2026-05-19,bedrock,claude-sonnet-5,Platform,Agent Runtime,1089,1724568,303790,332961,9.83
+2026-05-19,anthropic-api,claude-fable-5,Data Science,Forecasting,64,240721,137335,48784,9.32
+2026-05-19,anthropic-api,claude-opus-5,Data Science,Churn Model,59,114443,57949,24497,2.03
+2026-05-19,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,731,1125235,569018,188957,11.97
+2026-05-19,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,1847,2115258,255705,378630,3.43
+2026-05-19,bedrock,claude-haiku-4-5,Support,Ticket Triage,8290,9863870,1040552,2173724,15.28
+2026-05-19,bedrock,claude-sonnet-5,Support,Ticket Triage,458,741401,191044,139369,5.13
+2026-05-20,bedrock,claude-opus-5,Delivery,Cortex CMS,134,279849,126401,53832,4.59
+2026-05-20,bedrock,claude-opus-4-8,Delivery,Cortex CMS,391,908958,425767,154382,15.27
+2026-05-20,bedrock,claude-sonnet-5,Delivery,Client Portal,3237,5649236,2682096,1150898,57.52
+2026-05-20,bedrock,claude-haiku-4-5,Platform,Agent Runtime,24925,29519370,2816471,5020117,44.10
+2026-05-20,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,1469,2593698,550040,443421,16.16
+2026-05-20,anthropic-api,claude-fable-5,Data Science,Forecasting,51,204231,167255,40768,10.45
+2026-05-20,anthropic-api,claude-opus-5,Data Science,Forecasting,58,134703,68413,27890,2.40
+2026-05-20,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,707,1300938,511612,232948,11.65
+2026-05-20,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,1986,2323631,253243,503710,3.64
+2026-05-20,bedrock,claude-haiku-4-5,Support,Ticket Triage,10115,11575113,1068343,1969686,17.11
+2026-05-20,bedrock,claude-sonnet-5,Support,Ticket Triage,453,839020,258606,190383,6.45
+2026-05-21,bedrock,claude-opus-5,Delivery,Client Portal,152,375960,187237,79679,6.60
+2026-05-21,bedrock,claude-opus-4-8,Delivery,Client Portal,464,926497,524119,198547,17.83
+2026-05-21,bedrock,claude-sonnet-5,Delivery,Cortex CMS,3149,5262455,2295756,1196676,50.58
+2026-05-21,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,22977,28096657,2183043,5790583,39.59
+2026-05-21,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,1122,1849119,433522,339803,12.15
+2026-05-21,anthropic-api,claude-fable-5,Data Science,Forecasting,67,229968,189168,53232,11.81
+2026-05-21,anthropic-api,claude-opus-5,Data Science,Churn Model,60,130743,65180,26629,2.30
+2026-05-21,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,737,1157306,484672,210591,10.81
+2026-05-21,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,2074,2370231,293726,441053,3.88
+2026-05-21,bedrock,claude-haiku-4-5,Support,Ticket Triage,10243,11229078,1344118,2441098,18.19
+2026-05-21,bedrock,claude-sonnet-5,Support,Ticket Triage,436,774193,259140,164979,6.26
+2026-05-22,bedrock,claude-opus-5,Delivery,Cortex CMS,165,385357,209843,86481,7.22
+2026-05-22,bedrock,claude-opus-4-8,Delivery,Cortex CMS,389,812664,423539,148554,14.73
+2026-05-22,bedrock,claude-sonnet-5,Delivery,Client Portal,3043,5533114,1996691,1094767,46.88
+2026-05-22,bedrock,claude-haiku-4-5,Platform,Agent Runtime,30225,33626260,3099171,6980306,49.82
+2026-05-22,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,1388,2276099,455835,495527,13.81
+2026-05-22,anthropic-api,claude-fable-5,Data Science,Forecasting,67,204424,133106,40558,8.74
+2026-05-22,anthropic-api,claude-opus-5,Data Science,Forecasting,86,174899,121889,39135,3.94
+2026-05-22,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,723,1167564,592105,246355,12.46
+2026-05-22,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,2144,2516675,250037,571326,3.82
+2026-05-22,bedrock,claude-haiku-4-5,Support,Ticket Triage,11420,13608354,1198128,2730046,19.87
+2026-05-22,bedrock,claude-sonnet-5,Support,Ticket Triage,429,787817,246696,179876,6.12
+2026-05-23,bedrock,claude-opus-5,Delivery,Client Portal,41,97180,56044,18236,1.90
+2026-05-23,bedrock,claude-opus-4-8,Delivery,Cortex CMS,94,188037,79253,38810,2.94
+2026-05-23,bedrock,claude-sonnet-5,Delivery,Client Portal,704,1091489,485934,227544,10.63
+2026-05-23,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,6010,6887892,575913,1514800,9.92
+2026-05-23,bedrock,claude-sonnet-5,Platform,Agent Runtime,338,541207,101482,114461,3.18
+2026-05-23,anthropic-api,claude-fable-5,Data Science,Churn Model,12,45579,38123,9723,2.37
+2026-05-23,anthropic-api,claude-opus-5,Data Science,Forecasting,17,42904,26900,9166,0.89
+2026-05-23,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,164,280999,140849,63748,2.97
+2026-05-23,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,347,399227,42898,95440,0.62
+2026-05-23,bedrock,claude-haiku-4-5,Support,Ticket Triage,2058,2520462,293373,555544,4.04
+2026-05-23,bedrock,claude-sonnet-5,Support,Ticket Triage,128,205847,73271,48396,1.73
+2026-05-24,bedrock,claude-opus-5,Delivery,Client Portal,40,76233,34824,18288,1.26
+2026-05-24,bedrock,claude-opus-4-8,Delivery,Cortex CMS,106,253515,120783,59938,4.32
+2026-05-24,bedrock,claude-sonnet-5,Delivery,Cortex CMS,578,1016429,431031,189233,9.57
+2026-05-24,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,6623,7969889,669575,1875100,11.51
+2026-05-24,bedrock,claude-sonnet-5,Platform,Agent Runtime,350,654653,108198,121394,3.62
+2026-05-24,anthropic-api,claude-fable-5,Data Science,Forecasting,13,53026,43523,10730,2.72
+2026-05-24,anthropic-api,claude-opus-5,Data Science,Forecasting,18,42007,20444,8272,0.73
+2026-05-24,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,175,273036,145586,65226,3.02
+2026-05-24,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,376,414467,52607,89379,0.69
+2026-05-24,bedrock,claude-haiku-4-5,Support,Ticket Triage,1823,2068083,205279,476808,3.14
+2026-05-24,bedrock,claude-sonnet-5,Support,Ticket Triage,121,206959,67429,45378,1.65
+2026-05-25,bedrock,claude-opus-5,Delivery,Client Portal,199,399985,197329,95234,6.98
+2026-05-25,bedrock,claude-opus-4-8,Delivery,Cortex CMS,452,856486,440784,175091,15.39
+2026-05-25,bedrock,claude-sonnet-5,Delivery,Client Portal,3042,4583058,2010836,914915,44.19
+2026-05-25,bedrock,claude-haiku-4-5,Platform,Agent Runtime,22209,26374634,1902428,5929310,36.48
+2026-05-25,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,1517,2654948,494000,507641,15.53
+2026-05-25,anthropic-api,claude-fable-5,Data Science,Churn Model,59,177362,108405,44225,7.24
+2026-05-25,anthropic-api,claude-opus-5,Data Science,Forecasting,86,180335,117197,37490,3.85
+2026-05-25,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,796,1355188,607237,303633,13.27
+2026-05-25,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,2218,2662026,294420,517129,4.19
+2026-05-25,bedrock,claude-haiku-4-5,Support,Ticket Triage,11632,13608992,1622254,3155620,22.04
+2026-05-25,bedrock,claude-sonnet-5,Support,Ticket Triage,451,814578,282564,194283,6.74
+2026-05-26,bedrock,claude-opus-5,Delivery,Cortex CMS,185,395414,198013,76459,6.97
+2026-05-26,bedrock,claude-opus-4-8,Delivery,Client Portal,463,1059312,633938,218473,21.25
+2026-05-26,bedrock,claude-sonnet-5,Delivery,Cortex CMS,2544,4601016,2022741,1141754,44.49
+2026-05-26,bedrock,claude-haiku-4-5,Platform,Agent Runtime,24172,27349907,2104700,5985850,38.47
+2026-05-26,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,1282,1956603,412903,451959,12.20
+2026-05-26,anthropic-api,claude-fable-5,Data Science,Churn Model,54,171154,99144,40969,6.71
+2026-05-26,anthropic-api,claude-opus-5,Data Science,Churn Model,86,164736,98650,40709,3.31
+2026-05-26,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,908,1555732,664922,332080,14.74
+2026-05-26,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,2106,2501185,304076,628850,4.08
+2026-05-26,bedrock,claude-haiku-4-5,Support,Ticket Triage,11844,13355175,1230445,2766821,19.78
+2026-05-26,bedrock,claude-sonnet-5,Support,Ticket Triage,598,1077924,371171,242671,8.87
+2026-05-27,bedrock,claude-opus-5,Delivery,Cortex CMS,259,638935,379234,136558,12.74
+2026-05-27,bedrock,claude-opus-4-8,Delivery,Cortex CMS,459,1136152,588333,268596,20.52
+2026-05-27,bedrock,claude-sonnet-5,Delivery,Client Portal,2521,4521587,1451436,959127,35.62
+2026-05-27,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,27993,33724390,3147471,8521793,50.31
+2026-05-27,bedrock,claude-sonnet-5,Platform,Agent Runtime,1493,2567020,527854,574351,15.79
+2026-05-27,anthropic-api,claude-fable-5,Data Science,Forecasting,54,157455,126320,39982,7.93
+2026-05-27,anthropic-api,claude-opus-5,Data Science,Forecasting,95,231920,136836,50212,4.61
+2026-05-27,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,772,1225608,538499,258891,11.83
+2026-05-27,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,1820,2146497,247677,461993,3.43
+2026-05-27,bedrock,claude-haiku-4-5,Support,Ticket Triage,11304,13291862,1355753,2985034,20.37
+2026-05-27,bedrock,claude-sonnet-5,Support,Ticket Triage,559,1003271,286852,250455,7.39
+2026-05-28,bedrock,claude-opus-5,Delivery,Cortex CMS,210,461310,203819,115942,7.46
+2026-05-28,bedrock,claude-opus-4-8,Delivery,Client Portal,414,855684,399507,219587,14.38
+2026-05-28,bedrock,claude-sonnet-5,Delivery,Client Portal,2816,4577628,1515303,1177145,36.82
+2026-05-28,bedrock,claude-haiku-4-5,Platform,Agent Runtime,26357,28942214,2012831,6354205,39.64
+2026-05-28,bedrock,claude-sonnet-5,Platform,Agent Runtime,1313,2215525,411694,474433,12.96
+2026-05-28,anthropic-api,claude-fable-5,Data Science,Churn Model,55,195684,141919,40115,9.09
+2026-05-28,anthropic-api,claude-opus-5,Data Science,Churn Model,100,206023,112643,43427,3.87
+2026-05-28,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,721,1088335,475051,259036,10.47
+2026-05-28,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,1649,2010887,218396,526673,3.16
+2026-05-28,bedrock,claude-haiku-4-5,Support,Ticket Triage,9781,11640232,1231046,2476196,18.04
+2026-05-28,bedrock,claude-sonnet-5,Support,Ticket Triage,596,968689,336128,244934,8.02
+2026-05-29,bedrock,claude-opus-5,Delivery,Cortex CMS,237,504329,261064,100499,9.10
+2026-05-29,bedrock,claude-opus-4-8,Delivery,Cortex CMS,402,805717,341628,173280,12.66
+2026-05-29,bedrock,claude-sonnet-5,Delivery,Cortex CMS,2642,4519382,2163446,1193516,46.37
+2026-05-29,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,28045,33521882,2521517,8560898,46.99
+2026-05-29,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,1553,2878955,581090,643962,17.55
+2026-05-29,anthropic-api,claude-fable-5,Data Science,Churn Model,66,255153,190765,62683,12.15
+2026-05-29,anthropic-api,claude-opus-5,Data Science,Churn Model,134,281122,153733,69385,5.28
+2026-05-29,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,926,1609306,597346,387414,13.90
+2026-05-29,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,2200,2659007,277087,609989,4.11
+2026-05-29,bedrock,claude-haiku-4-5,Support,Ticket Triage,9683,11352775,1101095,2766376,17.13
+2026-05-29,bedrock,claude-sonnet-5,Support,Ticket Triage,497,786784,239691,197999,6.02
+2026-05-30,bedrock,claude-opus-5,Delivery,Cortex CMS,53,116473,47186,29975,1.78
+2026-05-30,bedrock,claude-opus-4-8,Delivery,Client Portal,93,219599,119086,51498,4.10
+2026-05-30,bedrock,claude-sonnet-5,Delivery,Client Portal,610,1138822,439377,257342,10.08
+2026-05-30,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,6530,7867648,727537,1710592,11.68
+2026-05-30,bedrock,claude-sonnet-5,Platform,Agent Runtime,316,581561,129989,136655,3.74
+2026-05-30,anthropic-api,claude-fable-5,Data Science,Churn Model,15,54393,44296,12988,2.77
+2026-05-30,anthropic-api,claude-opus-5,Data Science,Forecasting,32,61233,37035,15482,1.24
+2026-05-30,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,205,331158,126567,69719,2.91
+2026-05-30,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,418,464274,50717,105769,0.73
+2026-05-30,bedrock,claude-haiku-4-5,Support,Ticket Triage,2353,2709605,321872,588164,4.38
+2026-05-30,bedrock,claude-sonnet-5,Support,Ticket Triage,132,224268,64257,46170,1.65
+2026-05-31,bedrock,claude-opus-5,Delivery,Cortex CMS,74,155280,62195,41578,2.35
+2026-05-31,bedrock,claude-opus-4-8,Delivery,Cortex CMS,101,208713,123625,48910,4.16
+2026-05-31,bedrock,claude-sonnet-5,Delivery,Client Portal,787,1276827,599674,304191,12.92
+2026-05-31,bedrock,claude-haiku-4-5,Platform,Agent Runtime,5450,6179361,410689,1632825,8.40
+2026-05-31,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,297,465652,97801,96859,2.89
+2026-05-31,anthropic-api,claude-fable-5,Data Science,Churn Model,14,49948,41545,11733,2.59
+2026-05-31,anthropic-api,claude-opus-5,Data Science,Forecasting,35,75671,42843,19789,1.46
+2026-05-31,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,183,336087,127071,74926,2.94
+2026-05-31,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,397,481087,62076,111838,0.80
+2026-05-31,bedrock,claude-haiku-4-5,Support,Ticket Triage,2584,2996320,303476,715412,4.59
+2026-05-31,bedrock,claude-sonnet-5,Support,Ticket Triage,102,185775,46326,45279,1.27
+2026-06-01,bedrock,claude-opus-5,Delivery,Client Portal,275,628937,348741,168168,11.95
+2026-06-01,bedrock,claude-opus-4-8,Delivery,Client Portal,371,817860,386109,210216,13.85
+2026-06-01,bedrock,claude-sonnet-5,Delivery,Cortex CMS,2629,4014319,1806278,1072822,39.46
+2026-06-01,bedrock,claude-haiku-4-5,Platform,Agent Runtime,32791,36702259,2490609,8618219,50.02
+2026-06-01,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,1503,2786222,593412,693919,17.47
+2026-06-01,anthropic-api,claude-fable-5,Data Science,Forecasting,65,233326,180833,59346,11.43
+2026-06-01,anthropic-api,claude-opus-5,Data Science,Forecasting,169,393254,274195,103961,8.87
+2026-06-01,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,776,1154352,579218,245623,12.23
+2026-06-01,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,2255,2506206,274410,523851,3.93
+2026-06-01,bedrock,claude-haiku-4-5,Support,Ticket Triage,9516,10899464,1185414,2831097,17.11
+2026-06-01,bedrock,claude-sonnet-5,Support,Ticket Triage,636,985693,315928,272169,7.78
+2026-06-02,bedrock,claude-opus-5,Delivery,Cortex CMS,315,641351,297078,175673,10.72
+2026-06-02,bedrock,claude-opus-4-8,Delivery,Client Portal,430,1037735,493716,221246,17.64
+2026-06-02,bedrock,claude-sonnet-5,Delivery,Client Portal,3246,5219773,2071849,1478236,47.18
+2026-06-02,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,25442,30669354,2782405,8478764,45.43
+2026-06-02,bedrock,claude-sonnet-5,Platform,Agent Runtime,1606,2652392,598992,569582,17.11
+2026-06-02,anthropic-api,claude-fable-5,Data Science,Forecasting,63,212128,123349,58797,8.35
+2026-06-02,anthropic-api,claude-opus-5,Data Science,Churn Model,179,445151,269993,119494,9.04
+2026-06-02,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,772,1254326,649525,287116,13.59
+2026-06-02,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,2195,2405746,295871,606460,3.95
+2026-06-02,bedrock,claude-haiku-4-5,Support,Ticket Triage,10655,12361996,1370351,3394977,19.55
+2026-06-02,bedrock,claude-sonnet-5,Support,Ticket Triage,517,945220,230419,250460,6.37
+2026-06-03,bedrock,claude-opus-5,Delivery,Cortex CMS,316,734392,347350,177935,12.44
+2026-06-03,bedrock,claude-opus-4-8,Delivery,Cortex CMS,400,862149,387431,204846,14.10
+2026-06-03,bedrock,claude-sonnet-5,Delivery,Cortex CMS,3740,6406679,2825578,1597872,62.08
+2026-06-03,bedrock,claude-haiku-4-5,Platform,Agent Runtime,32636,38099954,2870661,10444421,53.50
+2026-06-03,bedrock,claude-sonnet-5,Platform,Agent Runtime,1783,3143408,507927,742171,17.27
+2026-06-03,anthropic-api,claude-fable-5,Data Science,Churn Model,62,246262,179196,70685,11.49
+2026-06-03,anthropic-api,claude-opus-5,Data Science,Churn Model,146,357306,249922,81745,8.08
+2026-06-03,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,993,1844334,800656,500954,17.69
+2026-06-03,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,1862,2078277,250565,484072,3.38
+2026-06-03,bedrock,claude-haiku-4-5,Support,Ticket Triage,10320,11673677,1218596,3256969,18.09
+2026-06-03,bedrock,claude-sonnet-5,Support,Ticket Triage,628,951509,289927,222618,7.27
+2026-06-04,bedrock,claude-opus-5,Delivery,Cortex CMS,353,810083,327223,178299,12.32
+2026-06-04,bedrock,claude-opus-4-8,Delivery,Cortex CMS,418,930381,495139,252148,17.16
+2026-06-04,bedrock,claude-sonnet-5,Delivery,Client Portal,2936,4676061,2239453,1308018,48.01
+2026-06-04,bedrock,claude-haiku-4-5,Platform,Agent Runtime,27601,31753951,2978558,8178581,47.46
+2026-06-04,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,1577,2847904,533935,788102,16.79
+2026-06-04,anthropic-api,claude-fable-5,Data Science,Forecasting,76,217967,174350,63284,10.96
+2026-06-04,anthropic-api,claude-opus-5,Data Science,Forecasting,180,391932,190839,106064,6.78
+2026-06-04,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,809,1388473,705558,388393,14.87
+2026-06-04,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,1923,2168826,289771,616129,3.68
+2026-06-04,bedrock,claude-haiku-4-5,Support,Ticket Triage,10302,12343578,1461553,2954122,19.95
+2026-06-04,bedrock,claude-sonnet-5,Support,Ticket Triage,666,1036096,280467,237200,7.39
+2026-06-05,bedrock,claude-opus-5,Delivery,Cortex CMS,357,747027,307677,222914,11.54
+2026-06-05,bedrock,claude-opus-4-8,Delivery,Client Portal,313,603290,358126,178548,12.06
+2026-06-05,bedrock,claude-sonnet-5,Delivery,Client Portal,3529,5870121,2092588,1398158,49.42
+2026-06-05,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,26622,32166647,2338286,8970534,44.76
+2026-06-05,bedrock,claude-sonnet-5,Platform,Agent Runtime,1360,2366597,532898,566268,15.26
+2026-06-05,anthropic-api,claude-fable-5,Data Science,Churn Model,81,282892,213981,80864,13.61
+2026-06-05,anthropic-api,claude-opus-5,Data Science,Forecasting,183,461638,223246,106493,7.94
+2026-06-05,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,1032,1887133,907421,469900,19.41
+2026-06-05,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,1782,2107171,215629,536891,3.24
+2026-06-05,bedrock,claude-haiku-4-5,Support,Ticket Triage,12107,13536196,1280916,3693232,20.31
+2026-06-05,bedrock,claude-sonnet-5,Support,Ticket Triage,573,889207,309041,213443,7.37
+2026-06-06,bedrock,claude-opus-5,Delivery,Cortex CMS,94,233190,99518,58404,3.68
+2026-06-06,bedrock,claude-opus-4-8,Delivery,Cortex CMS,79,189489,111263,49914,3.75
+2026-06-06,bedrock,claude-sonnet-5,Delivery,Cortex CMS,685,1183887,421085,300463,9.96
+2026-06-06,bedrock,claude-haiku-4-5,Platform,Agent Runtime,6893,8068839,723676,2298179,11.92
+2026-06-06,bedrock,claude-sonnet-5,Platform,Agent Runtime,385,636440,121180,144391,3.77
+2026-06-06,anthropic-api,claude-fable-5,Data Science,Forecasting,17,49276,31831,13928,2.10
+2026-06-06,anthropic-api,claude-opus-5,Data Science,Churn Model,33,67338,38658,19664,1.31
+2026-06-06,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,232,415101,158485,107307,3.65
+2026-06-06,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,551,617935,65302,176836,0.96
+2026-06-06,bedrock,claude-haiku-4-5,Support,Ticket Triage,2665,3124160,362474,900897,5.03
+2026-06-06,bedrock,claude-sonnet-5,Support,Ticket Triage,106,187896,61517,54915,1.50
+2026-06-07,bedrock,claude-opus-5,Delivery,Cortex CMS,84,207233,90615,62287,3.33
+2026-06-07,bedrock,claude-opus-4-8,Delivery,Cortex CMS,95,210094,91742,50572,3.37
+2026-06-07,bedrock,claude-sonnet-5,Delivery,Client Portal,817,1310028,511018,378402,11.71
+2026-06-07,bedrock,claude-haiku-4-5,Platform,Agent Runtime,7063,7842695,703374,2314387,11.59
+2026-06-07,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,315,488744,99133,140904,3.00
+2026-06-07,anthropic-api,claude-fable-5,Data Science,Forecasting,16,58920,45808,16737,2.90
+2026-06-07,anthropic-api,claude-opus-5,Data Science,Churn Model,42,79246,40279,23294,1.41
+2026-06-07,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,221,356210,191763,106861,3.98
+2026-06-07,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,429,498274,60546,137232,0.81
+2026-06-07,bedrock,claude-haiku-4-5,Support,Ticket Triage,2926,3466073,372656,1019031,5.43
+2026-06-07,bedrock,claude-sonnet-5,Support,Ticket Triage,109,169512,59462,47553,1.41
+2026-06-08,bedrock,claude-opus-5,Delivery,Client Portal,337,783642,466878,189003,15.68
+2026-06-08,bedrock,claude-opus-4-8,Delivery,Cortex CMS,399,965713,429245,241359,15.68
+2026-06-08,bedrock,claude-sonnet-5,Delivery,Cortex CMS,3273,5891201,2218812,1537235,51.42
+2026-06-08,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,29670,34861724,2631618,10249242,49.04
+2026-06-08,bedrock,claude-sonnet-5,Platform,Agent Runtime,1588,2527985,558956,734633,16.19
+2026-06-08,anthropic-api,claude-fable-5,Data Science,Forecasting,66,219147,180031,58136,11.25
+2026-06-08,anthropic-api,claude-opus-5,Data Science,Forecasting,206,490245,308809,138776,10.24
+2026-06-08,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,922,1639103,687789,436557,15.37
+2026-06-08,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,2002,2330048,236671,693440,3.58
+2026-06-08,bedrock,claude-haiku-4-5,Support,Ticket Triage,9819,11150704,1303637,2849483,17.95
+2026-06-08,bedrock,claude-sonnet-5,Support,Ticket Triage,693,1290048,420454,318760,10.27
+2026-06-09,bedrock,claude-opus-5,Delivery,Client Portal,395,861735,435029,270722,15.32
+2026-06-09,bedrock,claude-opus-4-8,Delivery,Cortex CMS,392,748556,447625,185711,15.03
+2026-06-09,bedrock,claude-sonnet-5,Delivery,Cortex CMS,3307,5967037,1948468,1735784,47.65
+2026-06-09,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,35746,39347033,3273281,9216917,56.64
+2026-06-09,bedrock,claude-sonnet-5,Platform,Agent Runtime,1712,2896320,609034,860414,18.08
+2026-06-09,anthropic-api,claude-fable-5,Data Science,Forecasting,75,261519,184232,68958,11.90
+2026-06-09,anthropic-api,claude-opus-5,Data Science,Churn Model,226,499459,269722,144215,9.31
+2026-06-09,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,919,1679085,697149,439043,15.63
+2026-06-09,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,2545,3108315,393801,880284,5.17
+2026-06-09,bedrock,claude-haiku-4-5,Support,Ticket Triage,10331,11784959,1062766,3478611,17.45
+2026-06-09,bedrock,claude-sonnet-5,Support,Ticket Triage,594,938180,246107,284257,6.59
+2026-06-10,bedrock,claude-opus-5,Delivery,Cortex CMS,477,913233,430687,218238,15.44
+2026-06-10,bedrock,claude-opus-4-8,Delivery,Cortex CMS,383,784841,469215,196076,15.75
+2026-06-10,bedrock,claude-sonnet-5,Delivery,Cortex CMS,2870,4622527,2198676,1434732,47.28
+2026-06-10,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,33942,37309412,3437729,10548017,55.55
+2026-06-10,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,1771,3088120,605164,763758,18.57
+2026-06-10,anthropic-api,claude-fable-5,Data Science,Forecasting,65,237382,166877,69846,10.79
+2026-06-10,anthropic-api,claude-opus-5,Data Science,Churn Model,177,350585,211909,87057,7.09
+2026-06-10,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,985,1826718,791029,512240,17.50
+2026-06-10,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,2033,2286070,314279,625226,3.92
+2026-06-10,bedrock,claude-haiku-4-5,Support,Ticket Triage,13885,16802440,1409332,4497997,24.30
+2026-06-10,bedrock,claude-sonnet-5,Support,Ticket Triage,657,1148505,284847,302100,7.81
+2026-06-11,bedrock,claude-opus-5,Delivery,Cortex CMS,431,978944,481031,301074,17.07
+2026-06-11,bedrock,claude-opus-4-8,Delivery,Client Portal,400,1001948,403024,293211,15.23
+2026-06-11,bedrock,claude-sonnet-5,Delivery,Cortex CMS,3683,5772891,2550697,1776739,56.11
+2026-06-11,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,36770,41524684,3009453,12233246,57.80
+2026-06-11,bedrock,claude-sonnet-5,Platform,Agent Runtime,1879,3032604,501817,849160,16.88
+2026-06-11,anthropic-api,claude-fable-5,Data Science,Churn Model,77,257142,157345,79003,10.52
+2026-06-11,anthropic-api,claude-opus-5,Data Science,Churn Model,205,438671,221716,122325,7.80
+2026-06-11,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,944,1767496,655234,464201,15.27
+2026-06-11,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,2258,2755336,377312,882424,4.73
+2026-06-11,bedrock,claude-haiku-4-5,Support,Ticket Triage,13002,15037239,1348308,4158746,22.19
+2026-06-11,bedrock,claude-sonnet-5,Support,Ticket Triage,703,1196883,312104,382618,8.39
+2026-06-12,bedrock,claude-opus-5,Delivery,Cortex CMS,457,877359,450759,284090,15.80
+2026-06-12,bedrock,claude-opus-4-8,Delivery,Cortex CMS,323,667199,373986,168564,12.77
+2026-06-12,bedrock,claude-sonnet-5,Delivery,Cortex CMS,3874,7256665,2639482,2128472,62.00
+2026-06-12,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,35282,40108481,2749614,10211164,54.88
+2026-06-12,bedrock,claude-sonnet-5,Platform,Agent Runtime,1629,2667026,558335,739013,16.60
+2026-06-12,anthropic-api,claude-fable-5,Data Science,Forecasting,78,319522,209405,102067,13.77
+2026-06-12,anthropic-api,claude-opus-5,Data Science,Churn Model,247,571806,389330,170504,12.68
+2026-06-12,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,1110,1966288,715756,556670,16.80
+2026-06-12,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,2318,2805404,325287,826690,4.51
+2026-06-12,bedrock,claude-haiku-4-5,Support,Ticket Triage,11422,12877829,1046466,3896747,18.50
+2026-06-12,bedrock,claude-sonnet-5,Support,Ticket Triage,708,1095462,303521,349044,7.94
+2026-06-13,bedrock,claude-opus-5,Delivery,Cortex CMS,127,274127,118104,85981,4.37
+2026-06-13,bedrock,claude-opus-4-8,Delivery,Cortex CMS,77,180574,83095,53942,3.01
+2026-06-13,bedrock,claude-sonnet-5,Delivery,Cortex CMS,696,1034276,393682,333086,9.11
+2026-06-13,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,8177,9148076,594224,2405732,12.36
+2026-06-13,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,379,619872,124974,201422,3.79
+2026-06-13,anthropic-api,claude-fable-5,Data Science,Forecasting,14,51855,31904,15303,2.13
+2026-06-13,anthropic-api,claude-opus-5,Data Science,Forecasting,61,129215,73569,37953,2.50
+2026-06-13,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,202,321558,143616,103084,3.15
+2026-06-13,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,497,565494,62328,146027,0.89
+2026-06-13,bedrock,claude-haiku-4-5,Support,Ticket Triage,2844,3323902,353920,828629,5.18
+2026-06-13,bedrock,claude-sonnet-5,Support,Ticket Triage,140,218666,55521,68703,1.51
+2026-06-14,bedrock,claude-opus-5,Delivery,Cortex CMS,98,223363,102137,60578,3.70
+2026-06-14,bedrock,claude-opus-4-8,Delivery,Client Portal,67,149352,60981,37707,2.29
+2026-06-14,bedrock,claude-sonnet-5,Delivery,Cortex CMS,912,1364587,447379,426497,10.93
+2026-06-14,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,8123,9704379,703635,2827932,13.51
+2026-06-14,bedrock,claude-sonnet-5,Platform,Agent Runtime,331,526840,97329,151957,3.09
+2026-06-14,anthropic-api,claude-fable-5,Data Science,Churn Model,18,66628,50178,20491,3.20
+2026-06-14,anthropic-api,claude-opus-5,Data Science,Forecasting,56,109463,78090,28105,2.51
+2026-06-14,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,198,313492,148594,92297,3.20
+2026-06-14,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,506,609164,58531,168298,0.92
+2026-06-14,bedrock,claude-haiku-4-5,Support,Ticket Triage,2362,2674456,271945,725696,4.11
+2026-06-14,bedrock,claude-sonnet-5,Support,Ticket Triage,115,174816,53730,51134,1.35
+2026-06-15,bedrock,claude-opus-5,Delivery,Client Portal,612,1361819,780271,456714,26.54
+2026-06-15,bedrock,claude-opus-4-8,Delivery,Cortex CMS,296,614245,252427,191637,9.48
+2026-06-15,bedrock,claude-sonnet-5,Delivery,Client Portal,3940,6182910,2774686,1727940,60.69
+2026-06-15,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,32256,38821905,2513797,11699677,52.56
+2026-06-15,bedrock,claude-sonnet-5,Platform,Agent Runtime,1692,2584054,472167,776900,15.07
+2026-06-15,anthropic-api,claude-fable-5,Data Science,Forecasting,75,237186,168504,66605,10.86
+2026-06-15,anthropic-api,claude-opus-5,Data Science,Forecasting,285,547680,394082,155927,12.67
+2026-06-15,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,1145,2116211,1111438,620379,23.21
+2026-06-15,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,2426,2950509,392891,862731,5.00
+2026-06-15,bedrock,claude-haiku-4-5,Support,Ticket Triage,13148,14442017,1542422,3903598,22.54
+2026-06-15,bedrock,claude-sonnet-5,Support,Ticket Triage,732,1210409,398981,372203,9.73
+2026-06-16,bedrock,claude-opus-5,Delivery,Client Portal,488,1042058,522786,339413,18.45
+2026-06-16,bedrock,claude-opus-4-8,Delivery,Client Portal,300,597071,287950,194794,10.28
+2026-06-16,bedrock,claude-sonnet-5,Delivery,Cortex CMS,4233,6549234,2983868,1728755,64.92
+2026-06-16,bedrock,claude-haiku-4-5,Platform,Agent Runtime,35280,42259180,2982932,13275515,58.50
+2026-06-16,bedrock,claude-sonnet-5,Platform,Agent Runtime,1653,2549469,410635,802106,14.05
+2026-06-16,anthropic-api,claude-fable-5,Data Science,Forecasting,92,364404,297355,118103,18.63
+2026-06-16,anthropic-api,claude-opus-5,Data Science,Churn Model,278,525802,344721,163021,11.33
+2026-06-16,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,1006,1686820,751345,454309,16.47
+2026-06-16,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,2407,2744108,294835,871584,4.31
+2026-06-16,bedrock,claude-haiku-4-5,Support,Ticket Triage,10725,12548646,1328816,3409678,19.53
+2026-06-16,bedrock,claude-sonnet-5,Support,Ticket Triage,754,1221065,383626,400311,9.54
+2026-06-17,bedrock,claude-opus-5,Delivery,Client Portal,540,1346982,756656,421915,25.86
+2026-06-17,bedrock,claude-opus-4-8,Delivery,Client Portal,296,681392,337345,220723,11.95
+2026-06-17,bedrock,claude-sonnet-5,Delivery,Cortex CMS,3874,5960603,2860170,2000844,61.38
+2026-06-17,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,35100,39761569,3170463,13913048,57.01
+2026-06-17,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,1616,2464889,445332,833308,14.32
+2026-06-17,anthropic-api,claude-fable-5,Data Science,Churn Model,77,315220,245111,87043,15.49
+2026-06-17,anthropic-api,claude-opus-5,Data Science,Forecasting,254,559207,269477,183669,9.62
+2026-06-17,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,893,1582870,575140,554092,13.54
+2026-06-17,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,2339,2825215,395406,991190,4.90
+2026-06-17,bedrock,claude-haiku-4-5,Support,Ticket Triage,13040,15467663,1397474,5267771,22.98
+2026-06-17,bedrock,claude-sonnet-5,Support,Ticket Triage,585,1086429,390006,360267,9.22
+2026-06-18,bedrock,claude-opus-5,Delivery,Client Portal,660,1435603,641788,423846,23.43
+2026-06-18,bedrock,claude-opus-4-8,Delivery,Cortex CMS,302,708723,381750,210448,13.19
+2026-06-18,bedrock,claude-sonnet-5,Delivery,Client Portal,3849,6156922,2913836,1759303,62.71
+2026-06-18,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,32992,37846351,3239832,12265106,55.27
+2026-06-18,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,1478,2699292,490746,924158,15.74
+2026-06-18,anthropic-api,claude-fable-5,Data Science,Churn Model,74,275517,206261,74971,13.14
+2026-06-18,anthropic-api,claude-opus-5,Data Science,Forecasting,299,654060,448370,191064,14.58
+2026-06-18,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,1130,2049230,965106,569901,20.80
+2026-06-18,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,2273,2784295,307832,910422,4.41
+2026-06-18,bedrock,claude-haiku-4-5,Support,Ticket Triage,13441,15038892,1449603,4100646,22.70
+2026-06-18,bedrock,claude-sonnet-5,Support,Ticket Triage,753,1387634,391038,457552,10.17
+2026-06-19,bedrock,claude-opus-5,Delivery,Client Portal,646,1620751,711301,433596,26.10
+2026-06-19,bedrock,claude-opus-4-8,Delivery,Cortex CMS,293,590143,314691,180249,10.91
+2026-06-19,bedrock,claude-sonnet-5,Delivery,Cortex CMS,3260,5060615,1724684,1783145,41.59
+2026-06-19,bedrock,claude-haiku-4-5,Platform,Agent Runtime,34514,41414315,2992429,11422305,57.52
+2026-06-19,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,1723,3030371,549564,943918,17.62
+2026-06-19,anthropic-api,claude-fable-5,Data Science,Forecasting,76,279815,166404,79676,11.20
+2026-06-19,anthropic-api,claude-opus-5,Data Science,Churn Model,315,695381,347448,220755,12.27
+2026-06-19,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,859,1583276,687813,562654,15.24
+2026-06-19,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,2470,2992955,309290,848096,4.62
+2026-06-19,bedrock,claude-haiku-4-5,Support,Ticket Triage,12731,14491382,1338991,3889405,21.58
+2026-06-19,bedrock,claude-sonnet-5,Support,Ticket Triage,708,1187717,344515,350192,8.84
+2026-06-20,bedrock,claude-opus-5,Delivery,Client Portal,114,220794,115913,65995,4.03
+2026-06-20,bedrock,claude-opus-4-8,Delivery,Client Portal,73,148302,63328,44678,2.35
+2026-06-20,bedrock,claude-sonnet-5,Delivery,Client Portal,787,1233779,559369,390368,12.21
+2026-06-20,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,8726,9697836,860204,3159796,14.31
+2026-06-20,bedrock,claude-sonnet-5,Platform,Agent Runtime,448,802274,154583,281568,4.81
+2026-06-20,anthropic-api,claude-fable-5,Data Science,Churn Model,21,70203,58252,24184,3.64
+2026-06-20,anthropic-api,claude-opus-5,Data Science,Forecasting,67,168227,96774,56282,3.29
+2026-06-20,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,251,428077,190774,155382,4.19
+2026-06-20,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,590,697286,73780,205720,1.09
+2026-06-20,bedrock,claude-haiku-4-5,Support,Ticket Triage,2990,3404871,398360,1024453,5.50
+2026-06-20,bedrock,claude-sonnet-5,Support,Ticket Triage,167,275134,96885,88888,2.31
+2026-06-21,bedrock,claude-opus-5,Delivery,Cortex CMS,157,334460,137137,103700,5.15
+2026-06-21,bedrock,claude-opus-4-8,Delivery,Cortex CMS,63,154041,81780,55944,2.84
+2026-06-21,bedrock,claude-sonnet-5,Delivery,Client Portal,783,1438242,625648,510536,13.85
+2026-06-21,bedrock,claude-haiku-4-5,Platform,Agent Runtime,9235,10272606,766443,3417335,14.45
+2026-06-21,bedrock,claude-sonnet-5,Platform,Agent Runtime,361,537577,104576,165675,3.23
+2026-06-21,anthropic-api,claude-fable-5,Data Science,Churn Model,18,61415,40451,20502,2.66
+2026-06-21,anthropic-api,claude-opus-5,Data Science,Forecasting,58,134627,81915,44475,2.74
+2026-06-21,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,189,346650,173493,104271,3.67
+2026-06-21,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,455,519332,57133,147405,0.82
+2026-06-21,bedrock,claude-haiku-4-5,Support,Ticket Triage,2708,3005918,306638,880244,4.63
+2026-06-21,bedrock,claude-sonnet-5,Support,Ticket Triage,142,259669,81907,84181,2.03
+2026-06-22,bedrock,claude-opus-5,Delivery,Cortex CMS,787,1928198,977804,684077,34.43
+2026-06-22,bedrock,claude-opus-4-8,Delivery,Cortex CMS,326,796632,417580,246091,14.55
+2026-06-22,bedrock,claude-sonnet-5,Delivery,Cortex CMS,4578,8303864,3318457,2462721,75.43
+2026-06-22,bedrock,claude-haiku-4-5,Platform,Agent Runtime,30245,33165272,2890271,10432804,48.66
+2026-06-22,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,1652,2574108,443823,794373,14.62
+2026-06-22,anthropic-api,claude-fable-5,Data Science,Forecasting,88,332903,270797,108588,16.98
+2026-06-22,anthropic-api,claude-opus-5,Data Science,Forecasting,305,657051,455101,221472,14.77
+2026-06-22,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,1057,1591702,591333,457681,13.78
+2026-06-22,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,2224,2587236,294502,782911,4.14
+2026-06-22,bedrock,claude-haiku-4-5,Support,Ticket Triage,13360,15473713,1419281,5328898,23.10
+2026-06-22,bedrock,claude-sonnet-5,Support,Ticket Triage,740,1220189,383030,428713,9.53
+2026-06-23,bedrock,claude-opus-5,Delivery,Client Portal,696,1360367,724969,444670,25.15
+2026-06-23,bedrock,claude-opus-4-8,Delivery,Client Portal,249,479605,263399,150343,9.06
+2026-06-23,bedrock,claude-sonnet-5,Delivery,Client Portal,3318,5476888,2375569,2059318,52.68
+2026-06-23,bedrock,claude-haiku-4-5,Platform,Agent Runtime,30477,35410783,2420773,10957136,48.61
+2026-06-23,bedrock,claude-sonnet-5,Platform,Agent Runtime,1676,3091811,634106,953936,19.07
+2026-06-23,anthropic-api,claude-fable-5,Data Science,Churn Model,98,318175,230923,116661,14.84
+2026-06-23,anthropic-api,claude-opus-5,Data Science,Forecasting,327,814282,576150,235820,18.59
+2026-06-23,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,1071,1813796,880648,604330,18.83
+2026-06-23,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,2523,2873164,410474,845290,5.01
+2026-06-23,bedrock,claude-haiku-4-5,Support,Ticket Triage,14436,17231724,2021025,5729033,27.91
+2026-06-23,bedrock,claude-sonnet-5,Support,Ticket Triage,769,1199155,296676,371787,8.16
+2026-06-24,bedrock,claude-opus-5,Delivery,Cortex CMS,751,1704702,881666,585081,30.86
+2026-06-24,bedrock,claude-opus-4-8,Delivery,Client Portal,295,733182,406416,229555,13.94
+2026-06-24,bedrock,claude-sonnet-5,Delivery,Cortex CMS,4564,7896675,2704208,2258321,64.93
+2026-06-24,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,30401,34832664,2615288,11306355,49.04
+2026-06-24,bedrock,claude-sonnet-5,Platform,Agent Runtime,1905,3569035,730908,1020218,21.98
+2026-06-24,anthropic-api,claude-fable-5,Data Science,Forecasting,87,295956,168468,100310,11.48
+2026-06-24,anthropic-api,claude-opus-5,Data Science,Forecasting,369,918047,550097,346161,18.52
+2026-06-24,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,1087,1883947,736530,643717,16.89
+2026-06-24,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,2837,3472908,378364,1121871,5.48
+2026-06-24,bedrock,claude-haiku-4-5,Support,Ticket Triage,15089,17830714,1818863,5148817,27.44
+2026-06-24,bedrock,claude-sonnet-5,Support,Ticket Triage,703,1115710,303084,384458,8.01
+2026-06-25,bedrock,claude-opus-5,Delivery,Cortex CMS,730,1541939,835767,464748,28.84
+2026-06-25,bedrock,claude-opus-4-8,Delivery,Client Portal,301,652174,333416,250983,11.72
+2026-06-25,bedrock,claude-sonnet-5,Delivery,Cortex CMS,4311,7434068,2939426,2459795,67.13
+2026-06-25,bedrock,claude-haiku-4-5,Platform,Agent Runtime,42273,49078481,4115740,17909487,71.45
+2026-06-25,bedrock,claude-sonnet-5,Platform,Agent Runtime,1681,3086934,542182,1121907,17.73
+2026-06-25,anthropic-api,claude-fable-5,Data Science,Churn Model,79,300714,220520,105379,14.14
+2026-06-25,anthropic-api,claude-opus-5,Data Science,Churn Model,317,687810,340541,208392,12.06
+2026-06-25,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,991,1569991,739194,567938,15.97
+2026-06-25,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,2559,3125290,335404,1063875,4.91
+2026-06-25,bedrock,claude-haiku-4-5,Support,Ticket Triage,14210,16696700,1538220,6172297,25.01
+2026-06-25,bedrock,claude-sonnet-5,Support,Ticket Triage,699,1309232,340948,378740,9.16
+2026-06-26,bedrock,claude-opus-5,Delivery,Cortex CMS,853,2089535,1188690,742740,40.54
+2026-06-26,bedrock,claude-opus-4-8,Delivery,Client Portal,277,652437,289658,247496,10.63
+2026-06-26,bedrock,claude-sonnet-5,Delivery,Cortex CMS,4648,7029903,3125973,2694499,68.79
+2026-06-26,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,42899,49287374,4091577,18102496,71.56
+2026-06-26,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,2197,3555152,598774,1120686,19.98
+2026-06-26,anthropic-api,claude-fable-5,Data Science,Churn Model,99,318245,215826,121994,14.10
+2026-06-26,anthropic-api,claude-opus-5,Data Science,Churn Model,327,730472,366518,214218,12.92
+2026-06-26,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,1224,2011260,751090,749771,17.53
+2026-06-26,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,2804,3080499,425212,1153036,5.32
+2026-06-26,bedrock,claude-haiku-4-5,Support,Ticket Triage,14690,16991122,1909256,6007791,27.14
+2026-06-26,bedrock,claude-sonnet-5,Support,Ticket Triage,650,1051214,303982,308097,7.81
+2026-06-27,bedrock,claude-opus-5,Delivery,Client Portal,199,393596,229199,120484,7.76
+2026-06-27,bedrock,claude-opus-4-8,Delivery,Cortex CMS,45,111938,45387,35485,1.71
+2026-06-27,bedrock,claude-sonnet-5,Delivery,Cortex CMS,968,1443647,678487,458859,14.65
+2026-06-27,bedrock,claude-haiku-4-5,Platform,Agent Runtime,7215,8807983,831976,2594562,13.23
+2026-06-27,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,365,565093,122407,205784,3.59
+2026-06-27,anthropic-api,claude-fable-5,Data Science,Forecasting,19,71694,43038,26954,2.90
+2026-06-27,anthropic-api,claude-opus-5,Data Science,Forecasting,73,159323,94482,54859,3.19
+2026-06-27,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,203,355619,154317,107975,3.41
+2026-06-27,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,532,649105,74768,219565,1.04
+2026-06-27,bedrock,claude-haiku-4-5,Support,Ticket Triage,3394,3829275,351506,1262974,5.71
+2026-06-27,bedrock,claude-sonnet-5,Support,Ticket Triage,130,216884,53304,68971,1.47
+2026-06-28,bedrock,claude-opus-5,Delivery,Client Portal,195,368568,150239,121829,5.66
+2026-06-28,bedrock,claude-opus-4-8,Delivery,Client Portal,58,113542,56544,34106,2.00
+2026-06-28,bedrock,claude-sonnet-5,Delivery,Cortex CMS,819,1392663,574252,414275,12.92
+2026-06-28,bedrock,claude-haiku-4-5,Platform,Agent Runtime,7869,9573868,893143,3549871,14.39
+2026-06-28,bedrock,claude-sonnet-5,Platform,Agent Runtime,455,683952,133580,260446,4.13
+2026-06-28,anthropic-api,claude-fable-5,Data Science,Churn Model,23,90293,70703,30406,4.47
+2026-06-28,anthropic-api,claude-opus-5,Data Science,Forecasting,82,171018,115354,56259,3.77
+2026-06-28,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,231,423459,185415,164712,4.10
+2026-06-28,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,675,820373,112942,249069,1.41
+2026-06-28,bedrock,claude-haiku-4-5,Support,Ticket Triage,3494,4007728,408464,1308197,6.18
+2026-06-28,bedrock,claude-sonnet-5,Support,Ticket Triage,152,264968,92303,101317,2.21
+2026-06-29,bedrock,claude-opus-5,Delivery,Client Portal,882,1882752,798058,586080,29.66
+2026-06-29,bedrock,claude-opus-4-8,Delivery,Cortex CMS,185,405014,196535,121985,7.00
+2026-06-29,bedrock,claude-sonnet-5,Delivery,Cortex CMS,3811,6760474,2614739,2300876,60.19
+2026-06-29,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,37015,44199196,2892890,16487790,60.31
+2026-06-29,bedrock,claude-sonnet-5,Platform,Agent Runtime,1870,2975884,690586,1014127,19.59
+2026-06-29,anthropic-api,claude-fable-5,Data Science,Churn Model,104,334588,214651,129486,14.21
+2026-06-29,anthropic-api,claude-opus-5,Data Science,Churn Model,366,770869,521695,285990,17.04
+2026-06-29,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,1300,2012900,1038102,656060,21.81
+2026-06-29,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,2222,2616808,329798,1012350,4.37
+2026-06-29,bedrock,claude-haiku-4-5,Support,Ticket Triage,16688,18538265,2186427,6977094,30.17
+2026-06-29,bedrock,claude-sonnet-5,Support,Ticket Triage,746,1148123,376663,373864,9.21
+2026-06-30,bedrock,claude-opus-5,Delivery,Client Portal,721,1612116,652012,594669,24.66
+2026-06-30,bedrock,claude-opus-4-8,Delivery,Cortex CMS,186,467416,190648,154919,7.18
+2026-06-30,bedrock,claude-sonnet-5,Delivery,Client Portal,4664,7609808,3489645,2673445,75.98
+2026-06-30,bedrock,claude-haiku-4-5,Platform,Agent Runtime,33146,36502323,3121190,11734168,53.28
+2026-06-30,bedrock,claude-sonnet-5,Platform,Agent Runtime,2157,3737144,762219,1330863,23.04
+2026-06-30,anthropic-api,claude-fable-5,Data Science,Forecasting,104,302886,206182,115101,13.45
+2026-06-30,anthropic-api,claude-opus-5,Data Science,Forecasting,414,878673,622804,329048,20.13
+2026-06-30,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,985,1627137,719222,492743,15.82
+2026-06-30,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,2407,2880401,379012,929628,4.87
+2026-06-30,bedrock,claude-haiku-4-5,Support,Ticket Triage,15134,17261479,1824542,5745267,26.96
+2026-06-30,bedrock,claude-sonnet-5,Support,Ticket Triage,835,1363949,381553,506573,9.97
+2026-07-01,bedrock,claude-opus-5,Delivery,Client Portal,785,1930050,1034025,709833,35.86
+2026-07-01,bedrock,claude-opus-4-8,Delivery,Cortex CMS,190,394683,182858,126589,6.61
+2026-07-01,bedrock,claude-sonnet-5,Delivery,Client Portal,4164,6851807,2251476,2129437,54.97
+2026-07-01,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,35722,39375166,3046532,14822080,56.09
+2026-07-01,bedrock,claude-sonnet-5,Platform,Agent Runtime,2293,4190355,984624,1625835,27.83
+2026-07-01,anthropic-api,claude-fable-5,Data Science,Forecasting,106,330448,238549,131308,15.36
+2026-07-01,anthropic-api,claude-opus-5,Data Science,Forecasting,437,936950,450210,294128,16.09
+2026-07-01,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,1282,2194078,1103592,872086,23.40
+2026-07-01,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,2478,2961392,410392,1007596,5.11
+2026-07-01,bedrock,claude-haiku-4-5,Support,Ticket Triage,13183,14938231,1350221,6153513,22.30
+2026-07-01,bedrock,claude-sonnet-5,Support,Ticket Triage,693,1251757,326442,423815,8.78
+2026-07-02,bedrock,claude-opus-5,Delivery,Cortex CMS,1032,2022777,1103354,676963,38.04
+2026-07-02,bedrock,claude-opus-4-8,Delivery,Cortex CMS,194,406020,172665,158074,6.43
+2026-07-02,bedrock,claude-sonnet-5,Delivery,Cortex CMS,4617,7996079,2978891,3036841,69.58
+2026-07-02,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,34140,37871662,2615874,14170812,52.37
+2026-07-02,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,2205,3658195,848422,1345469,24.10
+2026-07-02,anthropic-api,claude-fable-5,Data Science,Churn Model,89,322856,216174,110424,14.15
+2026-07-02,anthropic-api,claude-opus-5,Data Science,Churn Model,490,1075978,696053,340847,22.95
+2026-07-02,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,1103,1872675,914294,613278,19.52
+2026-07-02,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,2806,3120690,434819,1045357,5.40
+2026-07-02,bedrock,claude-haiku-4-5,Support,Ticket Triage,12480,15122548,1563129,6002519,23.54
+2026-07-02,bedrock,claude-sonnet-5,Support,Ticket Triage,815,1496300,477671,570536,11.83
+2026-07-03,bedrock,claude-opus-5,Delivery,Cortex CMS,916,2002053,1173807,790799,39.75
+2026-07-03,bedrock,claude-opus-4-8,Delivery,Cortex CMS,160,371578,186711,126782,6.59
+2026-07-03,bedrock,claude-sonnet-5,Delivery,Client Portal,3700,5852944,2502403,2335015,55.80
+2026-07-03,bedrock,claude-haiku-4-5,Platform,Agent Runtime,41662,46605427,3176406,18883260,64.38
+2026-07-03,bedrock,claude-sonnet-5,Platform,Agent Runtime,1698,2684709,596948,886288,17.27
+2026-07-03,anthropic-api,claude-fable-5,Data Science,Churn Model,104,331023,203159,139316,13.61
+2026-07-03,anthropic-api,claude-opus-5,Data Science,Churn Model,471,912169,541157,334600,18.26
+2026-07-03,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,1162,1943529,727089,778255,16.97
+2026-07-03,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,2511,2822222,333316,1062430,4.60
+2026-07-03,bedrock,claude-haiku-4-5,Support,Ticket Triage,16096,17746887,1925609,6008683,27.98
+2026-07-03,bedrock,claude-sonnet-5,Support,Ticket Triage,783,1182801,395131,447931,9.61
+2026-07-04,bedrock,claude-opus-5,Delivery,Client Portal,233,496775,274464,157423,9.42
+2026-07-04,bedrock,claude-opus-4-8,Delivery,Cortex CMS,39,77172,35457,28725,1.29
+2026-07-04,bedrock,claude-sonnet-5,Delivery,Cortex CMS,801,1403668,524068,523550,12.23
+2026-07-04,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,8372,10199106,959939,3631571,15.36
+2026-07-04,bedrock,claude-sonnet-5,Platform,Agent Runtime,456,835575,167164,285351,5.10
+2026-07-04,anthropic-api,claude-fable-5,Data Science,Churn Model,22,83936,50720,31349,3.41
+2026-07-04,anthropic-api,claude-opus-5,Data Science,Churn Model,106,252334,176017,98984,5.71
+2026-07-04,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,265,460901,240205,149382,5.03
+2026-07-04,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,530,609122,74053,206545,1.00
+2026-07-04,bedrock,claude-haiku-4-5,Support,Ticket Triage,3849,4687712,519590,1553632,7.44
+2026-07-04,bedrock,claude-sonnet-5,Support,Ticket Triage,178,327146,98247,111933,2.49
+2026-07-05,bedrock,claude-opus-5,Delivery,Client Portal,214,527223,213823,217676,8.09
+2026-07-05,bedrock,claude-opus-4-8,Delivery,Client Portal,43,105587,46057,35613,1.70
+2026-07-05,bedrock,claude-sonnet-5,Delivery,Client Portal,986,1484947,568907,615318,13.17
+2026-07-05,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,8350,9897735,863165,3275419,14.54
+2026-07-05,bedrock,claude-sonnet-5,Platform,Agent Runtime,487,823836,173015,270676,5.15
+2026-07-05,anthropic-api,claude-fable-5,Data Science,Forecasting,23,91813,72571,32927,4.58
+2026-07-05,anthropic-api,claude-opus-5,Data Science,Churn Model,100,225597,113678,86269,4.01
+2026-07-05,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,239,418736,199690,153636,4.30
+2026-07-05,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,578,704540,83979,233386,1.15
+2026-07-05,bedrock,claude-haiku-4-5,Support,Ticket Triage,3329,3828017,410271,1393627,6.02
+2026-07-05,bedrock,claude-sonnet-5,Support,Ticket Triage,184,335324,104206,142037,2.61
+2026-07-06,bedrock,claude-opus-5,Delivery,Cortex CMS,838,1899039,1025674,774647,35.52
+2026-07-06,bedrock,claude-opus-4-8,Delivery,Cortex CMS,146,327063,137051,109703,5.12
+2026-07-06,bedrock,claude-sonnet-5,Delivery,Cortex CMS,3938,5919517,2099271,2165652,49.90
+2026-07-06,bedrock,claude-haiku-4-5,Platform,Agent Runtime,47040,55774319,3712444,23349775,76.67
+2026-07-06,bedrock,claude-sonnet-5,Platform,Agent Runtime,1843,3106708,613118,1151158,18.86
+2026-07-06,anthropic-api,claude-fable-5,Data Science,Forecasting,102,415420,238410,147619,16.22
+2026-07-06,anthropic-api,claude-opus-5,Data Science,Churn Model,465,1023098,683998,418922,22.42
+2026-07-06,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,1252,2221163,1164628,922464,24.41
+2026-07-06,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,2864,3471375,460139,1274353,5.90
+2026-07-06,bedrock,claude-haiku-4-5,Support,Ticket Triage,13173,14463025,1460456,6174557,22.38
+2026-07-06,bedrock,claude-sonnet-5,Support,Ticket Triage,757,1146059,336965,449288,8.63
+2026-07-07,bedrock,claude-opus-5,Delivery,Client Portal,981,2270958,1210194,853965,42.04
+2026-07-07,bedrock,claude-opus-4-8,Delivery,Client Portal,160,384087,179955,136521,6.49
+2026-07-07,bedrock,claude-sonnet-5,Delivery,Cortex CMS,5065,8133153,3903521,2996548,83.85
+2026-07-07,bedrock,claude-haiku-4-5,Platform,Agent Runtime,37846,44830804,2889505,17124564,60.99
+2026-07-07,bedrock,claude-sonnet-5,Platform,Agent Runtime,1802,2698667,452660,1157382,15.23
+2026-07-07,anthropic-api,claude-fable-5,Data Science,Churn Model,88,263576,198325,98260,12.65
+2026-07-07,anthropic-api,claude-opus-5,Data Science,Forecasting,537,1350505,818663,550412,27.49
+2026-07-07,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,1172,2084667,1046891,815904,22.20
+2026-07-07,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,2369,2708198,279343,1140314,4.22
+2026-07-07,bedrock,claude-haiku-4-5,Support,Ticket Triage,14302,16501657,1783301,6443182,26.06
+2026-07-07,bedrock,claude-sonnet-5,Support,Ticket Triage,680,1025783,289066,363325,7.52
+2026-07-08,bedrock,claude-opus-5,Delivery,Cortex CMS,1093,2188493,966619,858676,35.54
+2026-07-08,bedrock,claude-opus-4-8,Delivery,Client Portal,144,308296,146710,125782,5.27
+2026-07-08,bedrock,claude-sonnet-5,Delivery,Client Portal,4817,7579784,2627277,3150876,63.09
+2026-07-08,bedrock,claude-haiku-4-5,Platform,Agent Runtime,47206,53600935,4770932,17814223,79.24
+2026-07-08,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,1927,2958939,680062,1126845,19.42
+2026-07-08,anthropic-api,claude-fable-5,Data Science,Churn Model,85,262431,162423,107992,10.85
+2026-07-08,anthropic-api,claude-opus-5,Data Science,Churn Model,493,1140987,631589,418617,21.70
+2026-07-08,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,1110,2003522,909685,865715,19.92
+2026-07-08,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,3215,3772653,467220,1429776,6.25
+2026-07-08,bedrock,claude-haiku-4-5,Support,Ticket Triage,17458,19720905,2304620,7528406,32.00
+2026-07-08,bedrock,claude-sonnet-5,Support,Ticket Triage,698,1140031,303259,413752,8.09
+2026-07-09,bedrock,claude-opus-5,Delivery,Client Portal,1157,2656775,1498064,916471,51.19
+2026-07-09,bedrock,claude-opus-4-8,Delivery,Client Portal,112,278558,120784,107496,4.47
+2026-07-09,bedrock,claude-sonnet-5,Delivery,Cortex CMS,4908,8786697,3511624,3099126,79.96
+2026-07-09,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,42611,51371525,4283418,17124041,74.50
+2026-07-09,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,2119,3420041,674732,1419308,20.81
+2026-07-09,anthropic-api,claude-fable-5,Data Science,Forecasting,105,410679,285014,179486,18.54
+2026-07-09,anthropic-api,claude-opus-5,Data Science,Churn Model,559,1314439,849996,439457,28.04
+2026-07-09,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,1053,1617016,609021,725197,14.20
+2026-07-09,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,2433,2702216,272175,1149125,4.18
+2026-07-09,bedrock,claude-haiku-4-5,Support,Ticket Triage,15129,18166364,2020973,7836656,29.05
+2026-07-09,bedrock,claude-sonnet-5,Support,Ticket Triage,856,1512686,438682,541692,11.28
+2026-07-10,bedrock,claude-opus-5,Delivery,Cortex CMS,901,2068816,969408,748213,34.95
+2026-07-10,bedrock,claude-opus-4-8,Delivery,Client Portal,111,240382,116118,96541,4.15
+2026-07-10,bedrock,claude-sonnet-5,Delivery,Cortex CMS,4258,7933617,2840135,3096004,67.33
+2026-07-10,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,38970,46598139,3870103,20336854,67.98
+2026-07-10,bedrock,claude-sonnet-5,Platform,Agent Runtime,2464,4329471,797188,1687534,25.45
+2026-07-10,anthropic-api,claude-fable-5,Data Science,Churn Model,111,336697,216831,138752,14.35
+2026-07-10,anthropic-api,claude-opus-5,Data Science,Churn Model,598,1350978,741994,490707,25.55
+2026-07-10,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,1419,2252996,1186031,953401,24.84
+2026-07-10,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,3210,3859924,453196,1367212,6.26
+2026-07-10,bedrock,claude-haiku-4-5,Support,Ticket Triage,14425,16255534,1790247,7301337,25.94
+2026-07-10,bedrock,claude-sonnet-5,Support,Ticket Triage,923,1416011,363393,541207,9.86
+2026-07-11,bedrock,claude-opus-5,Delivery,Client Portal,282,562704,296494,240801,10.35
+2026-07-11,bedrock,claude-opus-4-8,Delivery,Client Portal,25,59140,29672,23244,1.05
+2026-07-11,bedrock,claude-sonnet-5,Delivery,Cortex CMS,1045,1823568,714425,661040,16.39
+2026-07-11,bedrock,claude-haiku-4-5,Platform,Agent Runtime,9249,10299152,823150,3527541,14.77
+2026-07-11,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,520,806023,167831,275705,5.02
+2026-07-11,anthropic-api,claude-fable-5,Data Science,Forecasting,19,59942,40253,26682,2.64
+2026-07-11,anthropic-api,claude-opus-5,Data Science,Churn Model,119,275600,149716,120728,5.18
+2026-07-11,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,271,415920,156557,162335,3.64
+2026-07-11,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,609,701000,91610,244270,1.18
+2026-07-11,bedrock,claude-haiku-4-5,Support,Ticket Triage,3231,3812453,380995,1612269,5.88
+2026-07-11,bedrock,claude-sonnet-5,Support,Ticket Triage,144,261002,68646,107389,1.84
+2026-07-12,bedrock,claude-opus-5,Delivery,Client Portal,228,428364,242324,195777,8.30
+2026-07-12,bedrock,claude-opus-4-8,Delivery,Cortex CMS,22,45408,27026,17862,0.91
+2026-07-12,bedrock,claude-sonnet-5,Delivery,Cortex CMS,957,1626162,725819,599281,15.95
+2026-07-12,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,10757,12247255,1155562,5301952,18.56
+2026-07-12,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,548,968257,155635,380446,5.35
+2026-07-12,anthropic-api,claude-fable-5,Data Science,Churn Model,19,74800,60255,29686,3.79
+2026-07-12,anthropic-api,claude-opus-5,Data Science,Churn Model,125,282449,167101,121641,5.65
+2026-07-12,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,293,530521,249327,219671,5.40
+2026-07-12,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,768,869001,121045,362710,1.51
+2026-07-12,bedrock,claude-haiku-4-5,Support,Ticket Triage,3246,3810933,335449,1631667,5.65
+2026-07-12,bedrock,claude-sonnet-5,Support,Ticket Triage,156,256849,90349,102636,2.16
+2026-07-13,bedrock,claude-opus-5,Delivery,Cortex CMS,1160,2811502,1630971,1027079,55.35
+2026-07-13,bedrock,claude-opus-4-8,Delivery,Client Portal,87,171095,85012,69160,3.02
+2026-07-13,bedrock,claude-sonnet-5,Delivery,Cortex CMS,4680,8690753,3591605,3789674,81.08
+2026-07-13,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,42061,48204339,3916995,21534273,69.94
+2026-07-13,bedrock,claude-sonnet-5,Platform,Agent Runtime,1990,3238022,720037,1163198,20.86
+2026-07-13,anthropic-api,claude-fable-5,Data Science,Churn Model,95,307367,211207,140810,13.77
+2026-07-13,anthropic-api,claude-opus-5,Data Science,Churn Model,561,1347612,819360,474399,27.46
+2026-07-13,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,1263,2219987,1092680,846981,23.30
+2026-07-13,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,3310,3947898,465167,1373412,6.41
+2026-07-13,bedrock,claude-haiku-4-5,Support,Ticket Triage,13886,16105567,1889971,6860002,26.24
+2026-07-13,bedrock,claude-sonnet-5,Support,Ticket Triage,756,1233943,428735,430183,10.26
+2026-07-14,bedrock,claude-opus-5,Delivery,Client Portal,1293,2973324,1499262,1103458,52.90
+2026-07-14,bedrock,claude-opus-4-8,Delivery,Client Portal,65,163840,97716,73788,3.30
+2026-07-14,bedrock,claude-sonnet-5,Delivery,Client Portal,4865,8623646,2864406,3444842,69.87
+2026-07-14,bedrock,claude-haiku-4-5,Platform,Agent Runtime,39091,46885879,3684400,21245446,67.43
+2026-07-14,bedrock,claude-sonnet-5,Platform,Agent Runtime,2411,3948154,831732,1628200,24.81
+2026-07-14,anthropic-api,claude-fable-5,Data Science,Churn Model,103,336606,223460,125804,14.66
+2026-07-14,anthropic-api,claude-opus-5,Data Science,Forecasting,515,1286686,770404,470413,25.93
+2026-07-14,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,1335,2100837,784631,743077,18.29
+2026-07-14,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,3047,3728268,475860,1335964,6.24
+2026-07-14,bedrock,claude-haiku-4-5,Support,Ticket Triage,17763,20659855,1842751,9438247,30.82
+2026-07-14,bedrock,claude-sonnet-5,Support,Ticket Triage,693,1094885,355394,498112,8.76
+2026-07-15,bedrock,claude-opus-5,Delivery,Client Portal,1296,3133377,1323723,1419648,49.47
+2026-07-15,bedrock,claude-opus-4-8,Delivery,Client Portal,49,119539,63588,42919,2.21
+2026-07-15,bedrock,claude-sonnet-5,Delivery,Client Portal,3955,6057877,2525368,2817997,56.90
+2026-07-15,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,44280,52417859,5013574,21368427,79.62
+2026-07-15,bedrock,claude-sonnet-5,Platform,Agent Runtime,2455,4549676,750615,2019866,25.51
+2026-07-15,anthropic-api,claude-fable-5,Data Science,Churn Model,100,381786,256219,143428,16.77
+2026-07-15,anthropic-api,claude-opus-5,Data Science,Forecasting,590,1271822,814199,521940,26.98
+2026-07-15,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,1434,2256585,982944,912430,21.79
+2026-07-15,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,3305,3874495,523070,1775081,6.67
+2026-07-15,bedrock,claude-haiku-4-5,Support,Ticket Triage,18223,20465277,2185729,8836804,32.28
+2026-07-15,bedrock,claude-sonnet-5,Support,Ticket Triage,780,1291592,321167,520200,8.85
+2026-07-16,bedrock,claude-opus-5,Delivery,Client Portal,1249,3100199,1541363,1098720,54.58
+2026-07-16,bedrock,claude-opus-4-8,Delivery,Client Portal,52,99862,57161,39131,1.95
+2026-07-16,bedrock,claude-sonnet-5,Delivery,Client Portal,4398,7885783,2778933,2906325,66.21
+2026-07-16,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,39573,44035363,3210440,19481148,62.04
+2026-07-16,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,2463,3923165,709754,1716936,22.93
+2026-07-16,anthropic-api,claude-fable-5,Data Science,Forecasting,86,266226,161915,107285,10.87
+2026-07-16,anthropic-api,claude-opus-5,Data Science,Forecasting,664,1281321,783238,512099,26.24
+2026-07-16,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,1077,1956254,931957,859036,20.11
+2026-07-16,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,3483,3877678,556214,1401348,6.80
+2026-07-16,bedrock,claude-haiku-4-5,Support,Ticket Triage,16633,19368119,2103259,7618803,30.65
+2026-07-16,bedrock,claude-sonnet-5,Support,Ticket Triage,961,1650914,432707,708626,11.66
+2026-07-17,bedrock,claude-opus-5,Delivery,Cortex CMS,1249,3006687,1369615,1437353,49.99
+2026-07-17,bedrock,claude-opus-4-8,Delivery,Cortex CMS,35,70963,32520,28284,1.18
+2026-07-17,bedrock,claude-sonnet-5,Delivery,Client Portal,4863,7504705,3425912,3203336,74.86
+2026-07-17,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,39574,46802772,3489185,20920774,66.34
+2026-07-17,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,2530,4522385,1017713,1827003,29.38
+2026-07-17,anthropic-api,claude-fable-5,Data Science,Forecasting,87,260452,180392,100271,11.72
+2026-07-17,anthropic-api,claude-opus-5,Data Science,Churn Model,599,1140079,689122,451347,23.15
+2026-07-17,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,1095,1921923,718851,905587,16.82
+2026-07-17,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,3228,3903860,429001,1565206,6.21
+2026-07-17,bedrock,claude-haiku-4-5,Support,Ticket Triage,16869,20457021,1893426,7947276,30.72
+2026-07-17,bedrock,claude-sonnet-5,Support,Ticket Triage,765,1428544,462379,629487,11.41
+2026-07-18,bedrock,claude-opus-5,Delivery,Client Portal,237,594598,316678,221312,11.00
+2026-07-18,bedrock,claude-opus-4-8,Delivery,Client Portal,4,9032,4396,3578,0.16
+2026-07-18,bedrock,claude-sonnet-5,Delivery,Client Portal,1083,1705991,703609,615718,15.86
+2026-07-18,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,9308,10582152,868343,4268546,15.35
+2026-07-18,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,511,780510,143493,318407,4.59
+2026-07-18,anthropic-api,claude-fable-5,Data Science,Forecasting,24,74944,56262,31807,3.59
+2026-07-18,anthropic-api,claude-opus-5,Data Science,Forecasting,150,282036,146948,120799,5.14
+2026-07-18,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,320,559204,242633,253170,5.39
+2026-07-18,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,632,730492,73001,300680,1.13
+2026-07-18,bedrock,claude-haiku-4-5,Support,Ticket Triage,3726,4521390,448899,1757270,6.94
+2026-07-18,bedrock,claude-sonnet-5,Support,Ticket Triage,163,298911,105449,138597,2.52
+2026-07-19,bedrock,claude-opus-5,Delivery,Cortex CMS,319,723124,329649,299947,12.01
+2026-07-19,bedrock,claude-opus-4-8,Delivery,Cortex CMS,2,4692,2586,2079,0.09
+2026-07-19,bedrock,claude-sonnet-5,Delivery,Cortex CMS,1192,2211939,736425,998538,17.98
+2026-07-19,bedrock,claude-haiku-4-5,Platform,Agent Runtime,8476,10377114,993640,4879807,15.83
+2026-07-19,bedrock,claude-sonnet-5,Platform,Agent Runtime,475,846520,188116,361571,5.47
+2026-07-19,anthropic-api,claude-fable-5,Data Science,Churn Model,19,56453,33177,21809,2.25
+2026-07-19,anthropic-api,claude-opus-5,Data Science,Forecasting,153,323387,192926,134212,6.51
+2026-07-19,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,282,427871,213821,200875,4.55
+2026-07-19,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,705,776797,98899,355340,1.31
+2026-07-19,bedrock,claude-haiku-4-5,Support,Ticket Triage,3862,4256625,461620,1555786,6.72
+2026-07-19,bedrock,claude-sonnet-5,Support,Ticket Triage,160,253084,82879,100113,2.03
+2026-07-20,bedrock,claude-opus-5,Delivery,Client Portal,3304,8182170,3963431,3568428,141.78
+2026-07-20,bedrock,claude-sonnet-5,Delivery,Client Portal,15325,22910387,7999091,8416738,191.24
+2026-07-20,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,148980,177453681,12574358,88050613,249.13
+2026-07-20,bedrock,claude-sonnet-5,Platform,Agent Runtime,7424,13049450,2542394,4861420,78.74
+2026-07-20,anthropic-api,claude-fable-5,Data Science,Churn Model,322,1330304,934126,623629,60.63
+2026-07-20,anthropic-api,claude-opus-5,Data Science,Forecasting,2031,4440550,2413228,1822935,83.44
+2026-07-20,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,4268,6874688,3243584,3049060,70.19
+2026-07-20,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,9514,10746831,1057295,5200541,16.55
+2026-07-20,bedrock,claude-haiku-4-5,Support,Ticket Triage,44142,49273579,5641420,19895606,79.47
+2026-07-20,bedrock,claude-sonnet-5,Support,Ticket Triage,2096,3734536,1246589,1673080,30.40
+2026-07-21,bedrock,claude-opus-5,Delivery,Cortex CMS,4299,10338186,5399246,4542252,188.94
+2026-07-21,bedrock,claude-sonnet-5,Delivery,Cortex CMS,14863,27665887,12842485,11045935,278.95
+2026-07-21,bedrock,claude-haiku-4-5,Platform,Agent Runtime,109443,125459288,9157092,47588021,176.00
+2026-07-21,bedrock,claude-sonnet-5,Platform,Agent Runtime,6686,11318163,2282852,5639535,69.89
+2026-07-21,anthropic-api,claude-fable-5,Data Science,Churn Model,317,1074367,682333,457619,45.32
+2026-07-21,anthropic-api,claude-opus-5,Data Science,Forecasting,1763,4256546,2410515,1841552,82.47
+2026-07-21,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,3187,5873273,2822027,2785468,60.79
+2026-07-21,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,9564,10882526,1284522,4062674,17.71
+2026-07-21,bedrock,claude-haiku-4-5,Support,Ticket Triage,43061,49901976,5875812,24220159,81.70
+2026-07-21,bedrock,claude-sonnet-5,Support,Ticket Triage,2689,4622883,1585147,1734901,38.17
+2026-07-22,bedrock,claude-opus-5,Delivery,Client Portal,3512,8795030,4273283,4254306,152.93
+2026-07-22,bedrock,claude-sonnet-5,Delivery,Client Portal,13529,20157903,7606044,8887473,177.23
+2026-07-22,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,105465,118949647,8196870,45169101,164.45
+2026-07-22,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,5752,9452282,1827077,4126531,57.00
+2026-07-22,anthropic-api,claude-fable-5,Data Science,Churn Model,298,947238,581578,442429,38.99
+2026-07-22,anthropic-api,claude-opus-5,Data Science,Forecasting,1948,3698211,2499925,1423651,81.70
+2026-07-22,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,3157,4951760,2232169,2503449,49.09
+2026-07-22,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,7834,8869846,1035142,3747395,14.42
+2026-07-22,bedrock,claude-haiku-4-5,Support,Ticket Triage,40775,49687023,5265211,19902809,78.00
+2026-07-22,bedrock,claude-sonnet-5,Support,Ticket Triage,2131,3648139,1067645,1800262,27.50
+2026-07-23,bedrock,claude-opus-5,Delivery,Cortex CMS,1549,3873271,2308607,1511470,77.84
+2026-07-23,bedrock,claude-sonnet-5,Delivery,Client Portal,5476,9410450,3552605,4766815,82.95
+2026-07-23,bedrock,claude-haiku-4-5,Platform,Agent Runtime,38297,45705141,3466622,20782889,65.12
+2026-07-23,bedrock,claude-sonnet-5,Platform,Agent Runtime,2725,4168658,902184,1580214,26.51
+2026-07-23,anthropic-api,claude-fable-5,Data Science,Forecasting,106,310980,257577,147911,16.14
+2026-07-23,anthropic-api,claude-opus-5,Data Science,Churn Model,796,1825677,1080456,850597,36.57
+2026-07-23,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,1450,2482825,917475,1225241,21.58
+2026-07-23,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,3344,4007920,480665,1864332,6.60
+2026-07-23,bedrock,claude-haiku-4-5,Support,Ticket Triage,16356,19772693,1664157,8554475,28.95
+2026-07-23,bedrock,claude-sonnet-5,Support,Ticket Triage,721,1137218,329206,578622,8.52
+2026-07-24,bedrock,claude-opus-5,Delivery,Client Portal,1317,2582985,1203451,1260031,43.63
+2026-07-24,bedrock,claude-sonnet-5,Delivery,Cortex CMS,5050,7501737,3065999,3466713,69.54
+2026-07-24,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,41323,46198610,3469614,21137720,65.66
+2026-07-24,bedrock,claude-sonnet-5,Platform,Agent Runtime,2743,4732773,1085225,2325342,31.17
+2026-07-24,anthropic-api,claude-fable-5,Data Science,Churn Model,123,421947,332588,160912,21.01
+2026-07-24,anthropic-api,claude-opus-5,Data Science,Churn Model,578,1122385,752686,493358,24.68
+2026-07-24,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,1394,2433351,1113609,1190618,24.36
+2026-07-24,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,3777,4397170,609336,1897103,7.63
+2026-07-24,bedrock,claude-haiku-4-5,Support,Ticket Triage,17119,20377025,2077328,9738570,31.74
+2026-07-24,bedrock,claude-sonnet-5,Support,Ticket Triage,836,1484354,514374,619270,12.35
+2026-07-25,bedrock,claude-opus-5,Delivery,Cortex CMS,378,859455,362259,388380,13.55
+2026-07-25,bedrock,claude-sonnet-5,Delivery,Client Portal,1042,1785308,782540,889145,17.36
+2026-07-25,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,11917,14260722,1154122,6227731,20.65
+2026-07-25,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,608,1001569,191340,388315,5.99
+2026-07-25,anthropic-api,claude-fable-5,Data Science,Forecasting,26,87261,53745,36584,3.60
+2026-07-25,anthropic-api,claude-opus-5,Data Science,Churn Model,152,289848,153863,133402,5.36
+2026-07-25,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,253,398324,213792,176224,4.45
+2026-07-25,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,760,864265,123581,345968,1.52
+2026-07-25,bedrock,claude-haiku-4-5,Support,Ticket Triage,3311,3735446,331573,1540405,5.55
+2026-07-25,bedrock,claude-sonnet-5,Support,Ticket Triage,179,330665,118100,151580,2.81
+2026-07-26,bedrock,claude-opus-5,Delivery,Cortex CMS,324,646441,349566,333199,12.14
+2026-07-26,bedrock,claude-sonnet-5,Delivery,Cortex CMS,1314,2412231,1133083,1047387,24.55
+2026-07-26,bedrock,claude-haiku-4-5,Platform,Agent Runtime,9160,10881010,801064,5458813,15.43
+2026-07-26,bedrock,claude-sonnet-5,Platform,Agent Runtime,465,827048,150164,395650,4.85
+2026-07-26,anthropic-api,claude-fable-5,Data Science,Forecasting,26,87102,57611,34363,3.79
+2026-07-26,anthropic-api,claude-opus-5,Data Science,Churn Model,157,296019,187440,122131,6.23
+2026-07-26,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,354,632033,265027,271665,5.95
+2026-07-26,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,717,865710,121222,363759,1.51
+2026-07-26,bedrock,claude-haiku-4-5,Support,Ticket Triage,3791,4373037,496832,2174433,7.07
+2026-07-26,bedrock,claude-sonnet-5,Support,Ticket Triage,186,283428,92757,112840,2.28
+2026-07-27,bedrock,claude-opus-5,Delivery,Cortex CMS,1644,3916298,2078420,2033415,72.56
+2026-07-27,bedrock,claude-sonnet-5,Delivery,Cortex CMS,5280,8096635,3116109,3544591,72.09
+2026-07-27,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,47732,52781473,4315429,23294270,76.69
+2026-07-27,bedrock,claude-sonnet-5,Platform,Agent Runtime,2325,4226429,729679,2062703,24.24
+2026-07-27,anthropic-api,claude-fable-5,Data Science,Forecasting,119,490208,406683,232110,25.47
+2026-07-27,anthropic-api,claude-opus-5,Data Science,Churn Model,630,1410776,766288,569692,26.50
+2026-07-27,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,1619,2955784,1071943,1501282,25.40
+2026-07-27,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,3794,4157739,487198,1976823,6.79
+2026-07-27,bedrock,claude-haiku-4-5,Support,Ticket Triage,20180,23694822,2123655,10813194,35.39
+2026-07-27,bedrock,claude-sonnet-5,Support,Ticket Triage,903,1629636,532483,750187,13.10
+2026-07-28,bedrock,claude-opus-5,Delivery,Client Portal,1843,4514889,1904842,2160331,71.28
+2026-07-28,bedrock,claude-sonnet-5,Delivery,Client Portal,5588,8546976,4028208,4116893,87.30
+2026-07-28,bedrock,claude-haiku-4-5,Platform,Agent Runtime,50180,58706704,5012471,26373523,86.41
+2026-07-28,bedrock,claude-sonnet-5,Platform,Agent Runtime,2857,4258927,808727,1748889,25.43
+2026-07-28,anthropic-api,claude-fable-5,Data Science,Forecasting,108,319505,184792,165245,12.60
+2026-07-28,anthropic-api,claude-opus-5,Data Science,Forecasting,770,1710590,1202281,863673,39.04
+2026-07-28,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,1373,2512920,1261572,1042856,26.78
+2026-07-28,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,2788,3168778,373930,1425598,5.18
+2026-07-28,bedrock,claude-haiku-4-5,Support,Ticket Triage,14968,17577108,1575744,7074723,26.16
+2026-07-28,bedrock,claude-sonnet-5,Support,Ticket Triage,786,1422803,385427,643691,10.24
+2026-07-29,bedrock,claude-opus-5,Delivery,Client Portal,1563,3583170,1736824,1689748,62.18
+2026-07-29,bedrock,claude-sonnet-5,Delivery,Client Portal,4919,8277757,3195408,3313643,73.76
+2026-07-29,bedrock,claude-haiku-4-5,Platform,Agent Runtime,55258,65466378,4865559,26981353,92.49
+2026-07-29,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,2509,4060465,883500,1628516,25.92
+2026-07-29,anthropic-api,claude-fable-5,Data Science,Forecasting,97,322321,252825,139095,16.00
+2026-07-29,anthropic-api,claude-opus-5,Data Science,Forecasting,677,1507592,898209,679202,30.33
+2026-07-29,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,1435,2362744,876818,1147915,20.58
+2026-07-29,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,3616,4060721,532928,1760243,6.90
+2026-07-29,bedrock,claude-haiku-4-5,Support,Ticket Triage,20223,22698559,2586617,10864186,36.72
+2026-07-29,bedrock,claude-sonnet-5,Support,Ticket Triage,887,1481390,478331,728694,11.84
+2026-07-30,bedrock,claude-opus-5,Delivery,Cortex CMS,1810,3743273,1790413,1503934,64.23
+2026-07-30,bedrock,claude-sonnet-5,Delivery,Client Portal,5063,7988723,3694711,3243120,80.36
+2026-07-30,bedrock,claude-haiku-4-5,Platform,Agent Runtime,53506,61172129,4047142,31048807,84.51
+2026-07-30,bedrock,claude-sonnet-5,Platform,Agent Runtime,2653,4180860,692929,1801780,23.48
+2026-07-30,anthropic-api,claude-fable-5,Data Science,Churn Model,117,406860,249869,189970,16.75
+2026-07-30,anthropic-api,claude-opus-5,Data Science,Forecasting,775,1672485,880805,812093,30.79
+2026-07-30,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,1186,2063815,954573,913220,20.78
+2026-07-30,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,3780,4604304,645445,2481802,8.08
+2026-07-30,bedrock,claude-haiku-4-5,Support,Ticket Triage,19085,22982993,2453982,9698780,36.22
+2026-07-30,bedrock,claude-sonnet-5,Support,Ticket Triage,824,1357590,386060,580062,10.04
+2026-07-31,bedrock,claude-opus-5,Delivery,Cortex CMS,1881,4703301,2161163,2154925,78.62
+2026-07-31,bedrock,claude-sonnet-5,Delivery,Cortex CMS,4589,7246918,2780097,2934240,64.32
+2026-07-31,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,55303,61710814,5609687,26344940,92.39
+2026-07-31,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,2263,3704609,762754,1647797,23.05
+2026-07-31,anthropic-api,claude-fable-5,Data Science,Forecasting,116,343746,279441,153850,17.56
+2026-07-31,anthropic-api,claude-opus-5,Data Science,Forecasting,907,1957376,1049238,968926,36.50
+2026-07-31,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,1607,2596983,1288711,1150707,27.47
+2026-07-31,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,2934,3465883,351399,1760019,5.40
+2026-07-31,bedrock,claude-haiku-4-5,Support,Ticket Triage,15356,17903890,1898598,8153079,28.21
+2026-07-31,bedrock,claude-sonnet-5,Support,Ticket Triage,861,1304589,421557,615898,10.42
+2026-08-01,bedrock,claude-opus-5,Delivery,Cortex CMS,408,843715,446255,426290,15.59
+2026-08-01,bedrock,claude-sonnet-5,Delivery,Client Portal,1258,2069167,911610,1048402,20.20
+2026-08-01,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,9981,11905425,1072560,5114495,17.78
+2026-08-01,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,589,886741,144130,445104,4.96
+2026-08-01,anthropic-api,claude-fable-5,Data Science,Forecasting,27,111263,62686,60474,4.31
+2026-08-01,anthropic-api,claude-opus-5,Data Science,Churn Model,176,378890,248532,187933,8.20
+2026-08-01,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,260,400877,155001,163444,3.58
+2026-08-01,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,713,801230,108512,330197,1.38
+2026-08-01,bedrock,claude-haiku-4-5,Support,Ticket Triage,3486,4269814,455198,2129233,6.76
+2026-08-01,bedrock,claude-sonnet-5,Support,Ticket Triage,221,403712,124765,215780,3.15
+2026-08-02,bedrock,claude-opus-5,Delivery,Client Portal,349,733686,414312,350156,14.20
+2026-08-02,bedrock,claude-sonnet-5,Delivery,Client Portal,1255,1952128,794428,873545,18.03
+2026-08-02,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,12783,14376199,1358528,7054171,21.87
+2026-08-02,bedrock,claude-sonnet-5,Platform,Agent Runtime,590,971034,198749,503470,6.05
+2026-08-02,anthropic-api,claude-fable-5,Data Science,Churn Model,30,89712,66005,49509,4.25
+2026-08-02,anthropic-api,claude-opus-5,Data Science,Churn Model,189,363302,179803,163443,6.39
+2026-08-02,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,345,628352,228333,307063,5.40
+2026-08-02,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,857,956777,115932,526264,1.59
+2026-08-02,bedrock,claude-haiku-4-5,Support,Ticket Triage,4406,5333702,557311,2677448,8.39
+2026-08-02,bedrock,claude-sonnet-5,Support,Ticket Triage,189,337408,118387,186288,2.84
+2026-08-03,bedrock,claude-opus-5,Delivery,Cortex CMS,2041,4682671,2369560,2237845,83.77
+2026-08-03,bedrock,claude-sonnet-5,Delivery,Cortex CMS,6238,10151585,4222004,4968909,95.28
+2026-08-03,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,57286,67165108,5423316,36759780,97.96
+2026-08-03,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,2567,4621915,1105590,2080317,31.07
+2026-08-03,anthropic-api,claude-fable-5,Data Science,Forecasting,131,427542,293524,201709,19.15
+2026-08-03,anthropic-api,claude-opus-5,Data Science,Forecasting,945,1847463,943725,899665,33.28
+2026-08-03,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,1249,2094717,1075084,1067714,22.73
+2026-08-03,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,3229,3913791,531247,1627423,6.73
+2026-08-03,bedrock,claude-haiku-4-5,Support,Ticket Triage,19245,21836769,2221969,9772775,33.92
+2026-08-03,bedrock,claude-sonnet-5,Support,Ticket Triage,860,1337300,373571,570292,9.79
+2026-08-04,bedrock,claude-opus-5,Delivery,Cortex CMS,2083,4989938,2400152,2421845,86.16
+2026-08-04,bedrock,claude-sonnet-5,Delivery,Client Portal,4787,8503880,3828780,3573721,84.02
+2026-08-04,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,57972,67947928,6027887,37856232,101.87
+2026-08-04,bedrock,claude-sonnet-5,Platform,Agent Runtime,2821,5188390,1102575,2652040,32.90
+2026-08-04,anthropic-api,claude-fable-5,Data Science,Forecasting,118,400898,299063,213625,19.18
+2026-08-04,anthropic-api,claude-opus-5,Data Science,Churn Model,862,1726782,893218,739251,31.33
+2026-08-04,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,1576,2720188,1438129,1478720,30.18
+2026-08-04,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,3909,4594415,590705,2585579,7.81
+2026-08-04,bedrock,claude-haiku-4-5,Support,Ticket Triage,20388,23608009,2681848,11635218,38.18
+2026-08-04,bedrock,claude-sonnet-5,Support,Ticket Triage,805,1261381,371168,690809,9.56
+2026-08-05,bedrock,claude-opus-5,Delivery,Client Portal,1885,4314507,2474610,2405162,84.64
+2026-08-05,bedrock,claude-sonnet-5,Delivery,Client Portal,4566,7925567,3758532,4482706,81.50
+2026-08-05,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,58618,68956312,6604463,37157837,105.69
+2026-08-05,bedrock,claude-sonnet-5,Platform,Agent Runtime,2842,4478404,839318,2437221,26.76
+2026-08-05,anthropic-api,claude-fable-5,Data Science,Churn Model,127,466536,304828,261756,20.17
+2026-08-05,anthropic-api,claude-opus-5,Data Science,Forecasting,931,1838696,1059440,866181,36.11
+2026-08-05,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,1266,2093650,830770,1060561,19.06
+2026-08-05,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,3515,4073068,541557,2089426,6.99
+2026-08-05,bedrock,claude-haiku-4-5,Support,Ticket Triage,17381,20766196,1683881,9031695,30.09
+2026-08-05,bedrock,claude-sonnet-5,Support,Ticket Triage,855,1364227,407707,644684,10.40
+2026-08-06,bedrock,claude-opus-5,Delivery,Cortex CMS,1572,3726672,1885631,1645639,66.60
+2026-08-06,bedrock,claude-sonnet-5,Delivery,Client Portal,6170,9489124,3607351,4301920,83.87
+2026-08-06,bedrock,claude-haiku-4-5,Platform,Agent Runtime,49808,60087508,4781132,27776357,86.77
+2026-08-06,bedrock,claude-sonnet-5,Platform,Agent Runtime,3015,4756113,1026555,2622739,30.45
+2026-08-06,anthropic-api,claude-fable-5,Data Science,Churn Model,125,491981,317950,261011,21.08
+2026-08-06,anthropic-api,claude-opus-5,Data Science,Churn Model,793,1986100,1138371,1009143,38.89
+2026-08-06,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,1551,2330134,1071646,1077304,23.39
+2026-08-06,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,3862,4241167,583668,2254974,7.39
+2026-08-06,bedrock,claude-haiku-4-5,Support,Ticket Triage,17141,19127105,2079822,9734707,30.50
+2026-08-06,bedrock,claude-sonnet-5,Support,Ticket Triage,1020,1612506,428432,692009,11.47
+2026-08-07,bedrock,claude-opus-5,Delivery,Cortex CMS,1779,3561356,1548353,1697348,57.36
+2026-08-07,bedrock,claude-sonnet-5,Delivery,Client Portal,4660,7893465,2573017,3891145,63.44
+2026-08-07,bedrock,claude-haiku-4-5,Platform,Agent Runtime,52728,59729683,4148884,30882901,83.56
+2026-08-07,bedrock,claude-sonnet-5,Platform,Agent Runtime,2677,4503807,1033928,2537608,29.78
+2026-08-07,anthropic-api,claude-fable-5,Data Science,Forecasting,104,333580,216301,168842,14.32
+2026-08-07,anthropic-api,claude-opus-5,Data Science,Forecasting,823,1675792,901111,928264,31.37
+2026-08-07,anthropic-api,claude-sonnet-5,Sales Engineering,Demo Builder,1567,2473057,942162,1146546,21.90
+2026-08-07,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,3626,4279631,574753,2380609,7.39
+2026-08-07,bedrock,claude-haiku-4-5,Support,Ticket Triage,19545,22933971,2454592,10845983,36.29
+2026-08-07,bedrock,claude-sonnet-5,Support,Ticket Triage,850,1444100,349485,804031,9.82
+2026-08-08,bedrock,claude-opus-5,Delivery,Client Portal,487,1181316,632630,528718,21.99
+2026-08-08,bedrock,claude-sonnet-5,Delivery,Client Portal,1172,1993055,676733,1042006,16.44
+2026-08-08,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,12069,14129268,1032054,7182096,20.01
+2026-08-08,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,510,923579,172350,428606,5.48
+2026-08-08,anthropic-api,claude-fable-5,Data Science,Churn Model,29,101505,77680,45518,4.94
+2026-08-08,anthropic-api,claude-opus-5,Data Science,Churn Model,209,474542,247112,208349,8.65
+2026-08-08,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,277,411552,152248,223134,3.59
+2026-08-08,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,883,1068667,117650,556952,1.71
+2026-08-08,bedrock,claude-haiku-4-5,Support,Ticket Triage,4565,5007501,464339,2794512,7.61
+2026-08-08,bedrock,claude-sonnet-5,Support,Ticket Triage,215,381141,95943,172594,2.63
+2026-08-09,bedrock,claude-opus-5,Delivery,Client Portal,423,808051,399731,368541,14.22
+2026-08-09,bedrock,claude-sonnet-5,Delivery,Client Portal,1437,2238574,978782,1105201,21.73
+2026-08-09,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,12059,13342671,1176058,5968975,19.82
+2026-08-09,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,586,973884,227161,441821,6.46
+2026-08-09,anthropic-api,claude-fable-5,Data Science,Forecasting,27,94659,63804,54362,4.19
+2026-08-09,anthropic-api,claude-opus-5,Data Science,Forecasting,216,514749,359121,287053,11.70
+2026-08-09,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,340,508330,198846,258324,4.59
+2026-08-09,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,939,1126763,129305,538543,1.83
+2026-08-09,bedrock,claude-haiku-4-5,Support,Ticket Triage,4462,5088675,477392,2941178,7.77
+2026-08-09,bedrock,claude-sonnet-5,Support,Ticket Triage,214,393484,116702,184299,2.99
+2026-08-10,bedrock,claude-opus-5,Delivery,Client Portal,2290,5055121,2987408,2659199,101.29
+2026-08-10,bedrock,claude-sonnet-5,Delivery,Client Portal,5522,10297297,3758461,5408064,88.89
+2026-08-10,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,43665,52504568,4156354,27845286,76.07
+2026-08-10,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,2925,4712381,1116134,2471279,31.62
+2026-08-10,anthropic-api,claude-fable-5,Data Science,Churn Model,120,381229,265619,185980,17.28
+2026-08-10,anthropic-api,claude-opus-5,Data Science,Forecasting,781,1619736,791942,763008,28.28
+2026-08-10,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,1429,2618464,977581,1222045,22.89
+2026-08-10,anthropic-api,claude-haiku-4-5,Sales Engineering,Demo Builder,3416,3762512,432774,1786036,6.10
+2026-08-10,bedrock,claude-haiku-4-5,Support,Ticket Triage,20257,24322490,2852553,14259987,40.01
+2026-08-10,bedrock,claude-sonnet-5,Support,Ticket Triage,897,1340242,427851,743512,10.66
+2026-08-11,bedrock,claude-opus-5,Delivery,Cortex CMS,2036,4144885,1932175,2055222,70.06
+2026-08-11,bedrock,claude-sonnet-5,Delivery,Client Portal,5144,8882486,3393717,4882098,79.02
+2026-08-11,bedrock,claude-haiku-4-5,Platform,Ingest Pipeline,47675,53701880,3525822,27643391,74.10
+2026-08-11,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,2367,3881269,809532,2061477,24.41
+2026-08-11,anthropic-api,claude-fable-5,Data Science,Forecasting,123,397985,241392,179237,16.23
+2026-08-11,anthropic-api,claude-opus-5,Data Science,Forecasting,889,2226614,1381786,1169159,46.26
+2026-08-11,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,1736,2696207,1198744,1550213,26.53
+2026-08-11,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,3233,3953897,405562,1832389,6.16
+2026-08-11,bedrock,claude-haiku-4-5,Support,Ticket Triage,16290,18425541,1530413,10668933,27.14
+2026-08-11,bedrock,claude-sonnet-5,Support,Ticket Triage,826,1269563,422032,653317,10.34
+2026-08-12,bedrock,claude-opus-5,Delivery,Client Portal,2198,4165090,2386531,1980568,81.48
+2026-08-12,bedrock,claude-sonnet-5,Delivery,Client Portal,4781,7178667,2750234,3867788,63.95
+2026-08-12,bedrock,claude-haiku-4-5,Platform,Agent Runtime,53269,64546155,4641775,33080533,91.06
+2026-08-12,bedrock,claude-sonnet-5,Platform,Ingest Pipeline,3187,5614088,943995,3061081,31.92
+2026-08-12,anthropic-api,claude-fable-5,Data Science,Forecasting,122,415679,272091,194671,17.96
+2026-08-12,anthropic-api,claude-opus-5,Data Science,Churn Model,977,2428303,1258038,1444451,44.31
+2026-08-12,anthropic-api,claude-sonnet-5,Sales Engineering,RFP Assistant,1357,2152187,1013573,1262450,22.04
+2026-08-12,anthropic-api,claude-haiku-4-5,Sales Engineering,RFP Assistant,3205,3823347,426409,2052528,6.16
+2026-08-12,bedrock,claude-haiku-4-5,Support,Ticket Triage,19822,23144020,2033019,11113895,34.42
+2026-08-12,bedrock,claude-sonnet-5,Support,Ticket Triage,890,1595906,475222,930651,12.20
