@@ -1,33 +1,39 @@
 "use client";
 
-import { Attachment, ChatRequestOptions, Message } from "ai";
-import { useChat } from "ai/react";
-import { useState } from "react";
+import { useChat } from "@ai-sdk/react";
+import { DefaultChatTransport, UIMessage } from "ai";
 import { X, ExternalLink } from "lucide-react";
+import { useState } from "react";
 
 import { Message as PreviewMessage } from "@/components/custom/message";
 import { useScrollToBottom } from "@/components/custom/use-scroll-to-bottom";
 
 import { MultimodalInput } from "./multimodal-input";
 import { Overview } from "./overview";
+import { Attachment } from "./preview-attachment";
 
 export function Chat({
   id,
   initialMessages,
 }: {
   id: string;
-  initialMessages: Array<Message>;
+  initialMessages: Array<UIMessage>;
 }) {
-  const { messages, handleSubmit, input, setInput, append, isLoading, stop } =
-    useChat({
-      id,
+  const [input, setInput] = useState("");
+
+  const { messages, sendMessage, status, stop } = useChat({
+    id,
+    messages: initialMessages,
+    transport: new DefaultChatTransport({
+      api: "/api/chat",
       body: { id },
-      initialMessages,
-      maxSteps: 5,
-      onFinish: () => {
-        window.history.replaceState({}, "", `/chat/${id}`);
-      },
-    });
+    }),
+    onFinish: () => {
+      window.history.replaceState({}, "", `/chat/${id}`);
+    },
+  });
+
+  const isLoading = status === "submitted" || status === "streaming";
 
   const [messagesContainerRef, messagesEndRef] =
     useScrollToBottom<HTMLDivElement>();
@@ -98,18 +104,25 @@ export function Chat({
     return cues.some((c) => t.includes(c));
   };
 
-  const handleSubmitAutoClosePreview = (
-    event?: { preventDefault?: () => void },
-    chatRequestOptions?: ChatRequestOptions,
-  ) => {
-    if (
-      openWebsiteUrl &&
-      !looksLikePreviewFollowUp(input, openWebsiteUrl)
-    ) {
+  const submitMessage = () => {
+    if (input.trim().length === 0 && attachments.length === 0) return;
+
+    if (openWebsiteUrl && !looksLikePreviewFollowUp(input, openWebsiteUrl)) {
       setOpenWebsiteUrl(null);
     }
 
-    handleSubmit(event, chatRequestOptions);
+    sendMessage({
+      text: input,
+      files: attachments.map((a) => ({
+        type: "file" as const,
+        url: a.url,
+        mediaType: a.contentType ?? "",
+        filename: a.name,
+      })),
+    });
+
+    setInput("");
+    setAttachments([]);
   };
 
   const chatPanel = (
@@ -124,11 +137,8 @@ export function Chat({
           <PreviewMessage
             key={message.id}
             chatId={id}
-            role={message.role}
-            content={message.content}
-            attachments={message.experimental_attachments}
-            toolInvocations={message.toolInvocations}
-            onFormSubmit={(content) => append({ role: "user", content })}
+            message={message}
+            onFormSubmit={(content) => sendMessage({ text: content })}
             onWebsiteOpen={(url) => setOpenWebsiteUrl(url)}
           />
         ))}
@@ -153,13 +163,13 @@ export function Chat({
         <MultimodalInput
           input={input}
           setInput={setInput}
-          handleSubmit={handleSubmitAutoClosePreview}
+          handleSubmit={submitMessage}
           isLoading={isLoading}
           stop={stop}
           attachments={attachments}
           setAttachments={setAttachments}
           messages={messages}
-          append={append}
+          sendMessage={(text) => sendMessage({ text })}
         />
       </form>
     </div>

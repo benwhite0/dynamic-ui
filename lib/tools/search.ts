@@ -1,5 +1,5 @@
-import { tool } from 'ai';
 import { tavily } from '@tavily/core';
+import { tool } from 'ai';
 import { z } from 'zod';
 
 const client = tavily({ apiKey: process.env.TAVILY_API_KEY! });
@@ -70,7 +70,7 @@ async function canEmbedInIframe(url?: string | null): Promise<boolean> {
 export const suggestWebsites = tool({
   description:
     'Find and suggest the top websites for a task the user wants to perform on the internet. Use ONLY when the user wants to DO something (e.g. book a flight, buy something, compare hotels, find a service, make a reservation). Do NOT use for informational questions.',
-  parameters: z.object({
+  inputSchema: z.object({
     task: z
       .string()
       .describe('What the user wants to do, e.g. "book flights to Paris", "compare hotel prices in London"'),
@@ -138,7 +138,7 @@ export const suggestWebsites = tool({
 
 export const searchWeb = tool({
   description: 'Search the internet for current information, news, weather, or anything else.',
-  parameters: z.object({
+  inputSchema: z.object({
     query: z.string().describe('The search query'),
   }),
   execute: async ({ query }) => {

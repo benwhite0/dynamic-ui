@@ -1,4 +1,9 @@
-import { convertToCoreMessages, Message, streamText } from "ai";
+import {
+  convertToModelMessages,
+  stepCountIs,
+  streamText,
+  UIMessage,
+} from "ai";
 import { format } from "date-fns";
 import { z } from "zod";
 
@@ -14,7 +19,7 @@ import {
   saveChat,
   updateTicketById,
 } from "@/db/queries";
-
+import { getMcpTools } from "@/lib/tools/mcp";
 import { searchWeb, suggestWebsites } from "@/lib/tools/search";
 
 const STATUS_LABEL: Record<string, string> = {
@@ -78,7 +83,7 @@ async function resolveTicket(search: string) {
 }
 
 export async function POST(request: Request) {
-  const { id, messages }: { id: string; messages: Array<Message> } =
+  const { id, messages }: { id: string; messages: Array<UIMessage> } =
     await request.json();
 
   const session = await auth();
@@ -87,38 +92,50 @@ export async function POST(request: Request) {
     return new Response("Unauthorized", { status: 401 });
   }
 
-  const coreMessages = convertToCoreMessages(messages).filter(
-    (message) => message.content.length > 0,
-  );
-
   const lastUserMsg = messages.filter((m) => m.role === "user").pop();
   const lastContent =
-    typeof lastUserMsg?.content === "string"
-      ? lastUserMsg.content
-      : Array.isArray(lastUserMsg?.content)
-        ? (lastUserMsg?.content as Array<{ type: string; text?: string }>)
-            ?.find((p) => p.type === "text")
-            ?.text ?? ""
-        : "";
-  const isFormSubmission =
-    typeof lastContent === "string" && lastContent.startsWith("Form submitted:");
+    lastUserMsg?.parts
+      .filter((p): p is { type: "text"; text: string } => p.type === "text")
+      .map((p) => p.text)
+      .join("") ?? "";
+  const isFormSubmission = lastContent.startsWith("Form submitted:");
 
   let renderFormCallCount = 0;
   let renderCardCallCount = 0;
 
-  const result = await streamText({
+  const mcp = await getMcpTools();
+  const mcpPrompt =
+    Object.keys(mcp.tools).length > 0
+      ? `
+
+═══════════════════════════════════════
+COMPANY MCP TOOLS (live company data)
+═══════════════════════════════════════
+
+Extra tools from the company MCP server are also available. PREFER them over local tools when they can answer with real company data. After an MCP tool returns data, call renderCard to present the key information (this is an exception to the "only after searchWeb" rule), then reply with one short sentence.`
+      : "";
+
+  // When the MCP server provides holiday data, the local mock steps aside.
+  const mcpHasHolidays = Object.keys(mcp.tools).some((name) =>
+    name.toLowerCase().includes("holiday"),
+  );
+  const holidaysPrompt = mcpHasHolidays
+    ? `USE the company MCP holiday tool (e.g. find_holidays) when the user asks who is on holiday / off / away / on annual leave. When the data returns, call renderCard to display it: variant "info", icon "🌴", one pair block per person (label: name, value: date range). Then reply with one short sentence.`
+    : `USE getHolidays when the user asks who is on holiday / off / away / on annual leave, optionally for a time range (e.g. "who's on holiday next month?", "who's off in the next 2 weeks?"). Pass daysAhead when the user implies a window (2 weeks → 14). When the user asks about ONE person (e.g. "when is Leo next on holiday?", "is Charlotte off soon?") pass that person's name so only they are shown. It reads the company database and returns a finished card. Do NOT call renderCard or searchWeb for this; just reply with one short sentence.`;
+
+  const result = streamText({
     model: geminiProModel,
-    maxSteps: 5,
+    stopWhen: stepCountIs(5),
     system: `You help users by creating dynamic, beautifully styled forms AND rich info cards.
 Keep text responses to one sentence. DO NOT output lists. After calling renderForm, reply with a short phrase and wait.
 
 CRITICAL: When the latest user message starts with "Form submitted:" do NOT call renderForm or any tool. Reply with ONLY a short confirmation (e.g. "Email sent.", "Payment processed.", "Feedback received.", "Ticket created.", "RSVP confirmed.").
 
 ═══════════════════════════════════════
-HOLIDAYS — getHolidays (who is on annual leave)
+HOLIDAYS (who is on annual leave)
 ═══════════════════════════════════════
 
-USE getHolidays when the user asks who is on holiday / off / away / on annual leave, optionally for a time range (e.g. "who's on holiday next month?", "who's off in the next 2 weeks?"). Pass daysAhead when the user implies a window (2 weeks → 14). When the user asks about ONE person (e.g. "when is Leo next on holiday?", "is Charlotte off soon?") pass that person's name so only they are shown. It reads the company database and returns a finished card. Do NOT call renderCard or searchWeb for this; just reply with one short sentence.
+${holidaysPrompt}
 
 ═══════════════════════════════════════
 KANBAN TICKETS — createTicket / getTickets
@@ -209,13 +226,13 @@ CARD EXAMPLES:
   Weather → variant "weather", title "Sheffield, UK", icon "🌤️", blocks: [metric{label:"Temperature",value:"15",unit:"°C"}, pair{label:"Conditions",value:"Partly Cloudy"}, pair{label:"Humidity",value:"72%"}, pair{label:"Wind",value:"12 mph NW"}]
   Person → variant "profile", title "Albert Einstein", subtitle "Physicist", icon "👤", blocks: [text{content:"German-born theoretical physicist..."}, pair{label:"Born",value:"March 14, 1879"}, badges{labels:["Physics","Nobel Prize","Relativity"]}]
   Definition → variant "info", title "Quantum Computing", icon "💡", blocks: [text{content:"..."}, list{items:["Superposition","Entanglement","Qubits"],ordered:false}, badges{labels:["Computer Science","Physics"]}]
-  Sports score → variant "success", title "Match Result", icon "⚽", blocks: [metric{label:"Final Score",value:"3 – 1"}, pair{label:"Man City vs Arsenal",value:"Full Time"}, badges{labels:["Premier League","Matchday 12"]}]`,
-    messages: coreMessages,
+  Sports score → variant "success", title "Match Result", icon "⚽", blocks: [metric{label:"Final Score",value:"3 – 1"}, pair{label:"Man City vs Arsenal",value:"Full Time"}, badges{labels:["Premier League","Matchday 12"]}]${mcpPrompt}`,
+    messages: convertToModelMessages(messages),
     tools: {
       renderForm: {
         description:
           "Render a styled dynamic form in the chat. Choose the best variant and infer fields from the user's goal. Do not wait for the user to specify fields—reason from context.",
-        parameters: z.object({
+        inputSchema: z.object({
           variant: z
             .enum(["default", "email", "feedback", "payment", "support", "survey", "rsvp"])
             .optional()
@@ -247,7 +264,7 @@ CARD EXAMPLES:
       renderCard: {
         description:
           "Render a beautiful dynamic info card in the chat. Call this AFTER searchWeb to visually display the key information from search results. Choose the best variant and compose blocks.",
-        parameters: z.object({
+        inputSchema: z.object({
           variant: z
             .enum(["default", "finance", "weather", "stat", "profile", "info", "warning", "success"])
             .optional()
@@ -302,10 +319,14 @@ CARD EXAMPLES:
           };
         },
       },
+      // Local mock; hidden when the MCP server provides real holiday data.
+      ...(mcpHasHolidays
+        ? {}
+        : {
       getHolidays: {
         description:
           "Look up who is on annual leave / holiday from the company database. Use whenever the user asks who is on holiday, who's off, who's away, time off, or annual leave. Pass `name` to look up one specific person. Returns a finished card to display—do NOT also call renderCard.",
-        parameters: z.object({
+        inputSchema: z.object({
           name: z
             .string()
             .optional()
@@ -354,10 +375,11 @@ CARD EXAMPLES:
           };
         },
       },
+        }),
       createTicket: {
         description:
           "Create a new kanban ticket in the company database. Use when the user wants to create/add/open/raise a ticket, task, bug, or issue. Infer a concise title and (if implied) description, priority and status from the request. Returns a finished card—do NOT also call renderCard.",
-        parameters: z.object({
+        inputSchema: z.object({
           title: z.string().describe("Short ticket title"),
           description: z.string().optional().describe("Longer details, if given"),
           priority: z
@@ -377,7 +399,7 @@ CARD EXAMPLES:
       getTickets: {
         description:
           "List kanban tickets from the company database. Use when the user asks about tickets/tasks/issues, e.g. 'show my tickets', 'what's in progress', 'any high priority bugs'. Pass status to filter a column, or search to match title text. Returns a finished card—do NOT also call renderCard.",
-        parameters: z.object({
+        inputSchema: z.object({
           status: z
             .enum(["todo", "in_progress", "done"])
             .optional()
@@ -407,7 +429,7 @@ CARD EXAMPLES:
       updateTicket: {
         description:
           "Update an existing kanban ticket (e.g. move it to a new column, change priority, edit title/description). Use when the user wants to change/move/edit/reprioritise a ticket. Identify the ticket via `search` (its title text) and pass only the fields to change. Returns a finished card—do NOT also call renderCard.",
-        parameters: z.object({
+        inputSchema: z.object({
           search: z.string().describe("Title text identifying the ticket to update"),
           title: z.string().optional().describe("New title"),
           description: z.string().optional().describe("New description"),
@@ -433,7 +455,7 @@ CARD EXAMPLES:
       deleteTicket: {
         description:
           "Delete a kanban ticket. Use when the user wants to delete/remove/close out a ticket. Identify it via `search` (its title text). Returns a finished card—do NOT also call renderCard.",
-        parameters: z.object({
+        inputSchema: z.object({
           search: z.string().describe("Title text identifying the ticket to delete"),
         }),
         execute: async ({ search }) => {
@@ -451,19 +473,11 @@ CARD EXAMPLES:
       },
       searchWeb,
       suggestWebsites,
+      ...mcp.tools,
     },
-    onFinish: async ({ responseMessages }) => {
-      if (session.user && session.user.id) {
-        try {
-          await saveChat({
-            id,
-            messages: [...coreMessages, ...responseMessages],
-            userId: session.user.id,
-          });
-        } catch (error) {
-          console.error("Failed to save chat");
-        }
-      }
+    onError: async ({ error }) => {
+      console.error("streamText error", error);
+      await mcp.close();
     },
     experimental_telemetry: {
       isEnabled: true,
@@ -471,7 +485,28 @@ CARD EXAMPLES:
     },
   });
 
-  return result.toDataStreamResponse({});
+  return result.toUIMessageStreamResponse({
+    originalMessages: messages,
+    onError: (error) => {
+      console.error("chat stream error", error);
+      return error instanceof Error ? error.message : String(error);
+    },
+    onFinish: async ({ messages: finalMessages }) => {
+      await mcp.close();
+
+      if (session.user && session.user.id) {
+        try {
+          await saveChat({
+            id,
+            messages: finalMessages,
+            userId: session.user.id,
+          });
+        } catch (error) {
+          console.error("Failed to save chat");
+        }
+      }
+    },
+  });
 }
 
 export async function DELETE(request: Request) {

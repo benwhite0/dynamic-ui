@@ -1,6 +1,12 @@
-import { Attachment } from "ai";
-
 import { LoaderIcon } from "./icons";
+
+// The AI SDK v5 removed the Attachment type; uploads are file parts now.
+// This local shape matches what /api/files/upload returns.
+export type Attachment = {
+  url: string;
+  name?: string;
+  contentType?: string;
+};
 
 export const PreviewAttachment = ({
   attachment,
