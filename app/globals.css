@@ -78,6 +78,51 @@
     }
 }
 
+/*
+ * Chart palette. Both modes are selected, not flipped: the dark column is the
+ * same six hues re-stepped for the dark surface.
+ *
+ * Validated with the dataviz validator against this app's own card surfaces
+ * (#ffffff light, #09090b dark) — lightness band, chroma floor, adjacent CVD
+ * separation and normal-vision floor all pass in both modes. On light, series
+ * 3/4/5 sit below 3:1 against white, which obligates the relief rule: every
+ * chart ships a legend and a table view so identity is never colour-alone.
+ *
+ * Slot order is the CVD-safety mechanism — assign in order, never cycle. Past
+ * six series, fold the tail into "Other" rather than inventing a hue.
+ */
+@layer base {
+    :root {
+        --viz-surface: #ffffff;
+        --viz-1: #2a78d6;
+        --viz-2: #eb6834;
+        --viz-3: #1baf7a;
+        --viz-4: #eda100;
+        --viz-5: #e87ba4;
+        --viz-6: #008300;
+        --viz-grid: #e1e0d9;
+        --viz-axis: #c3c2b7;
+        --viz-muted: #898781;
+        --viz-good: #006300;
+        --viz-bad: #d03b3b;
+    }
+
+    .dark {
+        --viz-surface: #09090b;
+        --viz-1: #3987e5;
+        --viz-2: #d95926;
+        --viz-3: #199e70;
+        --viz-4: #c98500;
+        --viz-5: #d55181;
+        --viz-6: #008300;
+        --viz-grid: #2c2c2a;
+        --viz-axis: #383835;
+        --viz-muted: #898781;
+        --viz-good: #0ca30c;
+        --viz-bad: #d03b3b;
+    }
+}
+
 @layer base {
     * {
         @apply border-border;
