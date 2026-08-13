@@ -3,7 +3,7 @@ import "server-only";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
-import type { SpendRow } from "./types";
+import type { Dimension, SpendRow } from "./types";
 
 /**
  * Reads the dummy spend CSV. This is the swappable driver: when the real source
@@ -59,4 +59,22 @@ export function spendDateRange(): { from: string; to: string } {
   const rows = loadSpendRows();
   const dates = rows.map((row) => row.date).sort();
   return { from: dates[0], to: dates[dates.length - 1] };
+}
+
+/**
+ * Distinct values per dimension. The chat prompt is built from these so the
+ * model is told the real vocabulary of the data rather than a hardcoded list
+ * that drifts as the source changes.
+ */
+export function spendDimensions(): Record<Dimension, string[]> {
+  const rows = loadSpendRows();
+  const distinct = (dimension: Dimension) =>
+    [...new Set(rows.map((row) => row[dimension]))].sort();
+
+  return {
+    provider: distinct("provider"),
+    model: distinct("model"),
+    team: distinct("team"),
+    project: distinct("project"),
+  };
 }

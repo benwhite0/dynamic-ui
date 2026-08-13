@@ -2,7 +2,7 @@ import { ArrowDown, ArrowUp, Minus } from "lucide-react";
 
 import { SERIES_COLORS } from "./chart-kit";
 
-import type { Delta } from "@/lib/reports/format";
+import type { Delta } from "@/lib/reports/types";
 
 /**
  * 12-point sparkline, hand-rolled rather than another chart instance: at this
@@ -126,7 +126,7 @@ export type Stat = {
  * not a one-bar bar chart. Figures stay proportional — tabular digits make a
  * large standalone number look loose.
  */
-function StatTile({ stat, hero = false }: { stat: Stat; hero?: boolean }) {
+export function StatTile({ stat, hero = false }: { stat: Stat; hero?: boolean }) {
   return (
     <div className="flex flex-col gap-1 rounded-xl border border-border bg-card p-4">
       <p className="text-xs text-muted-foreground">{stat.label}</p>

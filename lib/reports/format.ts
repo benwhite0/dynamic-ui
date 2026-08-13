@@ -1,6 +1,6 @@
 import { format, parseISO } from "date-fns";
 
-import type { Bucket, Metric } from "./types";
+import type { Bucket, Delta, Metric } from "./types";
 
 /**
  * Thousands separators without `Intl`. Node and the browser ship different ICU
@@ -113,12 +113,6 @@ export function niceTicks(max: number, count = 5): number[] {
   }
   return ticks;
 }
-
-export type Delta = {
-  label: string;
-  /** Direction of change, independent of whether that direction is good. */
-  direction: "up" | "down" | "flat";
-};
 
 /**
  * Period-over-period change. Returns null when there's no prior figure to
