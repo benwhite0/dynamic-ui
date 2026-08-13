@@ -103,6 +103,7 @@
         --viz-grid: #e1e0d9;
         --viz-axis: #c3c2b7;
         --viz-muted: #898781;
+        --viz-ink: #0b0b0b;
         --viz-good: #006300;
         --viz-bad: #d03b3b;
     }
@@ -118,6 +119,7 @@
         --viz-grid: #2c2c2a;
         --viz-axis: #383835;
         --viz-muted: #898781;
+        --viz-ink: #ffffff;
         --viz-good: #0ca30c;
         --viz-bad: #d03b3b;
     }
