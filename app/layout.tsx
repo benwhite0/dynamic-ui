@@ -16,8 +16,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // next-themes sets class and color-scheme on <html> after mount, which the
+  // server never rendered. Suppressing the warning on this element is the
+  // documented requirement, not a workaround.
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className="antialiased">
         <ThemeProvider
           attribute="class"
