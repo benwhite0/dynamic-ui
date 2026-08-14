@@ -12,7 +12,13 @@ import type {
   Stat,
 } from "./types";
 
-export const DIMENSIONS = ["provider", "model", "team", "project"] as const;
+export const DIMENSIONS = [
+  "provider",
+  "model",
+  "team",
+  "project",
+  "principal",
+] as const;
 
 /** What the model is allowed to ask for. Mirrors the tool's input schema. */
 export type SpendChartInput = {

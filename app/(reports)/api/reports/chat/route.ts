@@ -51,6 +51,7 @@ WHAT THE DATA CANNOT ANSWER
 
 FILTERS AND RANGES
 - Put named things in filters, e.g. "sonnet 5 vs opus 5 by week" -> filters: {model: ["claude-sonnet-5", "claude-opus-5"]}, groupBy: "model", chartType: "bar".
+- For "who" or "what" spent the money — a person, an app, an API key, a service — use groupBy: "principal". It is the AWS identity the charge was authenticated as. Prefer it over team or project whenever those are listed as only "untagged", which means no cost allocation tags exist and they can tell you nothing.
 - Use days for relative windows ("last 10 days" -> days: 10). Use from/to only when the user gives explicit dates.
 - Leave bucket unset unless asked; it steps from day to week automatically on long ranges.
 - Write a title that names what was plotted, and put the qualifier in subtitle ("Daily, last 10 days").

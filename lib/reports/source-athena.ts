@@ -39,6 +39,14 @@ const AI_SPEND_PREDICATE = `ResourceId LIKE 'arn:aws:bedrock:%' AND ChargeCatego
 const PROVIDER_EXPR = `regexp_extract(ResourceId, 'inference-profile/([a-z0-9-]+)\\.([a-z0-9]+)\\.', 2)`;
 const MODEL_EXPR = `regexp_extract(ResourceId, 'inference-profile/[a-z0-9-]+\\.[a-z0-9]+\\.(.+)$', 1)`;
 
+/**
+ * The AWS identity behind the charge. x_IamPrincipal holds a full ARN, and the
+ * useful part is the last segment — `BedrockAPIKey-dmqn` for an IAM user,
+ * `su.chatterjee@reply.com` for an SSO role — so the ARN prefix is trimmed to
+ * keep chart labels readable.
+ */
+const PRINCIPAL_EXPR = `COALESCE(NULLIF(regexp_extract(x_IamPrincipal, '[^/:]+$'), ''), 'unknown')`;
+
 /** ConsumedQuantity is denominated by ConsumedUnit, which differs per billing path. */
 const TOKENS_EXPR = `ConsumedQuantity * CASE lower(ConsumedUnit)
       WHEN '1k tokens' THEN 1000
@@ -94,6 +102,7 @@ const DIMENSION_COLUMNS: Record<Dimension, string> = {
   model: "model",
   team: "team",
   project: "project",
+  principal: "principal",
 };
 
 /** The projection from FOCUS charge lines to one row per day/provider/model/team/project. */
@@ -107,6 +116,7 @@ function baseQuery(): string {
       ${MODEL_EXPR} AS model,
       ${tagExpr("ATHENA_TEAM_TAG_KEY")} AS team,
       ${tagExpr("ATHENA_PROJECT_TAG_KEY")} AS project,
+      ${PRINCIPAL_EXPR} AS principal,
       lower(SkuMeter) AS meter,
       ${TOKENS_EXPR} AS tokens,
       EffectiveCost AS cost
@@ -153,13 +163,13 @@ export async function loadSpendRows(query: SpendQuery = {}): Promise<SpendRow[]>
   const sql = `${baseQuery()}
       ${where.length ? `AND ${where.join(" AND ")}` : ""}
   )
-  SELECT day, provider, model, team, project,
+  SELECT day, provider, model, team, project, principal,
     SUM(CASE WHEN meter LIKE '%input%' THEN tokens ELSE 0 END) AS input_tokens,
     SUM(CASE WHEN meter LIKE '%output%' THEN tokens ELSE 0 END) AS output_tokens,
     SUM(cost) AS cost_usd
   FROM lines
   ${outerWhere.length ? `WHERE ${outerWhere.join(" AND ")}` : ""}
-  GROUP BY 1, 2, 3, 4, 5
+  GROUP BY 1, 2, 3, 4, 5, 6
   ORDER BY 1, 2, 3`;
 
   const rows = await athenaQuery(sql, params);
@@ -170,6 +180,7 @@ export async function loadSpendRows(query: SpendQuery = {}): Promise<SpendRow[]>
     model: row.model || "unknown",
     team: row.team || UNTAGGED,
     project: row.project || UNTAGGED,
+    principal: row.principal || "unknown",
     inputTokens: Math.round(Number(row.input_tokens ?? 0)),
     outputTokens: Math.round(Number(row.output_tokens ?? 0)),
     costUsd: Number(row.cost_usd ?? 0),
@@ -196,9 +207,10 @@ let inFlight: Promise<Metadata> | undefined;
 async function fetchMetadata(): Promise<Metadata> {
   const sql = `${baseQuery()}
   )
-  SELECT provider, model, team, project, min(day) AS min_day, max(day) AS max_day
+  SELECT provider, model, team, project, principal,
+         min(day) AS min_day, max(day) AS max_day
   FROM lines
-  GROUP BY 1, 2, 3, 4`;
+  GROUP BY 1, 2, 3, 4, 5`;
 
   const rows = await athenaQuery(sql);
 
@@ -216,6 +228,7 @@ async function fetchMetadata(): Promise<Metadata> {
       model: distinct("model"),
       team: distinct("team"),
       project: distinct("project"),
+      principal: distinct("principal"),
     },
   };
 }

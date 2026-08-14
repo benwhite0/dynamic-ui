@@ -38,6 +38,8 @@ function allRows(): SpendRow[] {
       model,
       team,
       project,
+      // The fixture predates the principal dimension and has no column for it.
+      principal: "unknown",
       inputTokens: Number(inputTokens),
       outputTokens: Number(outputTokens),
       costUsd: Number(costUsd),
@@ -68,5 +70,6 @@ export async function spendDimensions(): Promise<Record<Dimension, string[]>> {
     model: distinct("model"),
     team: distinct("team"),
     project: distinct("project"),
+    principal: distinct("principal"),
   };
 }

@@ -74,9 +74,11 @@ export const renderSpendChart = tool({
         "What to measure. Defaults to costUsd. There is no request-count metric — billing data measures tokens, not calls.",
       ),
     groupBy: z
-      .enum(["provider", "model", "team", "project"])
+      .enum(["provider", "model", "team", "project", "principal"])
       .optional()
-      .describe("Split into one series/category per value. Required for donut and ranked."),
+      .describe(
+        "Split into one series/category per value. Required for donut and ranked. Use 'principal' for who or what spent the money — it is the AWS identity behind the charge.",
+      ),
     bucket: z
       .enum(["day", "week", "month"])
       .optional()
@@ -95,6 +97,7 @@ export const renderSpendChart = tool({
         model: z.array(z.string()).optional(),
         team: z.array(z.string()).optional(),
         project: z.array(z.string()).optional(),
+        principal: z.array(z.string()).optional(),
       })
       .optional()
       .describe("Narrow to specific values, e.g. {model: ['claude-sonnet-5']}"),
@@ -136,6 +139,7 @@ export const renderSpendDashboard = tool({
         model: z.array(z.string()).optional(),
         team: z.array(z.string()).optional(),
         project: z.array(z.string()).optional(),
+        principal: z.array(z.string()).optional(),
       })
       .optional()
       .describe("Narrow to specific values, e.g. {team: ['platform']}"),

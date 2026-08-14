@@ -6,13 +6,20 @@ export type SpendRow = {
   model: string;
   team: string;
   project: string;
+  /**
+   * The AWS identity the charge was authenticated as — an IAM user, role or
+   * SSO principal. The closest thing to "who spent this" that billing data
+   * carries on its own, and the only attribution available while no cost
+   * allocation tags exist.
+   */
+  principal: string;
   inputTokens: number;
   outputTokens: number;
   costUsd: number;
 };
 
 /** Dimensions a report can slice or split by. */
-export type Dimension = "provider" | "model" | "team" | "project";
+export type Dimension = "provider" | "model" | "team" | "project" | "principal";
 
 /**
  * Measures a report can plot.
