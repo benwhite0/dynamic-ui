@@ -20,7 +20,15 @@ import { loadSpendRows, spendDateRange } from "@/lib/reports/source";
 import type { SpendQuery } from "@/lib/reports/types";
 
 /**
- * Every chart the report layer can produce, rendered against the dummy dataset.
+ * Rendered per request rather than prerendered. The page reads a live source,
+ * so building it statically would freeze the figures at build time and make the
+ * build itself depend on AWS credentials. The source's own TTL cache and
+ * Athena's result reuse keep the cost of that down.
+ */
+export const dynamic = "force-dynamic";
+
+/**
+ * Every chart the report layer can produce, rendered against the real dataset.
  * This is the surface for iterating on the visuals; the chat-driven version
  * picks the same components from a tool result.
  */
