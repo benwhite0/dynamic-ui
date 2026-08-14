@@ -21,9 +21,11 @@ import type { Dimension, SpendQuery, SpendRow } from "./types";
  *    '1M tokens' for Marketplace — so quantities are scaled per row from
  *    ConsumedUnit. Skipping that understates Claude usage by 1000x.
  *
- * 3. Cost comes from BilledCost. The view derives EffectiveCost by coalescing
- *    to line_item_net_unblended_cost, which this export populates as 0 rather
- *    than NULL, so EffectiveCost reads 0.00 on every row.
+ * 3. Cost comes from EffectiveCost — amortised cost after discounts and
+ *    commitments, which is the honest answer to "what did this actually cost
+ *    us". It currently equals BilledCost on every row because this account has
+ *    no discounts or commitments in play; it diverges, correctly, as soon as
+ *    either appears.
  */
 
 /** Only rows billed against a Bedrock inference profile are AI spend. */
@@ -107,7 +109,7 @@ function baseQuery(): string {
       ${tagExpr("ATHENA_PROJECT_TAG_KEY")} AS project,
       lower(SkuMeter) AS meter,
       ${TOKENS_EXPR} AS tokens,
-      BilledCost AS cost
+      EffectiveCost AS cost
     FROM ${view}
     WHERE ${AI_SPEND_PREDICATE}`;
 }
