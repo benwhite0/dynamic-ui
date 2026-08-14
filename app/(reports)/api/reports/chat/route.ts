@@ -21,12 +21,16 @@ export async function POST(request: Request) {
 
   const { messages }: { messages: Array<UIMessage> } = await request.json();
 
+  // Describes the real shape of the data to the model, so it has to be resolved
+  // before the prompt is built rather than interpolated as a promise.
+  const promptContext = await spendPromptContext();
+
   const result = streamText({
     model: geminiProModel,
     stopWhen: stepCountIs(4),
     system: `You are an analyst for a company's AI/LLM spend. You answer by drawing charts, using the renderSpendChart and renderSpendDashboard tools.
 
-${spendPromptContext()}
+${promptContext}
 
 RULES
 - Call renderSpendChart for any single-chart question about spend, cost, usage, requests or tokens. It queries the data and returns a finished chart.

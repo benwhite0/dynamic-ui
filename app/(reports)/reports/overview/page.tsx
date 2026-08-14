@@ -24,15 +24,15 @@ import type { SpendQuery } from "@/lib/reports/types";
  * This is the surface for iterating on the visuals; the chat-driven version
  * picks the same components from a tool result.
  */
-export default function ReportsPage() {
-  const rows = loadSpendRows();
-  const range = spendDateRange();
+export default async function ReportsPage() {
+  const range = await spendDateRange();
   const scope: SpendQuery = { from: range.from, to: range.to };
+  const rows = await loadSpendRows(scope);
 
   const currentTotal = total(rows, scope);
   const previous = previousPeriod(scope);
-  // The fixture starts at `range.from`, so the prior window has no data to
-  // compare against — deltas render only once there's real history behind them.
+  // `scope` spans the whole source, so the prior window sits before its earliest
+  // date — deltas render only once there's real history behind them.
   const previousTotal = previous ? total(rows, previous) : null;
   const hasPrevious = previousTotal !== null && previousTotal > 0;
 

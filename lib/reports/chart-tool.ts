@@ -3,14 +3,49 @@ import "server-only";
 import { tool } from "ai";
 import { z } from "zod";
 
+import { previousPeriod } from "./query";
 import { loadSpendRows, spendDateRange, spendDimensions } from "./source";
 import {
   DIMENSIONS,
   buildSpendChartPayload,
   buildSpendDashboardPayload,
+  resolveFilters,
+  resolveRange,
   type SpendChartInput,
   type SpendDashboardInput,
 } from "./spec";
+
+import type { Dimension, SpendRow } from "./types";
+
+/**
+ * Fetches just the rows a payload needs. The range and filters are resolved
+ * here so the source can narrow the fetch, then resolved again inside
+ * `buildSpendChartPayload` — both calls are pure and idempotent, so the payload
+ * is identical to what a whole-table fetch would have produced.
+ *
+ * `includePrior` widens the window backwards by one full period. A "stat" reads
+ * its change indicator via `previousPeriod`, and `total` re-filters the same
+ * rows array by date to get it — so if we fetched only the requested range, the
+ * prior total would silently be 0 and the indicator would vanish or lie. Using
+ * `previousPeriod` to compute the widened start guarantees we fetch exactly the
+ * window it will later ask for.
+ */
+async function fetchRows(
+  input: { days?: number; from?: string; to?: string; filters?: Partial<Record<Dimension, string[]>> },
+  bounds: { from: string; to: string },
+  available: Record<Dimension, string[]>,
+  includePrior: boolean,
+): Promise<SpendRow[]> {
+  const { filters, unsatisfiable } = resolveFilters(input.filters, available);
+
+  // Nothing can match, so the payload is "empty" either way — don't pay for a query.
+  if (unsatisfiable) return [];
+
+  const range = resolveRange(input, bounds);
+  const prior = includePrior ? previousPeriod(range) : null;
+
+  return loadSpendRows({ from: prior?.from ?? range.from, to: range.to, filters });
+}
 
 /**
  * The one tool this app exposes. The model chooses the question and the chart
@@ -66,13 +101,12 @@ export const renderSpendChart = tool({
       .optional()
       .describe("Keep only the top N categories; the rest fold into 'Other'. Max 6."),
   }),
-  execute: async (input) =>
-    buildSpendChartPayload(
-      loadSpendRows(),
-      spendDimensions(),
-      spendDateRange(),
-      input as SpendChartInput,
-    ),
+  execute: async (input) => {
+    const [bounds, available] = await Promise.all([spendDateRange(), spendDimensions()]);
+    const rows = await fetchRows(input, bounds, available, input.chartType === "stat");
+
+    return buildSpendChartPayload(rows, available, bounds, input as SpendChartInput);
+  },
 });
 
 /**
@@ -104,19 +138,18 @@ export const renderSpendDashboard = tool({
       .optional()
       .describe("Narrow to specific values, e.g. {team: ['platform']}"),
   }),
-  execute: async (input) =>
-    buildSpendDashboardPayload(
-      loadSpendRows(),
-      spendDimensions(),
-      spendDateRange(),
-      input as SpendDashboardInput,
-    ),
+  execute: async (input) => {
+    const [bounds, available] = await Promise.all([spendDateRange(), spendDimensions()]);
+    // A dashboard always builds stat cards, so it always needs the prior window.
+    const rows = await fetchRows(input, bounds, available, true);
+
+    return buildSpendDashboardPayload(rows, available, bounds, input as SpendDashboardInput);
+  },
 });
 
 /** Prompt fragment describing the data, built from the data itself. */
-export function spendPromptContext(): string {
-  const range = spendDateRange();
-  const dimensions = spendDimensions();
+export async function spendPromptContext(): Promise<string> {
+  const [range, dimensions] = await Promise.all([spendDateRange(), spendDimensions()]);
 
   return [
     `Data covers ${range.from} to ${range.to}. Treat ${range.to} as the most recent day with data.`,
