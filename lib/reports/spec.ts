@@ -283,11 +283,11 @@ export function buildSpendDashboardPayload(
     title: "Total spend",
     metric: "costUsd",
   });
-  const requestsStat = buildSpendChartPayload(rows, available, bounds, {
+  const tokensStat = buildSpendChartPayload(rows, available, bounds, {
     ...chartInputBase,
     chartType: "stat",
-    title: "Total requests",
-    metric: "requests",
+    title: "Total tokens",
+    metric: "totalTokens",
   });
   const trendChart = buildSpendChartPayload(rows, available, bounds, {
     ...chartInputBase,
@@ -303,7 +303,9 @@ export function buildSpendDashboardPayload(
     groupBy: "model",
   });
 
-  const topModel = byDimension(rows, { ...query, groupBy: "model", metric: "requests" })[0];
+  // Ranked by tokens rather than requests: AWS bills Bedrock per token, so no
+  // request count exists in the billing data to rank by.
+  const topModel = byDimension(rows, { ...query, groupBy: "model", metric: "totalTokens" })[0];
   const topTeam = byDimension(rows, { ...query, groupBy: "team", metric: "costUsd" })[0];
 
   const stats: Stat[] = [
@@ -311,9 +313,11 @@ export function buildSpendDashboardPayload(
     {
       label: "Most used model",
       value: topModel?.key ?? "—",
-      comparison: topModel ? `${formatMetric(topModel.value, "requests")} requests` : undefined,
+      comparison: topModel
+        ? `${formatMetric(topModel.value, "totalTokens")} tokens`
+        : undefined,
     },
-    toStat("Total requests", requestsStat),
+    toStat("Total tokens", tokensStat),
     {
       label: "Top team by spend",
       value: topTeam?.key ?? "—",

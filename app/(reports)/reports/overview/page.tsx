@@ -60,12 +60,12 @@ export default async function ReportsPage() {
       trend: weekly.points.map((point) => point.values.total),
     },
     {
-      label: "Requests",
-      value: formatCompact(total(rows, { ...scope, metric: "requests" })),
+      label: "Input tokens",
+      value: formatCompact(total(rows, { ...scope, metric: "inputTokens" })),
     },
     {
-      label: "Tokens",
-      value: formatCompact(total(rows, { ...scope, metric: "totalTokens" })),
+      label: "Output tokens",
+      value: formatCompact(total(rows, { ...scope, metric: "outputTokens" })),
     },
     {
       label: "Highest-spend model",

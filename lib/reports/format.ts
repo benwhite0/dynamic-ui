@@ -63,7 +63,6 @@ export function formatPercent(fraction: number): string {
 
 const METRIC_LABELS: Record<Metric, string> = {
   costUsd: "Spend",
-  requests: "Requests",
   inputTokens: "Input tokens",
   outputTokens: "Output tokens",
   totalTokens: "Tokens",

@@ -55,7 +55,7 @@ async function fetchRows(
  */
 export const renderSpendChart = tool({
   description:
-    "Query AI/LLM spend and render it as a chart in the conversation. Use this for ANY question about spend, cost, usage, requests or tokens — including totals, trends, comparisons and breakdowns. It runs the aggregation itself and returns a finished chart, so never estimate or state figures yourself; just add one short sentence about what it shows.",
+    "Query AI/LLM spend and render it as a chart in the conversation. Use this for ANY question about spend, cost, usage or tokens — including totals, trends, comparisons and breakdowns. It runs the aggregation itself and returns a finished chart, so never estimate or state figures yourself; just add one short sentence about what it shows.",
   inputSchema: z.object({
     chartType: z
       .enum(["line", "bar", "donut", "ranked", "stat"])
@@ -68,9 +68,11 @@ export const renderSpendChart = tool({
       .optional()
       .describe("Optional qualifier, e.g. 'Daily, last 10 days'"),
     metric: z
-      .enum(["costUsd", "requests", "inputTokens", "outputTokens", "totalTokens"])
+      .enum(["costUsd", "inputTokens", "outputTokens", "totalTokens"])
       .optional()
-      .describe("What to measure. Defaults to costUsd."),
+      .describe(
+        "What to measure. Defaults to costUsd. There is no request-count metric — billing data measures tokens, not calls.",
+      ),
     groupBy: z
       .enum(["provider", "model", "team", "project"])
       .optional()
@@ -118,7 +120,7 @@ export const renderSpendChart = tool({
  */
 export const renderSpendDashboard = tool({
   description:
-    "Build a dashboard of AI/LLM spend: a row of key figures (total spend, most used model, total requests, top team) plus a spend trend and a spend-by-model breakdown. Use this for requests like 'build a dashboard', 'give me an overview' or 'summarize spend' — not for a single-chart question, which renderSpendChart handles.",
+    "Build a dashboard of AI/LLM spend: a row of key figures (total spend, most used model, total tokens, top team) plus a spend trend and a spend-by-model breakdown. Use this for requests like 'build a dashboard', 'give me an overview' or 'summarize spend' — not for a single-chart question, which renderSpendChart handles.",
   inputSchema: z.object({
     title: z.string().describe("Short dashboard title, e.g. 'Spend overview'"),
     subtitle: z.string().optional().describe("Optional qualifier, e.g. 'Last 30 days'"),

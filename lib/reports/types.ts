@@ -6,23 +6,24 @@ export type SpendRow = {
   model: string;
   team: string;
   project: string;
-  requests: number;
   inputTokens: number;
   outputTokens: number;
-  cacheReadTokens: number;
   costUsd: number;
 };
 
 /** Dimensions a report can slice or split by. */
 export type Dimension = "provider" | "model" | "team" | "project";
 
-/** Measures a report can plot. */
-export type Metric =
-  | "costUsd"
-  | "requests"
-  | "inputTokens"
-  | "outputTokens"
-  | "totalTokens";
+/**
+ * Measures a report can plot.
+ *
+ * Request counts and cache-read tokens used to live here, and are deliberately
+ * gone: AWS bills Bedrock per token, so no request count exists anywhere in
+ * FOCUS/CUR, and this account has no cache-read SKUs. Leaving them in the union
+ * would let the model offer a metric the warehouse can only answer with zeros,
+ * and a confident zero is indistinguishable from a real one.
+ */
+export type Metric = "costUsd" | "inputTokens" | "outputTokens" | "totalTokens";
 
 export type Bucket = "day" | "week" | "month";
 
