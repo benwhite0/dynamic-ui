@@ -5,8 +5,9 @@ import { BarChart3, User } from "lucide-react";
 import { Streamdown } from "streamdown";
 
 import { SpendChart } from "./spend-chart";
+import { SpendDashboard } from "./spend-dashboard";
 
-import type { SpendChartPayload } from "@/lib/reports/types";
+import type { SpendChartPayload, SpendDashboardPayload } from "@/lib/reports/types";
 
 
 /** Placeholder while the tool runs, sized so the chart doesn't shift it. */
@@ -54,6 +55,32 @@ export function ReportsMessage({ message }: { message: UIMessage }) {
 
             if (toolPart.state === "output-available" && toolPart.output) {
               return <SpendChart key={key} payload={toolPart.output} />;
+            }
+
+            if (toolPart.state === "output-error") {
+              return (
+                <p key={key} className="text-xs text-muted-foreground">
+                  That query failed. Try narrowing the date range or naming a
+                  specific model or team.
+                </p>
+              );
+            }
+
+            return <ChartSkeleton key={key} />;
+          }
+
+          if (part.type === "tool-renderSpendDashboard") {
+            // Same loose typing as the chart tool part — the output shape is
+            // the SpendDashboardPayload union the tool returns.
+            const toolPart = part as {
+              state: string;
+              toolCallId?: string;
+              output?: SpendDashboardPayload;
+            };
+            const key = toolPart.toolCallId ?? index;
+
+            if (toolPart.state === "output-available" && toolPart.output) {
+              return <SpendDashboard key={key} payload={toolPart.output} />;
             }
 
             if (toolPart.state === "output-error") {

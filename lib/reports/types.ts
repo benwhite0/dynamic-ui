@@ -103,3 +103,29 @@ export type SpendChartPayload =
       metric: Metric;
       data: CategoryValue[];
     };
+
+/** One number a dashboard highlights, optionally with a period change and a trend. */
+export type Stat = {
+  label: string;
+  value: string;
+  delta?: Delta | null;
+  comparison?: string;
+  /** Whether a rise is a good outcome for this metric. */
+  upIsGood?: boolean;
+  trend?: number[];
+};
+
+/**
+ * What the renderSpendDashboard tool hands back: a KPI row plus a fixed set of
+ * charts, both built server-side from the same aggregation as renderSpendChart
+ * — the model only picks the range and filters, never the numbers.
+ */
+export type SpendDashboardPayload =
+  | { chartType: "empty"; title: string; message: string }
+  | {
+      chartType: "dashboard";
+      title: string;
+      subtitle?: string;
+      stats: Stat[];
+      charts: SpendChartPayload[];
+    };

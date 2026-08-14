@@ -4,7 +4,13 @@ import { tool } from "ai";
 import { z } from "zod";
 
 import { loadSpendRows, spendDateRange, spendDimensions } from "./source";
-import { DIMENSIONS, buildSpendChartPayload, type SpendChartInput } from "./spec";
+import {
+  DIMENSIONS,
+  buildSpendChartPayload,
+  buildSpendDashboardPayload,
+  type SpendChartInput,
+  type SpendDashboardInput,
+} from "./spec";
 
 /**
  * The one tool this app exposes. The model chooses the question and the chart
@@ -66,6 +72,44 @@ export const renderSpendChart = tool({
       spendDimensions(),
       spendDateRange(),
       input as SpendChartInput,
+    ),
+});
+
+/**
+ * A fixed dashboard — a KPI row plus a trend and a breakdown — rather than a
+ * single chart. Kept as its own tool with a narrower schema: the model only
+ * picks the range and filters here, never the chart type or which cards
+ * appear, so a "spend dashboard" request always comes back with the same
+ * shape.
+ */
+export const renderSpendDashboard = tool({
+  description:
+    "Build a dashboard of AI/LLM spend: a row of key figures (total spend, most used model, total requests, top team) plus a spend trend and a spend-by-model breakdown. Use this for requests like 'build a dashboard', 'give me an overview' or 'summarize spend' — not for a single-chart question, which renderSpendChart handles.",
+  inputSchema: z.object({
+    title: z.string().describe("Short dashboard title, e.g. 'Spend overview'"),
+    subtitle: z.string().optional().describe("Optional qualifier, e.g. 'Last 30 days'"),
+    days: z
+      .number()
+      .optional()
+      .describe("Relative window, e.g. 30 for the last 30 days. Omit for all available data."),
+    from: z.string().optional().describe("Explicit start date, YYYY-MM-DD"),
+    to: z.string().optional().describe("Explicit end date, YYYY-MM-DD"),
+    filters: z
+      .object({
+        provider: z.array(z.string()).optional(),
+        model: z.array(z.string()).optional(),
+        team: z.array(z.string()).optional(),
+        project: z.array(z.string()).optional(),
+      })
+      .optional()
+      .describe("Narrow to specific values, e.g. {team: ['platform']}"),
+  }),
+  execute: async (input) =>
+    buildSpendDashboardPayload(
+      loadSpendRows(),
+      spendDimensions(),
+      spendDateRange(),
+      input as SpendDashboardInput,
     ),
 });
 

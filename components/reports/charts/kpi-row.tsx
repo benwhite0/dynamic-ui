@@ -2,7 +2,9 @@ import { ArrowDown, ArrowUp, Minus } from "lucide-react";
 
 import { SERIES_COLORS } from "./chart-kit";
 
-import type { Delta } from "@/lib/reports/types";
+import type { Delta, Stat } from "@/lib/reports/types";
+
+export type { Stat };
 
 /**
  * 12-point sparkline, hand-rolled rather than another chart instance: at this
@@ -110,16 +112,6 @@ function DeltaBadge({
     </p>
   );
 }
-
-export type Stat = {
-  label: string;
-  value: string;
-  delta?: Delta | null;
-  comparison?: string;
-  /** Whether a rise is a good outcome for this metric. */
-  upIsGood?: boolean;
-  trend?: number[];
-};
 
 /**
  * The number is the chart. A single value with a trend belongs in a stat tile,

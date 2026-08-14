@@ -15,7 +15,7 @@ const EXAMPLES = [
   "Sonnet 5 spend over the last 10 days",
   "Which team spends the most?",
   "How has the model mix changed this quarter?",
-  "What did we spend in the last 30 days?",
+  "Build a dashboard of our spend this month",
 ];
 
 /**

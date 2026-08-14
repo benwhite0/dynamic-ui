@@ -2,12 +2,16 @@ import { convertToModelMessages, stepCountIs, streamText, UIMessage } from "ai";
 
 import { geminiProModel } from "@/ai";
 import { auth } from "@/app/(auth)/auth";
-import { renderSpendChart, spendPromptContext } from "@/lib/reports/chart-tool";
+import {
+  renderSpendChart,
+  renderSpendDashboard,
+  spendPromptContext,
+} from "@/lib/reports/chart-tool";
 
 /**
- * The reports chat. Deliberately separate from /api/chat: its own prompt and a
- * single tool, so none of the search, form or website tooling is in scope here
- * and the model has one obvious thing to do.
+ * The reports chat. Deliberately separate from /api/chat: its own prompt and
+ * only its two spend tools, so none of the search, form or website tooling is
+ * in scope here and the model has one obvious thing to do.
  */
 export async function POST(request: Request) {
   const session = await auth();
@@ -20,15 +24,16 @@ export async function POST(request: Request) {
   const result = streamText({
     model: geminiProModel,
     stopWhen: stepCountIs(4),
-    system: `You are an analyst for a company's AI/LLM spend. You answer by drawing charts, using the renderSpendChart tool.
+    system: `You are an analyst for a company's AI/LLM spend. You answer by drawing charts, using the renderSpendChart and renderSpendDashboard tools.
 
 ${spendPromptContext()}
 
 RULES
-- Call renderSpendChart for any question about spend, cost, usage, requests or tokens. It queries the data and returns a finished chart.
-- Never state, estimate or recalculate figures yourself. The tool owns the numbers; you own the question and the choice of chart. If you want to comment on a value, describe the shape ("it roughly doubles mid-July"), not invented totals.
-- After the chart, reply with ONE short sentence. Do not list the data back or add a bulleted summary — the chart and its table view already carry it.
-- Never call the tool twice for the same question. If a request genuinely needs two views (e.g. "trend and breakdown"), call it once per view, at most twice.
+- Call renderSpendChart for any single-chart question about spend, cost, usage, requests or tokens. It queries the data and returns a finished chart.
+- Call renderSpendDashboard instead when the user asks for a "dashboard", "overview" or "summary" of spend. It returns a fixed set of key figures and charts in one call — never build a dashboard by calling renderSpendChart several times.
+- Never state, estimate or recalculate figures yourself. The tools own the numbers; you own the question and, for renderSpendChart, the choice of chart. If you want to comment on a value, describe the shape ("it roughly doubles mid-July"), not invented totals.
+- After the chart or dashboard, reply with ONE short sentence. Do not list the data back or add a bulleted summary — the chart and its table view already carry it.
+- Never call a tool twice for the same question. If a request genuinely needs two chart views (e.g. "trend and breakdown"), call renderSpendChart once per view, at most twice.
 
 CHOOSING A CHART TYPE
 - "stat" for a single number: "what did we spend last month", "how many requests yesterday". Includes a change indicator against the preceding period.
@@ -45,7 +50,7 @@ FILTERS AND RANGES
 
 If a question isn't about AI spend, say briefly that this is the spend reporting assistant and suggest what can be asked.`,
     messages: convertToModelMessages(messages),
-    tools: { renderSpendChart },
+    tools: { renderSpendChart, renderSpendDashboard },
     experimental_telemetry: { isEnabled: true, functionId: "reports-chat" },
   });
 

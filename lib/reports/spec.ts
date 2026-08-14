@@ -6,8 +6,10 @@ import type {
   Dimension,
   Metric,
   SpendChartPayload,
+  SpendDashboardPayload,
   SpendQuery,
   SpendRow,
+  Stat,
 } from "./types";
 
 export const DIMENSIONS = ["provider", "model", "team", "project"] as const;
@@ -213,5 +215,117 @@ export function buildSpendChartPayload(
     metric,
     granularity: bucket,
     series: timeSeries(rows, query),
+  };
+}
+
+/** What the model is allowed to ask for. Mirrors the dashboard tool's input schema. */
+export type SpendDashboardInput = {
+  title: string;
+  subtitle?: string;
+  days?: number;
+  from?: string;
+  to?: string;
+  filters?: Partial<Record<Dimension, string[]>>;
+};
+
+/** Pulls the stat fields back out of a chart payload built as chartType: "stat". */
+function toStat(label: string, payload: SpendChartPayload): Stat {
+  if (payload.chartType !== "stat") return { label, value: "—" };
+  return {
+    label,
+    value: payload.value,
+    delta: payload.delta,
+    comparison: payload.comparison,
+    trend: payload.trend,
+  };
+}
+
+/**
+ * A fixed dashboard: a KPI row (total spend, most used model, total requests,
+ * top team) plus a trend and a breakdown, all built from the same aggregation
+ * as a single renderSpendChart call. The model picks the range and filters;
+ * which cards appear and their numbers are decided here, not by the model.
+ */
+export function buildSpendDashboardPayload(
+  rows: SpendRow[],
+  available: Record<Dimension, string[]>,
+  bounds: { from: string; to: string },
+  input: SpendDashboardInput,
+): SpendDashboardPayload {
+  const range = resolveRange(input, bounds);
+  const { filters, unmatched, unsatisfiable } = resolveFilters(input.filters, available);
+  const query: SpendQuery = { from: range.from, to: range.to, filters };
+
+  const grandTotal = unsatisfiable ? 0 : total(rows, { ...query, metric: "costUsd" });
+
+  if (grandTotal === 0) {
+    return {
+      chartType: "empty",
+      title: input.title,
+      message: unmatched.length
+        ? `No data for ${unmatched.join(", ")}. Available values — ${DIMENSIONS.map(
+            (dimension) => `${dimension}: ${available[dimension].join(", ")}`,
+          ).join("; ")}`
+        : "No spend recorded for that period.",
+    };
+  }
+
+  const chartInputBase = {
+    days: input.days,
+    from: input.from,
+    to: input.to,
+    filters: input.filters,
+  };
+
+  const spendStat = buildSpendChartPayload(rows, available, bounds, {
+    ...chartInputBase,
+    chartType: "stat",
+    title: "Total spend",
+    metric: "costUsd",
+  });
+  const requestsStat = buildSpendChartPayload(rows, available, bounds, {
+    ...chartInputBase,
+    chartType: "stat",
+    title: "Total requests",
+    metric: "requests",
+  });
+  const trendChart = buildSpendChartPayload(rows, available, bounds, {
+    ...chartInputBase,
+    chartType: "line",
+    title: "Spend over time",
+    metric: "costUsd",
+  });
+  const breakdownChart = buildSpendChartPayload(rows, available, bounds, {
+    ...chartInputBase,
+    chartType: "ranked",
+    title: "Spend by model",
+    metric: "costUsd",
+    groupBy: "model",
+  });
+
+  const topModel = byDimension(rows, { ...query, groupBy: "model", metric: "requests" })[0];
+  const topTeam = byDimension(rows, { ...query, groupBy: "team", metric: "costUsd" })[0];
+
+  const stats: Stat[] = [
+    toStat("Total spend", spendStat),
+    {
+      label: "Most used model",
+      value: topModel?.key ?? "—",
+      comparison: topModel ? `${formatMetric(topModel.value, "requests")} requests` : undefined,
+    },
+    toStat("Total requests", requestsStat),
+    {
+      label: "Top team by spend",
+      value: topTeam?.key ?? "—",
+      comparison: topTeam ? formatMetric(topTeam.value, "costUsd") : undefined,
+    },
+  ];
+
+  return {
+    chartType: "dashboard",
+    title: input.title,
+    subtitle: input.subtitle,
+    stats,
+    charts: [trendChart, breakdownChart],
   };
 }
