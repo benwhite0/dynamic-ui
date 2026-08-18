@@ -13,7 +13,6 @@ import {
 import { formatCurrency, formatMetricExact } from "@/lib/reports/format";
 
 import {
-  AXIS_PROPS,
   ChartCard,
   INK,
   NO_ANIMATION,
@@ -58,7 +57,32 @@ function RankTooltip({
  * burn the only free channel on nothing. Horizontal because the labels are
  * long. Each value is labelled at the tip, which makes the value axis
  * redundant, so it's dropped rather than repeating the same numbers.
+ *
+ * Category names sit *above* their bar rather than in a left-hand axis gutter.
+ * A gutter has to be a fixed width, and Recharts right-aligns tick text inside
+ * it, so anything longer is clipped from the start — `x_IamPrincipal` values
+ * like `cortex-teams-bot-generate-summary-prod` or a 32-char key id read as
+ * `enerate-summary-prod`. Widening the gutter only moves the cliff and takes
+ * the width straight out of the bars; above the bar, a name has the whole card.
  */
+/** Row pitch: one line for the name, one for the bar, plus breathing room. */
+const ROW_HEIGHT = 52;
+
+/** Bar thickness. Leaves the name clear space above its own bar. */
+const BAR_SIZE = 20;
+
+/**
+ * The category name, drawn at the bar's own origin so it is left-aligned with
+ * the bar it labels and free to run the full width of the card.
+ */
+function CategoryLabel({ x, y, value }: { x?: number; y?: number; value?: unknown }) {
+  return (
+    <text x={Number(x ?? 0)} y={Number(y ?? 0) - 8} fill={INK} fontSize={11}>
+      {String(value ?? "")}
+    </text>
+  );
+}
+
 export function SpendBars({
   data,
   metric = "costUsd",
@@ -76,7 +100,7 @@ export function SpendBars({
     <ChartCard
       title={title}
       subtitle={subtitle}
-      height={Math.max(160, ordered.length * 40)}
+      height={Math.max(160, ordered.length * ROW_HEIGHT)}
       table={{
         columns: ["Category", "Spend"],
         rows: ordered.map((entry) => [entry.key, formatMetricExact(entry.value, metric)]),
@@ -86,17 +110,11 @@ export function SpendBars({
         <BarChart
           data={ordered}
           layout="vertical"
-          margin={{ top: 0, right: 56, bottom: 0, left: 0 }}
+          margin={{ top: 14, right: 56, bottom: 0, left: 2 }}
         >
           <XAxis type="number" hide />
-          <YAxis
-            {...AXIS_PROPS}
-            type="category"
-            dataKey="key"
-            width={124}
-            axisLine={false}
-            tick={{ ...AXIS_PROPS.tick, fill: INK }}
-          />
+          {/* Hidden, not removed: the band scale still positions the bars. */}
+          <YAxis type="category" dataKey="key" hide />
           <Tooltip
             cursor={{ fill: "var(--viz-grid)", fillOpacity: 0.4 }}
             content={<RankTooltip metric={metric} />}
@@ -104,10 +122,11 @@ export function SpendBars({
           <Bar
             dataKey="value"
             fill={SERIES_COLORS[0]}
-            maxBarSize={24}
+            maxBarSize={BAR_SIZE}
             radius={[0, 4, 4, 0]}
             {...NO_ANIMATION}
           >
+            <LabelList dataKey="key" content={<CategoryLabel />} />
             <LabelList
               dataKey="value"
               position="right"

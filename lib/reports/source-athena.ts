@@ -32,12 +32,26 @@ import type { Dimension, SpendQuery, SpendRow } from "./types";
 const AI_SPEND_PREDICATE = `ResourceId LIKE 'arn:aws:bedrock:%' AND ChargeCategory = 'Usage'`;
 
 /**
- * `eu.anthropic.claude-sonnet-4-6` -> provider `anthropic`, model
- * `claude-sonnet-4-6`. The leading segment is a cross-region routing prefix,
- * not part of the model identity.
+ * Bedrock bills AI usage under two ARN shapes, and both have to be read:
+ *
+ *   inference-profile/eu.anthropic.claude-sonnet-5 -> anthropic / claude-sonnet-5
+ *   foundation-model/amazon.titan-embed-text-v2:0  -> amazon    / titan-embed-text
+ *
+ * An inference profile carries a cross-region routing prefix (`eu.`, `global.`)
+ * which is not part of the model identity; a direct foundation-model invocation
+ * has no prefix at all. So the prefix is optional rather than required — before
+ * that, every direct invocation reported `unknown` for both provider and model.
+ *
+ * The trailing version is stripped so one model is one series: a chart should
+ * not split `claude-sonnet-4-5-20250929-v1:0` from a plain `claude-sonnet-4-5`.
  */
-const PROVIDER_EXPR = `regexp_extract(ResourceId, 'inference-profile/([a-z0-9-]+)\\.([a-z0-9]+)\\.', 2)`;
-const MODEL_EXPR = `regexp_extract(ResourceId, 'inference-profile/[a-z0-9-]+\\.[a-z0-9]+\\.(.+)$', 1)`;
+const ARN_MODEL_PATH = `(?:foundation-model|inference-profile)/(?:[a-z0-9-]+\\.)?`;
+
+const PROVIDER_EXPR = `regexp_extract(ResourceId, '${ARN_MODEL_PATH}([a-z]+)\\.', 1)`;
+const MODEL_EXPR = `regexp_replace(
+      regexp_extract(ResourceId, '${ARN_MODEL_PATH}[a-z]+\\.(.+)$', 1),
+      '-(?:\\d{8}-)?v\\d+:\\d+$',
+      '')`;
 
 /**
  * The AWS identity behind the charge. x_IamPrincipal holds a full ARN, and the
@@ -204,7 +218,80 @@ const TTL_MS = Number(process.env.REPORTS_CACHE_TTL_SECONDS ?? 900) * 1000;
 let cache: { at: number; value: Metadata } | undefined;
 let inFlight: Promise<Metadata> | undefined;
 
+/**
+ * Columns the projection in `baseQuery()` reads. `Tags` is only required once a
+ * tag key is configured — until then `tagExpr` emits a literal and never
+ * references the column.
+ */
+const REQUIRED_COLUMNS = [
+  "ChargePeriodStart",
+  "ResourceId",
+  "SkuMeter",
+  "ConsumedQuantity",
+  "ConsumedUnit",
+  "ChargeCategory",
+  "EffectiveCost",
+  "x_IamPrincipal",
+];
+
+let shapeVerified = false;
+
+/**
+ * Fails before the first real query, naming every missing column at once.
+ *
+ * Without this, a renamed or absent column surfaces as a raw Athena
+ * COLUMN_NOT_FOUND that the chat UI flattens into "try narrowing the date range
+ * or naming a specific model or team" — which sends you looking at the range
+ * when the actual problem is the view. Trino also stops at the first bad column,
+ * so a hand-rolled view missing three of them takes three round trips to fix.
+ *
+ * Runs once per process rather than per metadata refresh: a view's shape does
+ * not change under a running server, and this costs an extra statement.
+ */
+async function assertViewShape(): Promise<void> {
+  if (shapeVerified) return;
+
+  const { view, database } = athenaConfig();
+  // The view may be given as `table`, `schema.table` or `catalog.schema.table`.
+  const parts = view.split(".");
+  const table = parts[parts.length - 1];
+  const schema = parts.length > 1 ? parts[parts.length - 2] : database;
+
+  const rows = await athenaQuery(
+    `SELECT column_name FROM information_schema.columns
+     WHERE table_schema = ? AND table_name = ?`,
+    [quote(schema), quote(table)],
+  );
+
+  // Trino lower-cases identifiers in information_schema, so `x_IamPrincipal`
+  // comes back as `x_iamprincipal`. Compare case-insensitively or every
+  // mixed-case column reads as missing.
+  const present = new Set(rows.map((row) => (row.column_name ?? "").toLowerCase()));
+
+  if (!present.size) {
+    throw new Error(
+      `ATHENA_SPEND_VIEW "${view}" has no columns in information_schema — it does not exist, or these credentials cannot see it. Check the name, ATHENA_DATABASE and the AWS profile.`,
+    );
+  }
+
+  const needed = [...REQUIRED_COLUMNS];
+  if (process.env.ATHENA_TEAM_TAG_KEY || process.env.ATHENA_PROJECT_TAG_KEY) {
+    needed.push("Tags");
+  }
+
+  const missing = needed.filter((column) => !present.has(column.toLowerCase()));
+  if (missing.length) {
+    throw new Error(
+      `ATHENA_SPEND_VIEW "${view}" is missing ${missing.length} column(s) the spend query needs: ${missing.join(", ")}.\nColumns actually present: ${[...present].sort().join(", ")}`,
+    );
+  }
+
+  shapeVerified = true;
+}
+
 async function fetchMetadata(): Promise<Metadata> {
+  await assertViewShape();
+
   const sql = `${baseQuery()}
   )
   SELECT provider, model, team, project, principal,
