@@ -3,7 +3,7 @@
 import { Cell, Pie, PieChart, ResponsiveContainer, Tooltip } from "recharts";
 
 import {
-  formatCurrency,
+  formatMetric,
   formatMetricExact,
   formatPercent,
 } from "@/lib/reports/format";
@@ -112,7 +112,7 @@ export function SpendDonut({
         {/* Centre label sits outside the SVG so it stays crisp and easy to style. */}
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
           <span className="text-xl font-semibold text-foreground">
-            {formatCurrency(total)}
+            {formatMetric(total, metric)}
           </span>
           <span className="text-xs text-muted-foreground">total</span>
         </div>

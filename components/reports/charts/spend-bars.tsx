@@ -10,7 +10,7 @@ import {
   YAxis,
 } from "recharts";
 
-import { formatCurrency, formatMetricExact } from "@/lib/reports/format";
+import { formatMetric, formatMetricExact } from "@/lib/reports/format";
 
 import {
   ChartCard,
@@ -133,7 +133,7 @@ export function SpendBars({
               offset={8}
               fill={INK}
               fontSize={11}
-              formatter={(value: unknown) => formatCurrency(Number(value))}
+              formatter={(value: unknown) => formatMetric(Number(value), metric)}
             />
           </Bar>
         </BarChart>

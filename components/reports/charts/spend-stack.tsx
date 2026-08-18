@@ -12,7 +12,7 @@ import {
 
 import {
   formatBucket,
-  formatCurrency,
+  formatMetric,
   formatMetricExact,
   niceTicks,
 } from "@/lib/reports/format";
@@ -126,7 +126,7 @@ export function SpendStack({
           />
           <YAxis
             {...AXIS_PROPS}
-            tickFormatter={formatCurrency}
+            tickFormatter={(value: number) => formatMetric(value, metric)}
             ticks={ticks}
             domain={[0, ticks[ticks.length - 1]]}
             width={52}
